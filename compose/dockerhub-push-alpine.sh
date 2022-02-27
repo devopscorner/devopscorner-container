@@ -16,7 +16,8 @@ export TAGS="latest \
   1.0.3 \
   1.0.3-alpine \
   alpine-latest \
-  alpine-3.15
+  alpine-3.15 \
+  alpine
 "
 
 for TAG in $TAGS

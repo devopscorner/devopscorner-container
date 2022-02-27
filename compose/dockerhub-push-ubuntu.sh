@@ -16,7 +16,8 @@ export TAGS="latest
   1.0.3 \
   1.0.3-ubuntu \
   ubuntu-latest \
-  ubuntu-20.04
+  ubuntu-20.04 \
+  ubuntu
 "
 
 for TAG in $TAGS
