@@ -1,0 +1,80 @@
+version: '3.7'
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  devopscorner_net:
+    name: devopscorner_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.146.146.0/16
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  vol_portainer:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
+  vol_ubuntu:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_UBUNTU:-/opt/data/docker/ubuntu}
+
+services:
+#================================================================================================
+# PORTAINER
+#================================================================================================
+  portainer:
+    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
+    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PORTAINER:-5212}:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - vol_portainer:/data
+    environment:
+      - PORTAINER_TEMPLATE=generic
+      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}
+
+#================================================================================================
+# UBUNTU
+#================================================================================================
+  ubuntu:
+    # image: ubuntu:${UBUNTU_VERSION:-20.04}
+    build:
+      context: ./docker/ubuntu
+      dockerfile: Dockerfile
+    container_name: ${CONTAINER_UBUNTU:-devopscorner_ubuntu}
+    restart: unless-stopped
+    ports:
+      - "${PORT_UBUNTU:-5290}:22"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_ubuntu/ssh:/root/.ssh
+      - vol_ubuntu/deploy:/root/deploy
+      - vol_ubuntu/repo:/root/GitHub
+      - vol_ubuntu/go:/root/go
+      - vol_ubuntu/.aws/credentials:/root/.aws/credentials
+      - vol_ubuntu/.aws/config:/root/.aws/config
+    environment:
+      - TZ="Asia/Jakarta"
+      - UBUNTU_VERSION=${UBUNTU_VERSION:-20.04}
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_UBUNTU:-172.146.146.212}
