@@ -2,21 +2,31 @@
 
 Docker Container Images Repository for DevOpsCorner.id
 
-## How-to-Use
+### Build Container Image
+
 - Clone this repository
+
   ```
   git clone https://github.com/devopscorner/devopscorner-container.git
   ```
 
-### Make Container
-```
-make build-cicd-ubuntu
-make build-cicd-alpine
-```
+- Replace "YOUR_AWS_ACCOUNT" with your AWS ACCOUNT ID
+
+  ```
+  find ./ -type f -exec sed -i 's/YOUR_AWS_ACCOUNT/123456789012/g' {} \;
+  ```
+
+- Execute Build Image
+
+  ```
+  make build-cicd-ubuntu
+  make build-cicd-alpine
+  ```
 
 ### Push ECR
-- Edit "YOUR_AWS_ACCOUNT" with your AWS ACCOUNT ID
+
 - Run this command in terminal:
+
   ```
   cd compose
 
@@ -30,8 +40,10 @@ make build-cicd-alpine
   ```
 
 ### Push Dockerhub
+
 - Login to your Dockerhub Account
 - Run this command in terminal:
+
   ```
   cd compose
 
