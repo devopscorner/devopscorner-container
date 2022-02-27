@@ -7,7 +7,7 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="ubuntu"
+ENV IMG_NAME="cicd-alpine"
 ENV IMG_VERSION="3.15"
 ENV IMG_DESC="Docker Image CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
@@ -40,7 +40,7 @@ LABEL maintainer="$AUTHOR" \
 
 COPY rootfs /
 
-ENV ANSIBLE_VERSION=2.11.6
+ENV ANSIBLE_VERSION=2.12.2
 ENV PACKER_VERSION=1.7.10
 ENV TERRAFORM_VERSION=1.1.6
 ENV TERRAGRUNT_VERSION=v0.36.1
@@ -84,9 +84,12 @@ RUN python3 -m pip install pip==21.3.1 &&\
       pip3 install --upgrade pip cffi &&\
       # install ansible
       pip3 install --no-cache-dir \
-            ${ANSIBLE_CUSTOM_VERSION} \
+            ansible-core==${ANSIBLE_VERSION} \
             ansible-tower-cli==3.3.4 \
             PyYaml \
+            Jinja2 \
+            httplib2 \
+            six \
             requests \
             boto3 \
       # install awscli
