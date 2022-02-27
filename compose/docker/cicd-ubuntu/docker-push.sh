@@ -12,7 +12,7 @@ export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_REGISTRY/$CI_PROJECT_PATH/$CI_PROJECT_NAME"
-export TAG="1.0.3"
+export TAG="ubuntu"
 
 echo " Push Image => $IMAGE:$TAG"
 docker push $IMAGE:$TAG
