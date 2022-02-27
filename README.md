@@ -18,7 +18,7 @@ make build-cicd-alpine
 - Edit "YOUR_AWS_ACCOUNT" with your AWS ACCOUNT ID
 - Run this command in terminal:
   ```
-  cd compose/docker
+  cd compose
 
   ## Alpine
   ./ecr-tag-alpine.sh
@@ -33,7 +33,7 @@ make build-cicd-alpine
 - Login to your Dockerhub Account
 - Run this command in terminal:
   ```
-  cd compose/docker
+  cd compose
 
   ## Alpine
   ./ecr-tag-alpine.sh
