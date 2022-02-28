@@ -30,30 +30,30 @@ Docker Container Images Repository for DevOpsCorner.id
   ```
   cd compose
 
-  ## Alpine
-  ./ecr-tag-alpine.sh
-  ./ecr-push-alpine.sh
-
   ## Ubuntu
   ./ecr-tag-ubuntu.sh
   ./ecr-push-ubuntu.sh
+
+  ## Alpine
+  ./ecr-tag-alpine.sh
+  ./ecr-push-alpine.sh
   ```
 
-### Push Dockerhub
+### Push DockerHub
 
-- Login to your Dockerhub Account
+- Login to your DockerHub Account
 - Run this command in terminal:
 
   ```
   cd compose
 
-  ## Alpine
-  ./ecr-tag-alpine.sh
-  ./ecr-push-alpine.sh
-
   ## Ubuntu
-  ./ecr-tag-ubuntu.sh
-  ./ecr-push-ubuntu.sh
+  ./dockerhub-tag-ubuntu.sh
+  ./dockerhub-push-ubuntu.sh
+
+  ## Alpine
+  ./dockerhub-tag-alpine.sh
+  ./dockerhub-push-alpine.sh
   ```
 
 ## Copyright
