@@ -7,8 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 export TERRAGRUNT_VERSION="0.36.1"
 
-if ! [ "${TG_VERSION}" = "" ]
-then
+if ! [ "${TG_VERSION}" = "" ]; then
   TERRAGRUNT_VERSION=${TG_VERSION}
 fi
 

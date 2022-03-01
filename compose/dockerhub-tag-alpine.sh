@@ -19,8 +19,7 @@ export TAGS="latest \
   alpine-3.15
 "
 
-for TAG in $TAGS
-do
+for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"
   echo ">> docker tag $BASE_IMAGE $IMAGE:$TAG"
   docker tag $BASE_IMAGE $IMAGE:$TAG

@@ -7,8 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 export PACKER_VERSION="1.7.10"
 
-if ! [ "${PACK_VERSION}" = "" ]
-then
+if ! [ "${PACK_VERSION}" = "" ]; then
   PACKER_VERSION=${PACK_VERSION}
 fi
 

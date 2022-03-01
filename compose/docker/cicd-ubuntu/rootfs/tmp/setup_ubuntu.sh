@@ -16,7 +16,7 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   libxml2 \
   libxml2-dev \
   libxslt1-dev \
-  #python-software-properties \
+  \
   software-properties-common \
   imagemagick \
   openjdk-8-jre-headless \
@@ -24,4 +24,4 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   libjpeg-dev \
   libsasl2-dev \
   libmysqlclient-dev \
-  phantomjs
+  phantomjs #python-software-properties \

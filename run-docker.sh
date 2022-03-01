@@ -7,19 +7,19 @@
 # -----------------------------------------------------------------------------
 set -e
 
-TITLE="DOCKER BUILD CONTAINER SCRIPT"           # script name
-VER="2.2"                                       # script version
-ENV="0"                                         # container environment (0 = development, 1 = staging, 2 = production)
-SKIP_BUILD="0"                                  # (0 = with build process, 1 = bypass build process)
-REMOVE_CACHE="0"                                # (0 = using cache, 1 = no-cache)
-RECREATE_CONTAINER="0"                          # (0 = disable recreate container, 1 = force recreate container)
-DAEMON_MODE="1"                                 # (0 = disable daemon mode, 1 = running daemon mode / background)
-CHMOD_DATA="0"                                  # (0 = disable chmod 777 folder data, 1 = skip chmod 777 folder data)
+TITLE="DOCKER BUILD CONTAINER SCRIPT" # script name
+VER="2.2"                             # script version
+ENV="0"                               # container environment (0 = development, 1 = staging, 2 = production)
+SKIP_BUILD="0"                        # (0 = with build process, 1 = bypass build process)
+REMOVE_CACHE="0"                      # (0 = using cache, 1 = no-cache)
+RECREATE_CONTAINER="0"                # (0 = disable recreate container, 1 = force recreate container)
+DAEMON_MODE="1"                       # (0 = disable daemon mode, 1 = running daemon mode / background)
+CHMOD_DATA="0"                        # (0 = disable chmod 777 folder data, 1 = skip chmod 777 folder data)
 
-USERNAME=`echo $USER`
-PATH_HOME=`echo $HOME`
+USERNAME=$(echo $USER)
+PATH_HOME=$(echo $HOME)
 
-PATH_APP=`pwd`
+PATH_APP=$(pwd)
 PATH_CONTAINER_DATA="$PATH_APP/data"
 COMPOSE_PATH="$PATH_APP/compose"
 COMPOSE_APP="$COMPOSE_PATH/app-compose.yml"
@@ -32,7 +32,7 @@ COL_END="\033[0m"
 export RUBY_VERSION="2.7.1"
 
 get_time() {
-  DATE=`date '+%Y-%m-%d %H:%M:%S'`
+  DATE=$(date '+%Y-%m-%d %H:%M:%S')
 }
 
 print_line0() {
@@ -78,18 +78,15 @@ footer() {
 }
 
 chmod_data() {
-  if [ "$CHMOD_DATA" = "1" ]
-  then
+  if [ "$CHMOD_DATA" = "1" ]; then
     sudo chmod 777 -R $PATH_CONTAINER_DATA
   fi
 }
 
 build_env() {
-  if [ "$ENV" = "0" ]
-  then
+  if [ "$ENV" = "0" ]; then
     BUILD_ENV="$CONTAINER_DEVELOPMENT"
-  elif [ "$ENV" = "1" ]
-  then
+  elif [ "$ENV" = "1" ]; then
     BUILD_ENV="$CONTAINER_STAGING"
   else
     BUILD_ENV="$CONTAINER_PRODUCTION"
@@ -97,8 +94,7 @@ build_env() {
 }
 
 cache() {
-  if [ "$REMOVE_CACHE" = "0" ]
-  then
+  if [ "$REMOVE_CACHE" = "0" ]; then
     CACHE=""
   else
     CACHE="--no-cache "
@@ -106,8 +102,7 @@ cache() {
 }
 
 recreate() {
-  if [ "$RECREATE_CONTAINER" = "0" ]
-  then
+  if [ "$RECREATE_CONTAINER" = "0" ]; then
     RECREATE=""
   else
     RECREATE="--force-recreate "
@@ -115,8 +110,7 @@ recreate() {
 }
 
 daemon_mode() {
-  if [ "$DAEMON_MODE" = "0" ]
-  then
+  if [ "$DAEMON_MODE" = "0" ]; then
     DAEMON=""
   else
     DAEMON="-d "
@@ -124,15 +118,13 @@ daemon_mode() {
 }
 
 docker_build() {
-  if [ "$SKIP_BUILD" = "0" ]
-  then
+  if [ "$SKIP_BUILD" = "0" ]; then
     print_line2
     get_time
     echo "$COL_BLUE[ $DATE ] ##### Docker Compose: $COL_END"
     echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP build $CACHE$BUILD_ENV $COL_END\n"
 
-    for CONTAINER in $BUILD_ENV
-    do
+    for CONTAINER in $BUILD_ENV; do
       get_time
       print_line2
       echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP build $CONTAINER $COL_END"
@@ -154,7 +146,7 @@ docker_up() {
   print_line2
   echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP up $RECREATE$BUILD_ENV $COL_END"
   print_line2
-  docker-compose -f $COMPOSE_APP  up $DAEMON $RECREATE$BUILD_ENV
+  docker-compose -f $COMPOSE_APP up $DAEMON $RECREATE$BUILD_ENV
   echo ""
 }
 

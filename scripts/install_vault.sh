@@ -7,8 +7,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 export VAULT_VERSION="1.9.3"
 
-if ! [ "${VT_VERSION}" = "" ]
-then
+if ! [ "${VT_VERSION}" = "" ]; then
   VAULT_VERSION=${VT_VERSION}
 fi
 

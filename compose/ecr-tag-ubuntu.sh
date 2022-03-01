@@ -26,8 +26,7 @@ aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS
 echo "- DONE -"
 echo ""
 
-for TAG in $TAGS
-do
+for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"
   echo ">> docker tag $BASE_IMAGE $IMAGE:$TAG"
   docker tag $BASE_IMAGE $IMAGE:$TAG

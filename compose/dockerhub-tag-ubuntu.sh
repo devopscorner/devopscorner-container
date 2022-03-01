@@ -19,8 +19,7 @@ export TAGS="latest
   ubuntu-20.04
 "
 
-for TAG in $TAGS
-do
+for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"
   echo ">> docker tag $BASE_IMAGE $IMAGE:$TAG"
   docker tag $BASE_IMAGE $IMAGE:$TAG
