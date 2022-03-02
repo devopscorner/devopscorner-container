@@ -1,0 +1,119 @@
+version: "3.6"
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  devopscorner_net:
+    name: ${NETWORKS_NAME:-devopscorner_net}
+    driver: ${NETWORKS_DRIVER:-bridge}
+    ipam:
+      config:
+        - subnet: 172.146.146.0/16
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  vol_portainer:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
+  vol_adminer:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${SESSION_ADMINER:-/opt/data/docker/session/adminer}
+  vol_mariadb:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_MARIADB:-/opt/data/docker/mariadb}
+
+services:
+  #================================================================================================
+  # ADMINER
+  #================================================================================================
+  adminer:
+    image: dockerframework/adminer:${ADMINER_VERSION:-4.8.1}
+    container_name: ${CONTAINER_ADMINER:-devopscorner_adminer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_ADMINER:-5210}:8080"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_adminer:/sessions
+    environment:
+      - TZ="Asia/Jakarta"
+      - ADMINER_VERSION=${ADMINER_VERSION:-4.8.1}
+      - INSTALL_MSSQL=${INSTALL_MSSQL:-false}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_ADMINER:-172.146.146.3}
+
+  #================================================================================================
+  # MARIADB
+  #================================================================================================
+  mariadb:
+    # image: yobasystems/alpine-mariadb:${MARIADB_VERSION:-10.5.12}
+    image: mariadb:${MARIADB_VERSION:-10.5.12}
+    # build:
+    #   context: ./docker/mariadb-ubuntu
+    #   dockerfile: Dockerfile
+    container_name: ${CONTAINER_MARIADB:-devopscorner_mariadb}
+    restart: always
+    ports:
+      - "${PORT_MARIADB:-3306}:3306"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      #- ./docker/mariadb-alpine/rootfs/etc/my.cnf:/etc/my.cnf
+      #- ./docker/mariadb-alpine/rootfs/etc/my.cnf.d/mariadb-server.cnf:/etc/my.cnf.d/mariadb-server.cnf
+      - ./docker/mariadb-ubuntu/rootfs/etc/my.cnf:/etc/my.cnf
+      - ./docker/mariadb-ubuntu/rootfs/etc/my.cnf.d/mariadb-server.cnf:/etc/my.cnf.d/mariadb-server.cnf
+      - vol_mariadb:/var/lib/mysql
+      ## Path services ##
+      - ${SERVICES_TOOLS:-./services}:/tmp/services
+    environment:
+      - ENV=local
+      - TZ="Asia/Jakarta"
+      - MYSQL_PROFILE=my-medium
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_ROOT_HOST=${MARIADB_ROOT_HOST}
+      - MYSQL_HOST=${MARIADB_HOST}
+      - MYSQL_DATABASE=${MARIADB_DATABASE}
+      - MYSQL_USER=${MARIADB_USER}
+      - MYSQL_PASSWORD=${MARIADB_PASSWORD}
+      #- SKIP_INNODB=1
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_MARIADB:-172.146.146.4}
+
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
+  portainer:
+    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
+    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PORTAINER:-5212}:9000"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_portainer:/data
+    environment:
+      - PORTAINER_TEMPLATE=generic
+      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}

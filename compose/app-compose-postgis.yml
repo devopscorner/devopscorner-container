@@ -1,0 +1,123 @@
+version: "3.6"
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  devopscorner_net:
+    name: devopscorner_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.146.146.0/16
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  vol_portainer:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
+  vol_pgadmin:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PGADMIN:-/opt/data/docker/pgadmin/storage}
+  vol_postgis:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_POSTGRESQL:-/opt/data/docker/postgresql/pgdata}
+
+services:
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
+  portainer:
+    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
+    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PORTAINER:-5212}:9000"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_portainer:/data
+    environment:
+      - PORTAINER_TEMPLATE=generic
+      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}
+
+  #================================================================================================
+  # POSTGIS
+  #================================================================================================
+  postgis:
+    build:
+      context: ./docker/ubuntu-postgis
+      ## Without Datadog ##
+      # dockerfile: Dockerfile
+      ## With Datadog (default) ##
+      dockerfile: Dockerfile-Datadog
+    container_name: ${CONTAINER_POSTGRESQL:-devopscorner_postgis}
+    restart: always
+    ports:
+      - "${PORT_POSTGRESQL:-5432}:5432"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_postgis:/var/lib/postgresql
+      ## Path config postgresql.conf ##
+      - ${CONFIG_POSTGRESQL:-./docker/config/postgresql/postgresql.conf}:/var/lib/postgresql/postgresql.conf
+      ## Path services ##
+      - ${SERVICES_TOOLS:-./services}:/tmp/services
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+    environment:
+      - TZ="Asia/Jakarta"
+      - POSTGRES_VERSION=${POSTGRES_VERSION:-14.1}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DATADOG_AGENT_MAJOR_VERSION=${DATADOG_AGENT_MAJOR_VERSION:-7}
+      - DATADOG_API_KEY=${DATADOG_API_KEY}
+      - DATADOG_SITE=${DATADOG_SITE:-datadoghq.com}
+      #- PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.9}
+
+  #================================================================================================
+  # PGADMIN
+  #================================================================================================
+  pgadmin:
+    image: dockerframework/pgadmin:${PGADMIN_VERSION:-latest}
+    container_name: ${CONTAINER_PGADMIN:-devopscorner_pgadmin}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PGADMIN:-5213}:80"
+    depends_on:
+      - postgresql
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - ${SESSION_PGADMIN:-/opt/data/docker/pgadmin/sessions}:/sessions
+      - vol_pgadmin:/var/lib/pgadmin/storage
+      ## Path services ##
+      - ${SERVICES_TOOLS:-./services}:/tmp/services
+    environment:
+      - TZ="Asia/Jakarta"
+      - PGADMIN_VERSION=${PGADMIN_VERSION:-latest}
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-pgadmin@devopscorner.id}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PGADMIN:-172.146.146.7}
