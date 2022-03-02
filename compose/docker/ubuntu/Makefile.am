@@ -1,4 +1,4 @@
-IMAGE = YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devops/ubuntu
+IMAGE = YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/ubuntu
 TAG = 20.04
 
 clean-local:

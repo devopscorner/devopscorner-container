@@ -1,4 +1,4 @@
-IMAGE = YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devops/cicd
+IMAGE = YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd
 TAG = ubuntu
 
 clean-local:
