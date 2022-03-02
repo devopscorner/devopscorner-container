@@ -1,0 +1,51 @@
+init_config:
+  service: postgresql-dev
+
+instances:
+  - host: localhost
+    port: 5432
+    username: postgres
+    password:
+    # dbname: <DBNAME>
+    # ssl: 'false'
+    query_timeout: 1000
+
+    collect_function_metrics: true
+    collect_count_metrics: true
+    collect_activity_metrics: true
+    table_count_limit: 200
+
+    tags:
+      - "environment:dev"
+      - "department:devops"
+
+    custom_queries:
+      - metric_prefix: postgresql.single_server.custom_stat_activity
+        query: SELECT application_name, usename, COUNT(*) AS count_by_applications FROM pg_stat_activity WHERE application_name NOT LIKE 'psql' AND (application_name <> '') IS TRUE GROUP BY application_name, usename
+        columns:
+        - name: application_name
+          type: tag
+        - name: pg_user
+          type: tag
+        - name: count_by_applications
+          type: gauge
+        relation: false
+        descriptors:
+          - [application_name, application_name]
+          - [usename, pg_user]
+        tags:
+          - query:custom_stat_activity
+
+logs:
+  - type: file
+    path:
+      - /var/lib/postgresql/data/pg_log/*.log
+      - /var/lib/postgresql/pgdata/pg_log/*.log
+      - /var/lib/postgresql/data/pgdata/pg_log/*.log
+      - /var/log/postgresql/*.log
+    source: postgresql
+    service: postgresql-dev
+    log_processing_rules:
+    - type: multi_line
+      pattern: \d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])
+      name: log_start_with_date
