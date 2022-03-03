@@ -38,8 +38,9 @@ LABEL maintainer="$AUTHOR" \
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV POSTGRES_USER=${POSTGRES_USER:-postgres}
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-passw0rdDB}
+ENV POSTGRES_USER=${POSTGRES_USER:-airflow}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-airflow}
+ENV POSTGRES_DB=${POSTGRES_DB:-airflow}
 # ENV PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
 
 RUN apt -o APT::Sandbox::User=root update; sync
