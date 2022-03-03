@@ -1,0 +1,214 @@
+version: "3.7"
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  devopscorner_net:
+    name: devopscorner_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.146.146.0/16
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  vol_container: &volume_default
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts: &driver_default
+      o: bind
+      type: none
+  vol_portainer:
+    <<: *volume_default
+    driver_opts:
+      <<: *driver_default
+      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
+  vol_postgres:
+    <<: *volume_default
+    driver_opts:
+      <<: *driver_default
+      device: ${DATA_POSTGRESQL:-/opt/data/docker/postgresql14/pgdata}
+  vol_airflow_dags:
+    <<: *volume_default
+    driver_opts:
+      <<: *driver_default
+      device: ${DATA_AIRFLOW_DAGS:-/opt/data/docker/airflow/dags}
+  vol_airflow_logs:
+    <<: *volume_default
+    driver_opts:
+      <<: *driver_default
+      device: ${DATA_AIRFLOW_LOGS:-/opt/data/docker/airflow/logs}
+  vol_airflow_plugins:
+    <<: *volume_default
+    driver_opts:
+      <<: *driver_default
+      device: ${DATA_AIRFLOW_PLUGINS:-/opt/data/docker/airflow/plugins}
+
+#================================================================================================
+# AIRFLOW GLOBAL
+#================================================================================================
+x-airflow-common: &airflow-common
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.2.2}
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:passw0rdDB@postgresql/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://postgres:passw0rdDB@postgresql/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "true"
+    AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
+  volumes:
+    - vol_airflow_dags:/opt/airflow/dags
+    - vol_airflow_logs:/opt/airflow/logs
+    - vol_airflow_plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
+  depends_on:
+    redis:
+      condition: service_healthy
+    postgres:
+      condition: service_healthy
+
+services:
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
+  portainer:
+    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
+    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PORTAINER:-5212}:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - vol_portainer:/data
+    environment:
+      - PORTAINER_TEMPLATE=generic
+      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}
+
+  #================================================================================================
+  # REDIS
+  #================================================================================================
+  redis:
+    image: redis:latest
+    container_name: ${CONTAINER_REDIS:-devopscorner_redis}
+    restart: always
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_REDIS:-172.146.146.212}
+
+  #================================================================================================
+  # POSTGRESQL
+  #================================================================================================
+  postgresql:
+    build:
+      context: docker/airflow-ubuntu
+      dockerfile: Dockerfile-PSQL
+    container_name: ${CONTAINER_POSTGRESQL:-devopscorner_postgresql}
+    restart: always
+    ports:
+      - "${PORT_POSTGRESQL:-5432}:5432"
+    volumes:
+      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      - vol_postgres:/var/lib/postgresql
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+    environment:
+      - TZ="Asia/Jakarta"
+      - POSTGRES_VERSION=${POSTGRES_VERSION:-14.1}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-passw0rdDB}
+      #- PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.6}
+
+  #================================================================================================
+  # AIRFLOW
+  #================================================================================================
+  airflow-webserver:
+    <<: *airflow-common
+    container_name: ${CONTAINER_AIRFLOW_WEB:-devopscorner_airflow_web}
+    restart: always
+    ports:
+      - 8080:8080
+    command: webserver
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.7}
+
+  airflow-scheduler:
+    <<: *airflow-common
+    container_name: ${CONTAINER_AIRFLOW_SCHEDULER:-devopscorner_airflow_scheduler}
+    restart: always
+    command: scheduler
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"',
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-worker:
+    <<: *airflow-common
+    container_name: ${CONTAINER_AIRFLOW_WORKER:-devopscorner_airflow_worker}
+    restart: always
+    command: celery worker
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  airflow-init:
+    <<: *airflow-common
+    container_name: ${CONTAINER_AIRFLOW_INIT:-devopscorner_airflow_init}
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-postgres}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-passw0rdDB}
+    command: version
+
+  flower:
+    <<: *airflow-common
+    container_name: ${CONTAINER_AIRFLOW_FLOWER:-devopscorner_airflow_flower}
+    restart: always
+    command: celery flower
+    ports:
+      - 5555:5555
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5

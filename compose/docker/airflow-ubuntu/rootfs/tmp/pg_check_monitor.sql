@@ -1,0 +1,1 @@
+SELECT * FROM pg_stat_database LIMIT(1);
