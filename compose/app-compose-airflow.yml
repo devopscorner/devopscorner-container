@@ -119,7 +119,7 @@ services:
   postgresql:
     build:
       context: docker/airflow-ubuntu
-      dockerfile: Dockerfile-PSQL
+      dockerfile: Dockerfile
     container_name: ${CONTAINER_POSTGRESQL:-devopscorner_postgresql}
     restart: always
     ports:
