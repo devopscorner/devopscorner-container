@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # ================================================================================================
-#  INSTALL KUBECTL
+#  INSTALL ANSIBLE (Ubuntu LINUX)
 # ================================================================================================
 export DEBIAN_FRONTEND=noninteractive
 
@@ -11,17 +11,18 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   bash \
   curl \
   wget \
-  zip \
-  unzip \
   software-properties-common \
   openssh-server \
-  openssh-client \
-  apt-transport-https
+  openssh-client
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-apt-get update
-apt-get install -y kubectl
+apt-add-repository ppa:ansible/ansible
+apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install \
+  ansible
 
-ln -nsf /usr/bin/kubectl /usr/local/bin/kubectl
-ln -nsf /usr/bin/kubectl /usr/local/bin/k
+for key in /etc/ssh/ssh_host_*_key.pub; do echo "localhost $(cat ${key})" >>/root/.ssh/known_hosts; done
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py &&
+  python get-pip.py &&
+  pip install coverage junit-xml
+
+rm -f get-pip.py

@@ -1,9 +1,15 @@
 #!/usr/bin/env sh
 
 # ================================================================================================
-#  INSTALL ANSIBLE
+#  INSTALL TERRAFORM (Ubuntu LINUX)
 # ================================================================================================
 export DEBIAN_FRONTEND=noninteractive
+
+export TERRAFORM_VERSION="1.1.6"
+
+if ! [ "${TF_VERSION}" = "" ]; then
+  TERRAFORM_VERSION=${TF_VERSION}
+fi
 
 apt-get update
 apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install \
@@ -11,18 +17,16 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   bash \
   curl \
   wget \
+  zip \
+  unzip \
   software-properties-common \
   openssh-server \
   openssh-client
 
-apt-add-repository ppa:ansible/ansible
-apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install \
-  ansible
+wget -nv https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -O /tmp/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
-for key in /etc/ssh/ssh_host_*_key.pub; do echo "localhost $(cat ${key})" >>/root/.ssh/known_hosts; done
+cd /tmp
+unzip -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+chmod +x /tmp/terraform
 
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py &&
-  python get-pip.py &&
-  pip install coverage junit-xml
-
-rm -f get-pip.py
+mv /tmp/terraform /usr/local/bin/terraform

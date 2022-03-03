@@ -1,14 +1,14 @@
 #!/usr/bin/env sh
 
 # ================================================================================================
-#  INSTALL TERRAGRUNT
+#  INSTALL PACKER (Ubuntu LINUX)
 # ================================================================================================
 export DEBIAN_FRONTEND=noninteractive
 
-export TERRAGRUNT_VERSION="0.36.1"
+export PACKER_VERSION="1.7.10"
 
-if ! [ "${TG_VERSION}" = "" ]; then
-  TERRAGRUNT_VERSION=${TG_VERSION}
+if ! [ "${PACK_VERSION}" = "" ]; then
+  PACKER_VERSION=${PACK_VERSION}
 fi
 
 apt-get update
@@ -23,6 +23,10 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   openssh-server \
   openssh-client
 
-wget -q -nv https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 -O /usr/local/bin/terragrunt
+wget -q -nv https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -O /usr/local/bin/packer.zip
+rm -f /usr/local/bin/packer
+cd /usr/local/bin
+unzip /usr/local/bin/packer.zip
+rm -f /usr/local/bin/packer.zip
 
-chmod +x /usr/local/bin/terragrunt
+chmod +x /usr/local/bin/packer

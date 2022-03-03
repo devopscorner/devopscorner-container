@@ -1,15 +1,9 @@
 #!/usr/bin/env sh
 
 # ================================================================================================
-#  INSTALL VAULT
+#  INSTALL KUBECTX (Ubuntu LINUX)
 # ================================================================================================
 export DEBIAN_FRONTEND=noninteractive
-
-export VAULT_VERSION="1.9.3"
-
-if ! [ "${VT_VERSION}" = "" ]; then
-  VAULT_VERSION=${VT_VERSION}
-fi
 
 apt-get update
 apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install \
@@ -23,10 +17,12 @@ apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-conf
   openssh-server \
   openssh-client
 
-wget -nv https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip -O /tmp/vault_${VAULT_VERSION}_linux_amd64.zip
+export KUBECTX_PATH="$GOPATH/src/github.com/kubectx"
 
-cd /tmp
-unzip -o vault_${VAULT_VERSION}_linux_amd64.zip
-chmod +x /tmp/vault
+git clone https://github.com/ahmetb/kubectx $KUBECTX_PATH
 
-mv /tmp/vault /usr/local/bin/vault
+ln -snf $KUBECTX_PATH/kubectx /usr/local/bin/kubectx
+ln -snf $KUBECTX_PATH/kubectx /usr/local/bin/kx
+
+ln -snf $KUBECTX_PATH/kubens /usr/local/bin/kubens
+ln -snf $KUBECTX_PATH/kubens /usr/local/bin/ks

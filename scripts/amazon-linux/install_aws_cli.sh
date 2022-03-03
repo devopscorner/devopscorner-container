@@ -1,22 +1,8 @@
 #!/usr/bin/env sh
 
 # ================================================================================================
-#  INSTALL AWS CLI
+#  INSTALL AWS CLI (AMAZON LINUX)
 # ================================================================================================
-export DEBIAN_FRONTEND=noninteractive
-
-apt-get update
-apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install \
-  git \
-  bash \
-  curl \
-  wget \
-  zip \
-  unzip \
-  software-properties-common \
-  openssh-server \
-  openssh-client
-
 curl -O https://bootstrap.pypa.io/get-pip.py
 
 ### Python 3.x ###
