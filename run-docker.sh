@@ -8,7 +8,7 @@
 set -e
 
 TITLE="DOCKER BUILD CONTAINER SCRIPT" # script name
-VER="2.2"                             # script version
+VER="3.1"                             # script version
 ENV="0"                               # container environment (0 = development, 1 = staging, 2 = production)
 SKIP_BUILD="0"                        # (0 = with build process, 1 = bypass build process)
 REMOVE_CACHE="0"                      # (0 = using cache, 1 = no-cache)
@@ -117,11 +117,40 @@ daemon_mode() {
   fi
 }
 
+prepare_volume() {
+  print_line2
+
+  VOL_PATH="/opt/data/docker"
+
+  # VOL_CONTAINER="$VOL_PATH/airflow/dags \
+  # $VOL_PATH/airflow/logs \
+  # $VOL_PATH/airflow/plugins \
+  # $VOL_PATH/postgresql14/pgdata \
+  # $VOL_PATH/portainer"
+
+  get_time
+  echo "$COL_BLUE[ $DATE ] ##### Prepare Volume Container: $COL_END"
+  echo "$COL_GREEN[ $DATE ]       sudo mkdir -p [vol_docker]\n"
+
+  # for VOL in $VOL_CONTAINER; do
+  #   get_time
+  #   print_line2
+  #   echo "$COL_GREEN[ $DATE ]       sudo mkdir -p $VOL $COL_END"
+  #   print_line2
+  #   sudo mkdir -p $VOL
+  #   echo "- DONE -"
+  # done
+
+  sudo chmod -R 777 $VOL_PATH
+  echo "-- VOLUME DONE --"
+  echo ""
+}
+
 docker_build() {
   if [ "$SKIP_BUILD" = "0" ]; then
     print_line2
     get_time
-    echo "$COL_BLUE[ $DATE ] ##### Docker Compose: $COL_END"
+    echo "$COL_BLUE[ $DATE ] ##### Docker Compose Build: $COL_END"
     echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP build $CACHE$BUILD_ENV $COL_END\n"
 
     for CONTAINER in $BUILD_ENV; do
@@ -130,23 +159,26 @@ docker_build() {
       echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP build $CONTAINER $COL_END"
       print_line2
       docker-compose -f $COMPOSE_APP build $CONTAINER
+      echo "- DONE -"
       echo ""
     done
   fi
+  echo "-- BUILD DONE --"
+  echo ""
 }
 
 docker_up() {
   daemon_mode
-  echo ""
   print_line2
   get_time
   echo "$COL_BLUE[ $DATE ] ##### Docker Compose Up: $COL_END"
-  echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP up $RECREATE$BUILD_ENV $COL_END\n"
+  echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP up $DAEMON $RECREATE$BUILD_ENV $COL_END\n"
   get_time
   print_line2
-  echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP up $RECREATE$BUILD_ENV $COL_END"
+  echo "$COL_GREEN[ $DATE ]       docker-compose -f $COMPOSE_APP up $DAEMON $RECREATE$BUILD_ENV $COL_END"
   print_line2
   docker-compose -f $COMPOSE_APP up $DAEMON $RECREATE$BUILD_ENV
+  echo "-- UP DONE --"
   echo ""
 }
 
@@ -155,10 +187,11 @@ main() {
   cache
   recreate
   build_env
+  prepare_volume
   docker_build
   docker_up
   footer
-  chmod_data
+  # chmod_data
 }
 
 ### START HERE ###
