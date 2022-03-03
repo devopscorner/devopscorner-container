@@ -7,7 +7,8 @@
 # -----------------------------------------------------------------------------
 set -e
 
-export CI_REGISTRY="YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
+export AWS_ACCOUNT="YOUR_AWS_ACCOUNT"
+export CI_REGISTRY="$AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
 export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="cicd"
 
@@ -21,8 +22,8 @@ export TAGS="latest \
 "
 
 echo "Login ECR"
-echo ">> aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
-aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
+echo ">> aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
+aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
 echo "- DONE -"
 echo ""
 
