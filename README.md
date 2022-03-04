@@ -39,87 +39,144 @@ Docker Container Images Repository for DevOpsCorner.id
 ### Push Image to ECR
 
 - Create Tags Image
+  - Example:
 
-  ```
-  export PATH_COMPOSE="compose"
-  export PATH_DOCKER="$PATH_COMPOSE/docker"
+    ```
+    # Ubuntu
 
-  cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
-  cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    docker tag devopscorner-cicd:ubuntu YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu
 
-  -- or --
+    # Alpine
 
-  cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh
-  cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh
+    docker tag devopscorner-cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
+    ```
 
-  -- or --
+  - With Script:
 
-  make ecr-tag-ubuntu
-  make ecr-tag-alpine
-  ```
+    ```
+    export PATH_COMPOSE="compose"
+    export PATH_DOCKER="$PATH_COMPOSE/docker"
+
+    cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+
+    -- or --
+
+    cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh
+    cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh
+
+    -- or --
+
+    make ecr-tag-ubuntu
+    make ecr-tag-alpine
+    ```
 
 - Push Image with Tags
+  - Example:
 
-  ```
-  export PATH_COMPOSE="compose"
-  export PATH_DOCKER="$PATH_COMPOSE/docker"
+    ```
+    # Ubuntu
 
-  cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
-  cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+    docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu
 
-  -- or --
+    # Alpine
 
-  cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh
-  cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh
+    docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
+    ```
 
-  -- or --
+  - With Script:
 
-  make ecr-push-ubuntu
-  make ecr-push-alpine
-  ```
+    ```
+    export PATH_COMPOSE="compose"
+    export PATH_DOCKER="$PATH_COMPOSE/docker"
+
+    cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+
+    -- or --
+
+    cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh
+    cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh
+
+    -- or --
+
+    make ecr-push-ubuntu
+    make ecr-push-alpine
+    ```
 
 ### Push Image to DockerHub
 
 - Login to your DockerHub Account
 - Create Tags Image
+  - Example:
 
-  ```
-  export PATH_COMPOSE="compose"
-  export PATH_DOCKER="$PATH_COMPOSE/docker"
+    ```
+    # Ubuntu (Latest)
 
-  cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
-  cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    docker tag devopscorner-cicd:ubuntu docker tag devopscorner-cicd:latest
 
-  -- or --
+    # Alpine (Latest)
 
-  cd ${PATH_COMPOSE} && ./dockerhub-tag-ubuntu.sh
-  cd ${PATH_COMPOSE} && ./dockerhub-tag-alpine.sh
+    docker tag devopscorner-cicd:alpine docker tag devopscorner-cicd:latest
+    ```
 
-  -- or --
+  - With Script:
 
-  make dockerhub-tag-ubuntu
-  make dockerhub-tag-alpine
-  ```
+    ```
+    export PATH_COMPOSE="compose"
+    export PATH_DOCKER="$PATH_COMPOSE/docker"
+
+    cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+
+    -- or --
+
+    cd ${PATH_COMPOSE} && ./dockerhub-tag-ubuntu.sh
+    cd ${PATH_COMPOSE} && ./dockerhub-tag-alpine.sh
+
+    -- or --
+
+    make dockerhub-tag-ubuntu
+    make dockerhub-tag-alpine
+    ```
 
 - Push Image with Tags
 
-  ```
-  export PATH_COMPOSE="compose"
-  export PATH_DOCKER="$PATH_COMPOSE/docker"
+  - Example:
 
-  cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
-  cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+    ```
+    # Ubuntu
 
-  -- or --
+    docker push devopscorner-cicd:ubuntu
 
-  cd ${PATH_COMPOSE} && ./dockerhub-push-ubuntu.sh
-  cd ${PATH_COMPOSE} && ./dockerhub-push-alpine.sh
+    # Alpine
 
-  -- or --
+    docker push devopscorner-cicd:alpine
 
-  make dockerhub-push-ubuntu
-  make dockerhub-push-alpine
-  ```
+    # Latest (Ubuntu / Alpine)
+
+    docker push devopscorner-cicd:latest
+    ```
+
+  - With Script:
+
+    ```
+    export PATH_COMPOSE="compose"
+    export PATH_DOCKER="$PATH_COMPOSE/docker"
+
+    cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+
+    -- or --
+
+    cd ${PATH_COMPOSE} && ./dockerhub-push-ubuntu.sh
+    cd ${PATH_COMPOSE} && ./dockerhub-push-alpine.sh
+
+    -- or --
+
+    make dockerhub-push-ubuntu
+    make dockerhub-push-alpine
+    ```
 
 ## Copyright
 
