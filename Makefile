@@ -24,6 +24,9 @@ VERSION       ?= 1.3.0
 BASE_IMAGE     = ubuntu
 BASE_VERSION   = 20.04
 
+# ==================== #
+#   CONTAINER UBUNTU   #
+# ==================== #
 .PHONY: run stop remove build push push-container
 run:
 	@echo "================================================="
@@ -58,63 +61,102 @@ push-ubuntu:
 	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh
 	@echo '- DONE -'
 
-push-container-ubuntu:
+build-push-ubuntu:
 	@echo "================================================="
-	@echo " Task      : Push Container Image Ubuntu"
+	@echo " Task      : Build & Push Container Image Ubuntu "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
 	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh
 	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh
 	@echo '- DONE -'
 
-.PHONY: build-cicd-ubuntu push-cicd-ubuntu push-container-cicd-ubuntu
-build-cicd-ubuntu:
-	@echo "================================================="
-	@echo " Task      : Create Container Image CI/CD Ubuntu "
-	@echo " Date/Time : `date`"
-	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh
-	@echo '- DONE -'
-
-push-cicd-ubuntu:
-	@echo "================================================="
-	@echo " Task      : Push Container Image CI/CD Ubuntu"
-	@echo " Date/Time : `date`"
-	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-push.sh
-	@echo '- DONE -'
-
-push-container-cicd-ubuntu:
-	@echo "================================================="
-	@echo " Task      : Push Container Image CI/CD Ubuntu"
-	@echo " Date/Time : `date`"
-	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-push.sh
-	@echo '- DONE -'
-
-.PHONY: build-cicd-alpine push-cicd-alpine push-container-cicd-alpine
+# ========================= #
+#   BUILD CONTAINER CI/CD   #
+# ========================= #
+.PHONY: build-cicd-alpine build-cicd-ubuntu
 build-cicd-alpine:
 	@echo "================================================="
-	@echo " Task      : Create Container Image CI/CD Alpine "
+	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
 	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh
 	@echo '- DONE -'
 
-push-cicd-alpine:
+build-cicd-ubuntu:
 	@echo "================================================="
-	@echo " Task      : Push Container Image CI/CD Alpine"
+	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-push.sh
+	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh
 	@echo '- DONE -'
 
-push-container-cicd-alpine:
+# ======================== #
+#   TAGS CONTAINER CI/CD   #
+# ======================== #
+.PHONY: tag-dockerhub-alpine tag-dockerhub-ubuntu tag-ecr-alpine tag-ecr-ubuntu
+dockerhub-tag-alpine:
 	@echo "================================================="
-	@echo " Task      : Push Container Image CI/CD Alpine"
+	@echo " Task      : Set Tags Image Alpine to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh
-	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-push.sh
+	@cd ${PATH_COMPOSE} && ./dockerhub-tag-alpine.sh
+	@echo '- DONE -'
+
+dockerhub-tag-ubuntu:
+	@echo "================================================="
+	@echo " Task      : Set Tags Image Ubuntu to DockerHub"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./dockerhub-tag-ubuntu.sh
+	@echo '- DONE -'
+
+ecr-tag-alpine:
+	@echo "================================================="
+	@echo " Task      : Set Tags Image Alpine to ECR"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh
+	@echo '- DONE -'
+
+ecr-tag-ubuntu:
+	@echo "================================================="
+	@echo " Task      : Set Tags Image Ubuntu to ECR"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh
+	@echo '- DONE -'
+
+# ======================== #
+#   PUSH CONTAINER CI/CD   #
+# ======================== #
+dockerhub-push-alpine:
+	@echo "================================================="
+	@echo " Task      : Push Image Alpine to DockerHub"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./dockerhub-push-alpine.sh
+	@echo '- DONE -'
+
+dockerhub-push-ubuntu:
+	@echo "================================================="
+	@echo " Task      : Push Image Ubuntu to DockerHub"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./dockerhub-push-ubuntu.sh
+	@echo '- DONE -'
+
+ecr-push-alpine:
+	@echo "================================================="
+	@echo " Task      : Push Image Alpine to ECR"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh
+	@echo '- DONE -'
+
+ecr-push-ubuntu:
+	@echo "================================================="
+	@echo " Task      : Push Image Ubuntu to ECR"
+	@echo " Date/Time : `date`"
+	@echo "================================================="
+	@cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh
 	@echo '- DONE -'
