@@ -90,7 +90,7 @@ RUN apt-get install -y \
       rm -f packer_${PACKER_VERSION}_linux_amd64.zip; sync
 
 RUN python3 -m pip install pip==21.3.1 &&\
-      pip3 install --upgrade pip cffi &&\
+      pip3 install --upgrade pip cffi awscli &&\
       # install ansible
       pip3 install ansible-core==${ANSIBLE_VERSION} \
       ansible-tower-cli==3.3.4 \

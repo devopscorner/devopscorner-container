@@ -8,7 +8,7 @@ apk add --no-cache \
       py3-pip
 
 python3 -m pip install pip==21.3.1 &&
-      pip3 install --upgrade pip cffi &&
+      pip3 install --upgrade pip cffi awscli &&
       pip3 install --no-cache-dir \
             PyYaml \
             requests \
