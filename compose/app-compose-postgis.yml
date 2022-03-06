@@ -61,11 +61,11 @@ services:
   #================================================================================================
   postgis:
     build:
-      context: ./docker/ubuntu-postgis
+      context: ./docker/postgis-ubuntu
       ## Without Datadog ##
-      # dockerfile: Dockerfile
+      dockerfile: Dockerfile
       ## With Datadog (default) ##
-      dockerfile: Dockerfile-Datadog
+      # dockerfile: Dockerfile-Datadog
     container_name: ${CONTAINER_POSTGRESQL:-devopscorner_postgis}
     restart: always
     ports:
@@ -75,7 +75,7 @@ services:
       #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_postgis:/var/lib/postgresql
       ## Path config postgresql.conf ##
-      - ${CONFIG_POSTGRESQL:-./docker/config/postgresql/postgresql.conf}:/var/lib/postgresql/postgresql.conf
+      - ${CONFIG_POSTGRESQL:-./docker/postgis-ubuntu/config/postgresql.conf}:/var/lib/postgresql/postgresql.conf
       ## Path services ##
       - ${SERVICES_TOOLS:-./services}:/tmp/services
     command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
