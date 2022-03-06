@@ -178,6 +178,19 @@ Docker Container Images Repository for DevOpsCorner.id
     make dockerhub-push-alpine
     ```
 
+## Security Check
+
+Make sure that you didn't push sensitive information in this repository
+
+- [ ] AWS Credentials (AWS_ACCESS_KEY, AWS_SECRET_KEY)
+- [ ] AWS Account ID
+- [ ] AWS Resources ARN
+- [ ] Username & Password
+- [ ] Private (id_rsa) & Public Key (id_rsa.pub)
+- [ ] DNS Zone ID
+- [ ] APP & API Key
+
+
 ## Copyright
 
 - Author: **Dwi Fahni Denni (@zeroc0d3)**

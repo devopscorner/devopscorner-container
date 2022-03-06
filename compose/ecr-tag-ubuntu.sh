@@ -21,11 +21,11 @@ export TAGS="latest
   ubuntu-20.04
 "
 
-echo "Login ECR"
-echo ">> aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
-aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
-echo "- DONE -"
-echo ""
+# echo "Login ECR"
+# echo ">> aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
+# aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
+# echo "- DONE -"
+# echo ""
 
 for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"
