@@ -44,11 +44,11 @@ Docker Container Images Repository for DevOpsCorner.id
     ```
     # Ubuntu
 
-    docker tag devopscorner-cicd:ubuntu YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
 
     # Alpine
 
-    docker tag devopscorner-cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
     ```
 
   - With Script:
@@ -113,11 +113,11 @@ Docker Container Images Repository for DevOpsCorner.id
     ```
     # Ubuntu (Latest)
 
-    docker tag devopscorner-cicd:ubuntu docker tag devopscorner-cicd:latest
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu devopscorner/cicd:ubuntu
 
     # Alpine (Latest)
 
-    docker tag devopscorner-cicd:alpine docker tag devopscorner-cicd:latest
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine devopscorner/cicd:alpine
     ```
 
   - With Script:
