@@ -59,5 +59,6 @@ artifacts:
     - scripts/*
     - _infra/*
     - Makefile
+    - README.md
     - run-docker.sh
   name: "artifact-$(date '+%Y%m%d-%H%M%S')"
