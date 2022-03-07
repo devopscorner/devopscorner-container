@@ -25,10 +25,8 @@ export TAGS="latest
 echo "============="
 echo "  Login ECR  "
 echo "============="
-touch ./ecr_password.txt
-echo `$(aws ecr get-login-password --region ap-southeast-1)` > ./ecr_password.txt
-echo ">> cat ./ecr_password.txt | docker login -u AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
-cat ./ecr_password.txt | docker login -u AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
+PASSWORD=`aws ecr get-login-password --region ap-southeast-1`
+echo $PASSWORD | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
 echo "- DONE -"
 echo ""
 
