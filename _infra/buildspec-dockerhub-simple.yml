@@ -43,13 +43,17 @@ phases:
       # ============ #
       #  Tags Image  #
       #============= #
-      - make ecr-tag-alpine
+      - docker tag ${env_aws_account}.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine ${env_container_image}
+      - make dockerhub-tag-alpine
       # ============ #
       #  Push Image  #
       #============= #
-      # Login ECR (Inside Script)
-      # Push to ECR
-      - make ecr-push-alpine
+      # Login DockerHub
+      - touch ./dockerhub_password.txt
+      - echo "${env_dockerhub_password}" | base64 -d > ./dockerhub_password.txt
+      - cat ./dockerhub_password.txt | docker login --username ${env_dockerhub_username} --password-stdin
+      # Push to DockerHub
+      - make dockerhub-push-alpine
       - echo '-- ALL DONE --'
 
 artifacts:
