@@ -20,6 +20,13 @@ export TAGS="latest \
   alpine
 "
 
+echo "==================="
+echo "  Login DockerHub  "
+echo "==================="
+touch ./dockerhub_password.txt
+echo "${DOCKERHUB_PASSWORD}" > ./dockerhub_password.txt
+cat ./dockerhub_password.txt | docker login --username ${DOCKERHUB_USERNAME} --password-stdin
+
 for TAG in $TAGS; do
   echo "Docker Push => $IMAGE:$TAG"
   echo ">> docker push $IMAGE:$TAG"

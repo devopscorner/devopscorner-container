@@ -48,10 +48,7 @@ phases:
       # ============ #
       #  Push Image  #
       #============= #
-      # Login DockerHub
-      - touch ./dockerhub_password.txt
-      - echo "${env_dockerhub_password}" | base64 -d > ./dockerhub_password.txt
-      - cat ./dockerhub_password.txt | docker login --username ${env_dockerhub_username} --password-stdin
+      # Login DockerHub (Inside Script)
       # Push to DockerHub
       - make dockerhub-push-alpine
       - echo '-- ALL DONE --'
@@ -62,6 +59,5 @@ artifacts:
     - scripts/*
     - _infra/*
     - Makefile
-    - README.md
     - run-docker.sh
   name: "artifact-$(date '+%Y%m%d-%H%M%S')"
