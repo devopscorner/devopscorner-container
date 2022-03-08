@@ -9,7 +9,7 @@ env:
     STORE_AWS_ACCOUNT: /devopscorner/cicd/lab/credentials/aws_account
     STORE_AWS_ACCESS_KEY: /devopscorner/cicd/lab/credentials/aws_access_key
     STORE_AWS_SECRET_KEY: /devopscorner/cicd/lab/credentials/aws_secret_key
-    STORE_REPO_USENAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
+    STORE_REPO_USERNAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
     STORE_REPO_PASSWORD: /devopscorner/cicd/lab/repo_credentials/codecommit/password_encoded
     STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/lab/repo_credentials/dockerhub/username
     STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/lab/repo_credentials/dockerhub/password_encoded
@@ -19,16 +19,7 @@ env:
   #  Ref: Pipeline Environment Variables  #
   # ===================================== #
   variables:
-    env_aws_account: $STORE_AWS_ACCOUNT
-    env_aws_access_key: $STORE_AWS_ACCESS_KEY
-    env_aws_secret_key: $STORE_AWS_SECRET_KEY
-    env_repo_username: $STORE_REPO_USENAME
-    env_repo_pubkey: $STORE_REPO_PASSWORD" # base64 encode
-    env_dockerhub_username: $STORE_DOCKERHUB_USERNAME
-    env_dockerhub_password: $STORE_DOCKERHUB_PASSWORD
-    env_repo_url: $STORE_REPO_URL
-    env_repo_folder: $STORE_REPO_FOLDER
-    env_container_image: "devopscorner/cicd:alpine"
+    env_container_image: "devopscorner/devopscorner-container:ubuntu"
     AWS_DEFAULT_REGION: "ap-southeast-1"
     TF_VERSION: "1.1.7"
 
@@ -54,17 +45,6 @@ phases:
       #  Build Image  #
       #============== #
       - make build-cicd-alpine
-      # ============================================================================ #
-      #  - Check credentials existing                                                #
-      #  - If not exist from environment variables, store from AWS Parameter Store   #
-      # ============================================================================ #
-      - if ["${AWS_ACCOUNT}" = ""] then ${env_aws_account}=$(STORE_AWS_ACCOUNT) fi
-      - if ["${STORE_AWS_ACCESS_KEY}" = ""] then ${env_aws_access_key}=$(STORE_AWS_ACCESS_KEY) fi
-      - if ["${AWS_SECRET_KEY}" = ""] then ${env_aws_secret_key}=$(STORE_AWS_SECRET_KEY) fi
-      - if ["${REPO_USERNAME}" = ""] then ${env_repo_username}=$(STORE_REPO_USENAME) fi
-      - if ["${REPO_PUBKEY}" = ""] then ${env_repo_pubkey}=$(STORE_REPO_PASSWORD) fi
-      - if ["${DOCKERHUB_USERNAME}" = ""] then ${env_dockerhub_username}=$(STORE_DOCKERHUB_USERNAME) fi
-      - if ["${DOCKERHUB_PASSWORD}" = ""] then ${env_dockerhub_password}=$(STORE_DOCKERHUB_PASSWORD) fi
       # ============ #
       #  Tags Image  #
       #============= #

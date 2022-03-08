@@ -12,9 +12,9 @@ env:
     env_repo_pubkey: "${REPO_PUBKEY}" # base64 encoded
     env_dockerhub_username: "${DOCKERHUB_USERNAME}"
     env_dockerhub_password: "${DOCKERHUB_PASSWORD}"
-    env_repo_url: "https://github.com/devopscorner/devopscorner-container.git"
-    env_repo_folder: "devopscorner-container"
-    env_container_image: "devopscorner/cicd:ubuntu"
+    env_repo_url: "${REPO_URL}"
+    env_repo_folder: "${REPO_FOLDER}"
+    env_container_image: "devopscorner/cicd:alpine"
     AWS_DEFAULT_REGION: "ap-southeast-1"
     TF_VERSION: "1.1.7"
 

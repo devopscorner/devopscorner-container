@@ -9,7 +9,7 @@ env:
     STORE_AWS_ACCOUNT: /devopscorner/cicd/lab/credentials/aws_account
     STORE_AWS_ACCESS_KEY: /devopscorner/cicd/lab/credentials/aws_access_key
     STORE_AWS_SECRET_KEY: /devopscorner/cicd/lab/credentials/aws_secret_key
-    STORE_REPO_USENAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
+    STORE_REPO_USERNAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
     STORE_REPO_PASSWORD: /devopscorner/cicd/lab/repo_credentials/codecommit/password_encoded
     STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/lab/repo_credentials/dockerhub/username
     STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/lab/repo_credentials/dockerhub/password_encoded
@@ -19,16 +19,7 @@ env:
   #  Ref: Pipeline Environment Variables  #
   # ===================================== #
   variables:
-    env_aws_account: $STORE_AWS_ACCOUNT
-    env_aws_access_key: $STORE_AWS_ACCESS_KEY
-    env_aws_secret_key: $STORE_AWS_SECRET_KEY
-    env_repo_username: $STORE_REPO_USENAME
-    env_repo_pubkey: $STORE_REPO_PASSWORD" # base64 encode
-    env_dockerhub_username: $STORE_DOCKERHUB_USERNAME
-    env_dockerhub_password: $STORE_DOCKERHUB_PASSWORD
-    env_repo_url: $STORE_REPO_URL
-    env_repo_folder: $STORE_REPO_FOLDER
-    env_container_image: "devopscorner/cicd:alpine"
+    env_container_image: "devopscorner/devopscorner-container:alpine"
     AWS_DEFAULT_REGION: "ap-southeast-1"
     TF_VERSION: "1.1.7"
 
@@ -45,8 +36,8 @@ phases:
       - unzip terraform_${TF_VERSION}_linux_amd64.zip
   pre_build:
     commands:
-      - git clone ${env_repo_url} ${env_repo_folder}
-      - cd ${env_repo_folder} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${env_aws_account}/g" {} \;
+      - git clone ${STORE_REPO_URL} ${STORE_REPO_FOLDER}
+      - cd ${env_repo_folder} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
       - echo '- DONE -'
   build:
     commands:
@@ -54,27 +45,17 @@ phases:
       #  Build Image  #
       #============== #
       - make build-cicd-alpine
-      # ============================================================================ #
-      #  - Check credentials existing                                                #
-      #  - If not exist from environment variables, store from AWS Parameter Store   #
-      # ============================================================================ #
-      - if ["${AWS_ACCOUNT}" = ""] then ${env_aws_account}=$(STORE_AWS_ACCOUNT) fi
-      - if ["${STORE_AWS_ACCESS_KEY}" = ""] then ${env_aws_access_key}=$(STORE_AWS_ACCESS_KEY) fi
-      - if ["${AWS_SECRET_KEY}" = ""] then ${env_aws_secret_key}=$(STORE_AWS_SECRET_KEY) fi
-      - if ["${REPO_USERNAME}" = ""] then ${env_repo_username}=$(STORE_REPO_USENAME) fi
-      - if ["${REPO_PUBKEY}" = ""] then ${env_repo_pubkey}=$(STORE_REPO_PASSWORD) fi
-      - if ["${DOCKERHUB_USERNAME}" = ""] then ${env_dockerhub_username}=$(STORE_DOCKERHUB_USERNAME) fi
-      - if ["${DOCKERHUB_PASSWORD}" = ""] then ${env_dockerhub_password}=$(STORE_DOCKERHUB_PASSWORD) fi
       # ============ #
       #  Tags Image  #
       #============= #
-      - make ecr-tag-alpine
+      - docker tag ${env_aws_account}.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine ${env_container_image}
+      - make dockerhub-tag-alpine
       # ============ #
       #  Push Image  #
       #============= #
-      # Login ECR (Inside Script)
-      # Push to ECR
-      - make ecr-push-alpine
+      # Login DockerHub (Inside Script)
+      # Push to DockerHub
+      - make dockerhub-push-alpine
       - echo '-- ALL DONE --'
 
 artifacts:
