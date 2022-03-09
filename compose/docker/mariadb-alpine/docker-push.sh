@@ -7,8 +7,8 @@
 # -----------------------------------------------------------------------------
 set -e
 
-export AWS_ACCOUNT="YOUR_AWS_ACCOUNT"
-export CI_REGISTRY="$AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com"
+export AWS_ACCOUNT_ID="YOUR_AWS_ACCOUNT"
+export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
 export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="mariadb"
 

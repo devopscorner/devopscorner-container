@@ -62,13 +62,13 @@ Docker Container Images Repository for DevOpsCorner.id
 
     -- or --
 
-    cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh
-    cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh
+    cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh ARGS="YOUR_AWS_ACCOUNT"
+    cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh ARGS="YOUR_AWS_ACCOUNT"
 
     -- or --
 
-    make ecr-tag-ubuntu
-    make ecr-tag-alpine
+    make ecr-tag-ubuntu ARGS="YOUR_AWS_ACCOUNT"
+    make ecr-tag-alpine ARGS="YOUR_AWS_ACCOUNT"
     ```
 
 - Push Image with Tags
@@ -95,13 +95,13 @@ Docker Container Images Repository for DevOpsCorner.id
 
     -- or --
 
-    cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh
-    cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh
+    cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh ARGS="YOUR_AWS_ACCOUNT"
+    cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh ARGS="YOUR_AWS_ACCOUNT"
 
     -- or --
 
-    make ecr-push-ubuntu
-    make ecr-push-alpine
+    make ecr-push-ubuntu ARGS="YOUR_AWS_ACCOUNT"
+    make ecr-push-alpine ARGS="YOUR_AWS_ACCOUNT"
     ```
 
 ### Push Image to DockerHub

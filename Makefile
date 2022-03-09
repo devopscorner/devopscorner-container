@@ -13,7 +13,7 @@ export PATH_COMPOSE="compose"
 export PATH_DOCKER="compose/docker"
 export PROJECT_NAME="container"
 
-export CI_REGISTRY     ?= YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com
+export CI_REGISTRY     ?= $(ARGS).dkr.ecr.ap-southeast-1.amazonaws.com
 export CI_PROJECT_PATH ?= devopscorner
 export CI_PROJECT_NAME ?= cicd
 
@@ -115,7 +115,7 @@ ecr-tag-alpine:
 	@echo " Task      : Set Tags Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh
+	@cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh $(ARGS)
 	@echo '- DONE -'
 
 ecr-tag-ubuntu:
@@ -123,7 +123,7 @@ ecr-tag-ubuntu:
 	@echo " Task      : Set Tags Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh
+	@cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh $(ARGS)
 	@echo '- DONE -'
 
 # ======================== #
@@ -150,7 +150,7 @@ ecr-push-alpine:
 	@echo " Task      : Push Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh
+	@cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh $(ARGS)
 	@echo '- DONE -'
 
 ecr-push-ubuntu:
@@ -158,5 +158,5 @@ ecr-push-ubuntu:
 	@echo " Task      : Push Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh
+	@cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh $(ARGS)
 	@echo '- DONE -'

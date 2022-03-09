@@ -52,17 +52,17 @@ phases:
       # ============= #
       #  Build Image  #
       #============== #
-      - make build-cicd-ubuntu
+      - make build-cicd-ubuntu ARGS=${STORE_AWS_ACCOUNT}
       # ============ #
       #  Tags Image  #
       #============= #
-      - make ecr-tag-ubuntu
+      - make ecr-tag-ubuntu ARGS=${STORE_AWS_ACCOUNT}
       # ============ #
       #  Push Image  #
       #============= #
       # Login ECR (Inside Script)
       # Push to ECR
-      - make ecr-push-ubuntu
+      - make ecr-push-ubuntu ARGS=${STORE_AWS_ACCOUNT}
       - echo '-- ALL DONE --'
 
 artifacts:

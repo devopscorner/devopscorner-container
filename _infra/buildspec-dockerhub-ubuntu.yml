@@ -35,12 +35,12 @@ phases:
       #  Using Public Repository  #
       #========================== #
       # - git clone ${STORE_REPO_URL} ${STORE_REPO_FOLDER}
-      # - cd ${STORE_REPO_FOLDER} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
+      # - cd ${STORE_REPO_FOLDER} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${env_aws_account}/g" {} \;
       # ====================== #
       #  Using AWS CodeCommit  #
       #======================= #
       # https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
-      - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
+      - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${env_aws_account}/g" {} \;
       - echo '- DONE -'
   build:
     commands:

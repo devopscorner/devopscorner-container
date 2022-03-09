@@ -52,7 +52,7 @@ phases:
       # ============= #
       #  Build Image  #
       #============== #
-      - make build-cicd-alpine
+      - make build-cicd-alpine ARGS=${STORE_AWS_ACCOUNT}
       # ============ #
       #  Tags Image  #
       #============= #
