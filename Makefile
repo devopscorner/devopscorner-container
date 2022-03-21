@@ -10,7 +10,8 @@
 export PATH_WORKSPACE="src"
 export PATH_SCRIPT="scripts"
 export PATH_COMPOSE="compose"
-export PATH_DOCKER="compose/docker"
+export PATH_DOCKER="$(PATH_COMPOSE)/docker"
+export PATH_HELM="$(PATH_COMPOSE)/helm"
 export PROJECT_NAME="container"
 
 export CI_REGISTRY     ?= $(ARGS).dkr.ecr.ap-southeast-1.amazonaws.com
@@ -79,7 +80,8 @@ build-cicd-alpine:
 	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh
+	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && docker-compose -f app-compose-cicd-alpine.yml up -d
 	@echo '- DONE -'
 
 build-cicd-ubuntu:
@@ -87,7 +89,8 @@ build-cicd-ubuntu:
 	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh
+	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && docker-compose -f app-compose-cicd-ubuntu.yml up -d
 	@echo '- DONE -'
 
 # ======================== #
@@ -129,6 +132,7 @@ ecr-tag-ubuntu:
 # ======================== #
 #   PUSH CONTAINER CI/CD   #
 # ======================== #
+.PHONY: dockerhub-push-alpine dockerhub-push-ubuntu ecr-push-alpine ecr-push-ubuntu
 dockerhub-push-alpine:
 	@echo "================================================="
 	@echo " Task      : Push Image Alpine to DockerHub"
