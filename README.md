@@ -1,5 +1,17 @@
 # DevOpsCorner Docker Container
 
+![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
+![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
+![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
+![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/1.0/total)
+![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
+![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/devopscorner-container/blob/master/clone.json?raw=True&logo=github)
+![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
+![pull requests](https://img.shields.io/github/issues-pr/devopscorner/devopscorner-container)
+![forks](https://img.shields.io/github/forks/devopscorner/devopscorner-container)
+![stars](https://img.shields.io/github/stars/devopscorner/devopscorner-container)
+[![license](https://img.shields.io/github/license/devopscorner/devopscorner-container)](https://img.shields.io/github/license/devopscorner/devopscorner-container)
+
 Docker Container Images Repository for DevOpsCorner.id
 
 ### Build Container Image
