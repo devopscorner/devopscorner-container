@@ -1,4 +1,5 @@
-FROM ubuntu:${UBUNTU_VERSION:-20.04}
+# FROM ubuntu:${UBUNTU_VERSION:-20.04}
+FROM nginx:${NGINX_VERSION:-1.21}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -111,4 +112,10 @@ RUN apt-get clean &&\
 
 WORKDIR /root
 
-EXPOSE 22
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+EXPOSE 22 80
+
+STOPSIGNAL SIGQUIT
+
+CMD ["nginx", "-g", "daemon off;"]

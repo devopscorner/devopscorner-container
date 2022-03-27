@@ -1,4 +1,5 @@
-FROM alpine:${ALPINE_VERSION:-3.15}
+# FROM alpine:${ALPINE_VERSION:-3.15}
+FROM nginx:${NGINX_VERSION:-1.21-alpine}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -104,4 +105,10 @@ RUN rm -rf /var/cache/apk/* /root/.cache /tmp/*
 
 WORKDIR /root
 
-EXPOSE 22
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+EXPOSE 22 80
+
+STOPSIGNAL SIGQUIT
+
+CMD ["nginx", "-g", "daemon off;"]

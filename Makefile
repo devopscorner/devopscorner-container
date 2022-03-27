@@ -51,7 +51,7 @@ build-ubuntu:
 	@echo " Task      : Create Container Image Ubuntu "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh $(ARGS)
 	@echo '- DONE -'
 
 push-ubuntu:
@@ -59,7 +59,7 @@ push-ubuntu:
 	@echo " Task      : Push Container Image Ubuntu"
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(ARGS)
 	@echo '- DONE -'
 
 build-push-ubuntu:
@@ -67,8 +67,8 @@ build-push-ubuntu:
 	@echo " Task      : Build & Push Container Image Ubuntu "
 	@echo " Date/Time : `date`"
 	@echo "================================================="
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh $(ARGS)
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(ARGS)
 	@echo '- DONE -'
 
 # ========================= #
@@ -81,7 +81,6 @@ build-cicd-alpine:
 	@echo " Date/Time : `date`"
 	@echo "================================================="
 	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh $(ARGS)
-	@cd ${PATH_COMPOSE} && docker-compose -f app-compose-cicd-alpine.yml up -d
 	@echo '- DONE -'
 
 build-cicd-ubuntu:
@@ -90,7 +89,6 @@ build-cicd-ubuntu:
 	@echo " Date/Time : `date`"
 	@echo "================================================="
 	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh $(ARGS)
-	@cd ${PATH_COMPOSE} && docker-compose -f app-compose-cicd-ubuntu.yml up -d
 	@echo '- DONE -'
 
 # ======================== #
