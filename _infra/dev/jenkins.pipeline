@@ -40,10 +40,6 @@ node {
             git log -n 1 --pretty=format:'%h'
         ''').trim()
     }
-    createImage(
-        '', '_api.Dockerfile', ECR_REPO + 'api',
-        VERSION, 'api/api.yaml'
-    )
 
     dir(PATH_COMPOSE){
         for (int i = 0; i < SERVICES.size(); i++) {
