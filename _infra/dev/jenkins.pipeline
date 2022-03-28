@@ -69,7 +69,7 @@ node {
                 kubectl version
                 kubectl config use-context arn:aws:eks:ap-southeast-1:YOUR_AWS_ACCOUNT:cluster/EKS_CLUSTER_NAME
                 helmfile --version
-                helmfile -f helmfile.yaml apply
+                helmfile -f jumppod-template.yml apply
                 '''
             }
         }
