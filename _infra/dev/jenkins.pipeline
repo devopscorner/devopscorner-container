@@ -1,0 +1,86 @@
+def VERSION = 'latest'
+def ECR_REPO = 'YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/'
+def GITHUB_REPO = 'https://github.com/devopscorner/devopscorner-container.git'
+def PATH_KUBECONFIG = '/home/ubuntu/.kube/config'
+def PATH_DEPLOY = '_infra/dev'
+def PATH_COMPOSE = 'compose/docker/cicd-alpine'
+
+def SERVICES = [
+    'jumppod'
+]
+
+def commitID = ''
+
+def createImage(serviceName, dockerFile, dockerImage, version, helmValues) {
+    stage('Build & push image - ' + serviceName) {
+        println 'Creating ' + dockerImage
+
+        if (serviceName == '') {
+            sh 'docker build -f ' + dockerFile + ' -t ' + dockerImage + ' .'
+        } else {
+            sh 'docker build --build-arg SVC=' + serviceName + ' -f ' + dockerFile + ' -t ' + dockerImage + ' .'
+        }
+
+        withDockerRegistry(credentialsId: 'ecr:ap-southeast-1:devops', toolName: 'docker', url: 'https://'+dockerImage) {
+            docker.image(dockerImage).push(version)
+        }
+
+        sh 'sed -i "s/tag:.*$/tag: \"' + version + '\"/" _infra/dev/values/' + helmValues
+    }
+}
+
+node {
+    stage('Init'){
+        def dockerHome = tool 'docker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
+    stage('Clone'){
+        git branch: 'develop', credentialsId: 'github', url: GITHUB_REPO
+        commitID = sh(returnStdout: true, script: '''
+            git log -n 1 --pretty=format:'%h'
+        ''').trim()
+    }
+    createImage(
+        '', '_api.Dockerfile', ECR_REPO + 'api',
+        VERSION, 'api/api.yaml'
+    )
+
+    dir(PATH_COMPOSE){
+        for (int i = 0; i < SERVICES.size(); i++) {
+            createImage(
+                SERVICES[i], 'Dockerfile', ECR_REPO + 'container-' + SERVICES[i],
+                VERSION, 'api/' + SERVICES[i] + '.yml'
+            )
+        }
+    }
+
+    stage('Cleaning docker images'){
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
+            sh '''
+                docker rmi -f $(sudo docker images | grep ''' + ECR_REPO + ''' | awk '{print $3}')
+                docker rmi -f $(sudo docker images --filter="dangling=true" -q --no-trunc)
+            '''
+        }
+    }
+    stage('Helmfile Deploy'){
+        withEnv(["KUBECONFIG=$PATH_KUBECONFIG"]) {
+            dir(PATH_DEPLOY){
+                sh '''
+                kubectl version
+                kubectl config use-context arn:aws:eks:ap-southeast-1:YOUR_AWS_ACCOUNT:cluster/EKS_CLUSTER_NAME
+                helmfile --version
+                helmfile -f helmfile.yaml apply
+                '''
+            }
+        }
+    }
+    stage('Cleaning up workspace'){
+        cleanWs()
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            sh '''
+                docker rmi -f $(docker images | grep ''' + ECR_REPO + ''' | awk '{print $3}')
+                docker rmi -f $(docker images --filter="dangling=true" -q --no-trunc)
+            '''
+        }
+    }
+}
