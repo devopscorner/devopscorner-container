@@ -14,7 +14,7 @@ ENV IMG_DESC="Docker Image CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV UBUNTU_VERSION="20.04"
-ENV CICD_VERSION="1.0.34"
+ENV CICD_VERSION="1.0.44"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \

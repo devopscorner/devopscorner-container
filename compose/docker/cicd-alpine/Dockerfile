@@ -14,7 +14,7 @@ ENV IMG_DESC="Docker Image CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV ALPINE_VERSION="3.15"
-ENV CICD_VERSION="1.0.3"
+ENV CICD_VERSION="1.0.4"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
@@ -42,9 +42,11 @@ LABEL maintainer="$AUTHOR" \
 COPY rootfs /
 
 ENV ANSIBLE_VERSION=2.12.2
+ENV ANSIBLE_TOWER_CLI_VERSION=3.3.4
 ENV PACKER_VERSION=1.7.10
 ENV TERRAFORM_VERSION=1.1.6
 ENV TERRAGRUNT_VERSION=v0.36.1
+ENV TERRASCAN_VERSION=1.14.0
 
 USER root
 RUN apk add --no-cache \
@@ -67,34 +69,43 @@ RUN apk add --no-cache \
       py3-pip &&\
       set -ex; sync
 
+# install terraform
 RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&\
       unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
-      rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&\
+      rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip; sync &&\
       # install terragrunt
       wget -O /usr/local/bin/terragrunt \
       https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
-      chmod +x /usr/local/bin/terragrunt &&\
+      chmod +x /usr/local/bin/terragrunt; sync &&\
       # install packer
       wget -O packer_${PACKER_VERSION}_linux_amd64.zip \
       https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&\
       unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
-      rm -f packer_${PACKER_VERSION}_linux_amd64.zip; sync
+      rm -f packer_${PACKER_VERSION}_linux_amd64.zip; sync &&\
+      # install terrascan
+      wget -O terrascan.tar.gz \
+      https://github.com/accurics/terrascan/releases/download/v${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION}_Linux_x86_64.tar.gz &&\
+      tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
+      chmod +x /usr/local/bin/terrascan &&\
+      rm terrascan.tar.gz; sync &&\
+      # install infracost
+      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | ash; sync
 
 RUN python3 -m pip install pip==21.3.1 &&\
       pip3 install --upgrade pip cffi awscli &&\
       # install ansible
       pip3 install --no-cache-dir \
       ansible-core==${ANSIBLE_VERSION} \
-      ansible-tower-cli==3.3.4 \
+      ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
       PyYaml \
       Jinja2 \
       httplib2 \
       six \
       requests \
       boto3 \
-      # install awscli
-      awscli &&\
+      # install checkov
+      checkov &&\
       # setup root .ssh directory
       mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
 
