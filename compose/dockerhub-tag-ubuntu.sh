@@ -13,10 +13,10 @@ export CI_PROJECT_NAME="cicd"
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export BASE_IMAGE="$IMAGE:ubuntu"
 export TAGS="latest
-  1.0.4 \
-  1.0.4-ubuntu \
+  1.0.5 \
+  1.0.5-ubuntu \
   ubuntu-latest \
-  ubuntu-20.04
+  ubuntu-22.04
 "
 
 for TAG in $TAGS; do

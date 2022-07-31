@@ -13,10 +13,10 @@ export CI_PROJECT_NAME="cicd"
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export BASE_IMAGE="$IMAGE:alpine"
 export TAGS="latest \
-  1.0.4 \
-  1.0.4-alpine \
+  1.0.5 \
+  1.0.5-alpine \
   alpine-latest \
-  alpine-3.15 \
+  alpine-3.16 \
   alpine
 "
 
