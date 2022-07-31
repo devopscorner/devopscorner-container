@@ -1,4 +1,4 @@
-# FROM alpine:${ALPINE_VERSION:-3.15}
+# FROM alpine:${ALPINE_VERSION:-3.16}
 FROM nginx:${NGINX_VERSION:-1.21-alpine}
 
 ARG BUILD_DATE
@@ -9,11 +9,11 @@ ARG GIT_URL
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
 ENV IMG_NAME="cicd-alpine"
-ENV IMG_VERSION="3.15"
+ENV IMG_VERSION="3.16"
 ENV IMG_DESC="Docker Image CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV ALPINE_VERSION="3.15"
+ENV ALPINE_VERSION="3.16"
 ENV CICD_VERSION="1.0.4"
 
 LABEL maintainer="$AUTHOR" \
@@ -44,9 +44,11 @@ COPY rootfs /
 ENV ANSIBLE_VERSION=2.12.2
 ENV ANSIBLE_TOWER_CLI_VERSION=3.3.4
 ENV PACKER_VERSION=1.7.10
-ENV TERRAFORM_VERSION=1.1.6
+ENV TERRAFORM_VERSION=1.1.7
 ENV TERRAGRUNT_VERSION=v0.36.1
 ENV TERRASCAN_VERSION=1.14.0
+ENV HELMFILE_VERSION=v0.144.0
+ENV KUBECTL_VERSION=v1.24.0
 
 USER root
 RUN apk add --no-cache \
@@ -90,8 +92,28 @@ RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
       # install infracost
-      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | ash; sync
+      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash; sync &&\
+      # install helm
+      curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
+      chmod 700 get_helm.sh \
+      ./get_helm.sh; sync
 
+# install helm plugins
+RUN helm plugin install https://github.com/databus23/helm-diff \
+      helm plugin install https://github.com/hypnoglow/helm-s3.git \
+      helm repo add stable https://charts.helm.sh/stable; sync
+
+# install helmfile
+RUN wget -O /usr/local/bin/helmfile \
+      https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
+      chmod +x /usr/local/bin/helmfile; sync
+
+# install kubectl
+RUN wget -O /usr/local/bin/kubectl \
+      https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+      chmod +x /usr/local/bin/kubectl; sync
+
+# install python libraries
 RUN python3 -m pip install pip==21.3.1 &&\
       pip3 install --upgrade pip cffi awscli &&\
       # install ansible
