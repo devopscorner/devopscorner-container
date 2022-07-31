@@ -104,8 +104,8 @@ RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       ./get_helm.sh; sync
 
 # install helm plugins
-RUN helm plugin install https://github.com/databus23/helm-diff \
-      helm plugin install https://github.com/hypnoglow/helm-s3.git \
+RUN helm plugin install https://github.com/databus23/helm-diff &&\
+      helm plugin install https://github.com/hypnoglow/helm-s3.git &&\
       helm repo add stable https://charts.helm.sh/stable; sync
 
 # install helmfile
@@ -119,7 +119,7 @@ RUN wget -O /usr/local/bin/kubectl \
       chmod +x /usr/local/bin/kubectl; sync
 
 # install python libraries
-RUN python3 -m pip install pip==21.3.1 &&\
+RUN python3 -m pip install pip==22.0.4 &&\
       pip3 install --upgrade pip cffi awscli &&\
       # install ansible
       pip3 install --no-cache-dir \
