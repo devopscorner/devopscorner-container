@@ -71,52 +71,87 @@ RUN apk add --no-cache \
       py3-pip &&\
       set -ex; sync
 
-# install terraform
+# =================== #
+#  Install Terraform  #
+# =================== #
 RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&\
       unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
       rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip; sync &&\
-      # install terragrunt
+      # ==================== #
+      #  Install Terragrunt  #
+      # ==================== #
       wget -O /usr/local/bin/terragrunt \
       https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
-      # install packer
+      # ================ #
+      #  Install Packer  #
+      # ================ #
       wget -O packer_${PACKER_VERSION}_linux_amd64.zip \
       https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&\
       unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
       rm -f packer_${PACKER_VERSION}_linux_amd64.zip; sync &&\
-      # install terrascan
+      # =================== #
+      #  Install Terrascan  #
+      # =================== #
       wget -O terrascan.tar.gz \
       https://github.com/accurics/terrascan/releases/download/v${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION}_Linux_x86_64.tar.gz &&\
       tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
-      # install infracost
-      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash; sync &&\
-      # install helm
-      curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
-      chmod 700 get_helm.sh \
-      ./get_helm.sh; sync
+      # =================== #
+      #  Install Infracost  #
+      # =================== #
+      curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash; sync
 
-# install helm plugins
+# =============== #
+#  Install TFenv  #
+# =============== #
+RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
+      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile &&\
+      ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
+      mkdir -p ~/.local/bin/ &&\
+      ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
+
+# ============== #
+#  Install Helm  #
+# ============== #
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
+      chmod 700 get_helm.sh &&\
+      ./get_helm.sh &&\
+      helm version; sync
+
+# ===================== #
+#  Install Helm Plugins #
+# ===================== #
 RUN helm plugin install https://github.com/databus23/helm-diff &&\
       helm plugin install https://github.com/hypnoglow/helm-s3.git &&\
-      helm repo add stable https://charts.helm.sh/stable; sync
+      helm repo add stable https://charts.helm.sh/stable &&\
+      helm repo update; sync
 
-# install helmfile
+# ================== #
+#  Install Helmfile  #
+# ================== #
 RUN wget -O /usr/local/bin/helmfile \
       https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
-      chmod +x /usr/local/bin/helmfile; sync
+      chmod +x /usr/local/bin/helmfile &&\
+      helmfile --version; sync
 
-# install kubectl
+# ================= #
+#  Install Kubectl  #
+# ================= #
 RUN wget -O /usr/local/bin/kubectl \
       https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
-# install python libraries
+# ========================= #
+# Install Python Libraries  #
+# ========================= #
 RUN python3 -m pip install pip==22.0.4 &&\
       pip3 install --upgrade pip cffi awscli &&\
-      # install ansible
+      # ================= #
+      #  Install Ansible  #
+      # ================= #
       pip3 install --no-cache-dir \
       ansible-core==${ANSIBLE_VERSION} \
       ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
@@ -126,7 +161,9 @@ RUN python3 -m pip install pip==22.0.4 &&\
       six \
       requests \
       boto3 \
-      # install checkov
+      # ================= #
+      #  Install Checkov  #
+      # ================= #
       checkov &&\
       # setup root .ssh directory
       mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
