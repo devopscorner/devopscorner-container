@@ -38,16 +38,19 @@ Docker Container Images Repository for DevOpsCorner.id
 
   cd ${PATH_DOCKER}/cicd-ubuntu && docker build . -t $IMAGE:$TAG
   cd ${PATH_DOCKER}/cicd-alpine && docker build . -t $IMAGE:$TAG
+  cd ${PATH_DOCKER}/cicd-codebuild && docker build . -t $IMAGE:$TAG
 
   -- or --
 
   cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh
   cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh
+  cd ${PATH_DOCKER}/cicd-codebuild && ./docker-build.sh
 
   -- or --
 
   make build-cicd-ubuntu
   make build-cicd-alpine
+  make build-cicd-codebuild
   ```
 
 ### Push Image to ECR
@@ -63,6 +66,10 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
+    
+    # CodeBuild
+
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
     ```
 
   - With Script:
@@ -73,16 +80,19 @@ Docker Container Images Repository for DevOpsCorner.id
 
     cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
     cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-codebuild && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
 
     -- or --
 
     cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh ARGS=YOUR_AWS_ACCOUNT
     cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh ARGS=YOUR_AWS_ACCOUNT
+    cd ${PATH_COMPOSE} && ./ecr-tag-codebuild.sh ARGS=YOUR_AWS_ACCOUNT
 
     -- or --
 
     make ecr-tag-ubuntu ARGS=YOUR_AWS_ACCOUNT
     make ecr-tag-alpine ARGS=YOUR_AWS_ACCOUNT
+    make ecr-tag-codebuild ARGS=YOUR_AWS_ACCOUNT
     ```
 
 - Push Image with Tags
@@ -96,6 +106,10 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
+    
+    # CodeBuild
+
+    docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild
     ```
 
   - With Script:
@@ -106,16 +120,19 @@ Docker Container Images Repository for DevOpsCorner.id
 
     cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
     cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-codebuild && docker push $IMAGE:$TAG
 
     -- or --
 
     cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh ARGS=YOUR_AWS_ACCOUNT
     cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh ARGS=YOUR_AWS_ACCOUNT
+    cd ${PATH_COMPOSE} && ./ecr-push-codebuild.sh ARGS=YOUR_AWS_ACCOUNT
 
     -- or --
 
     make ecr-push-ubuntu ARGS=YOUR_AWS_ACCOUNT
     make ecr-push-alpine ARGS=YOUR_AWS_ACCOUNT
+    make ecr-push-codebuild ARGS=YOUR_AWS_ACCOUNT
     ```
 
 ### Push Image to DockerHub
@@ -132,6 +149,10 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine (Latest)
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine devopscorner/cicd:alpine
+    
+    # CodeBuild (Latest)
+
+    docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine devopscorner/cicd:codebuild
     ```
 
   - With Script:
@@ -142,16 +163,19 @@ Docker Container Images Repository for DevOpsCorner.id
 
     cd ${PATH_DOCKER}/cicd-ubuntu && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
     cd ${PATH_DOCKER}/cicd-alpine && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-codebuild && docker tag $BASE_IMAGE:$TAG $IMAGE:$TAG
 
     -- or --
 
     cd ${PATH_COMPOSE} && ./dockerhub-tag-ubuntu.sh
     cd ${PATH_COMPOSE} && ./dockerhub-tag-alpine.sh
+    cd ${PATH_COMPOSE} && ./dockerhub-tag-codebuild.sh
 
     -- or --
 
     make dockerhub-tag-ubuntu
     make dockerhub-tag-alpine
+    make dockerhub-tag-codebuild
     ```
 
 - Push Image with Tags
@@ -166,8 +190,12 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker push devopscorner-cicd:alpine
+    
+    # CodeBuild
 
-    # Latest (Ubuntu / Alpine)
+    docker push devopscorner-cicd:alpine
+
+    # Latest (Ubuntu / Alpine / CodeBuild)
 
     docker push devopscorner-cicd:latest
     ```
@@ -180,17 +208,53 @@ Docker Container Images Repository for DevOpsCorner.id
 
     cd ${PATH_DOCKER}/cicd-ubuntu && docker push $IMAGE:$TAG
     cd ${PATH_DOCKER}/cicd-alpine && docker push $IMAGE:$TAG
+    cd ${PATH_DOCKER}/cicd-codebuild && docker push $IMAGE:$TAG
 
     -- or --
 
     cd ${PATH_COMPOSE} && ./dockerhub-push-ubuntu.sh
     cd ${PATH_COMPOSE} && ./dockerhub-push-alpine.sh
+    cd ${PATH_COMPOSE} && ./dockerhub-push-codebuild.sh
 
     -- or --
 
     make dockerhub-push-ubuntu
     make dockerhub-push-alpine
+    make dockerhub-push-codebuild
     ```
+
+## Available Tags
+- Alpine
+  ```
+  devopscorner/cicd:latest
+  devopscorner/cicd:1.0.3
+  devopscorner/cicd:1.0.3-alpine
+  devopscorner/cicd:1.0.5
+  devopscorner/cicd:1.0.5-alpine
+  devopscorner/cicd:alpine
+  devopscorner/cicd:alpine-latest
+  devopscorner/cicd:alpine-3.15
+  devopscorner/cicd:alpine-3.16
+  ```
+
+- Ubuntu
+  ```
+  devopscorner/cicd:1.0.3-ubuntu
+  devopscorner/cicd:1.0.5-ubuntu
+  devopscorner/cicd:ubuntu
+  devopscorner/cicd:ubuntu-latest
+  devopscorner/cicd:ubuntu-20.04
+  devopscorner/cicd:ubuntu-22.04
+  ```
+
+- AWS Linux (CodeBuild)
+  ```
+  devopscorner/cicd:codebuild
+  devopscorner/cicd:codebuild-latest
+  devopscorner/cicd:codebuild-2.0
+  devopscorner/cicd:codebuild-3.0
+  devopscorner/cicd:codebuild-4.0
+  ```
 
 ## Security Check
 
