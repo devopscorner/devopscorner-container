@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Tags
+#  Docker Build Container
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
@@ -12,20 +12,15 @@ export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
 export CI_ECR_PATH=$2
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
-export BASE_IMAGE="$IMAGE:ubuntu"
-export COMMIT_HASH=`git log -1 --format=format:"%H"`
-export TAGS="ubuntu-latest \
-  1.0.5-ubuntu \
-  alpine-22.04 \
-  ${COMMIT_HASH}"
+export TAG="codebuild"
 
-for TAG in $TAGS; do
-  echo "Docker Tags => $IMAGE:$TAG"
-  echo ">> docker tag $BASE_IMAGE $IMAGE:$TAG"
-  docker tag $BASE_IMAGE $IMAGE:$TAG
-  echo '- DONE -'
-  echo ''
-done
-
+echo "============="
+echo "  Login ECR  "
+echo "============="
+PASSWORD=`aws ecr get-login-password --region ap-southeast-1`
+echo $PASSWORD | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com
+echo '- DONE -'
 echo ''
-echo '-- ALL DONE --'
+
+echo " Build Image => $IMAGE:$TAG"
+docker build -f Dockerfile -t $IMAGE:$TAG .

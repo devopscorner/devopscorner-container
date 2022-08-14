@@ -12,9 +12,10 @@ export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export BASE_IMAGE="$IMAGE:codebuild"
+export COMMIT_HASH=`git log -1 --format=format:"%H"`
 export TAGS="codebuild-latest \
-  codebuild-4.0
-"
+  codebuild-4.0 \
+  ${COMMIT_HASH}"
 
 for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"

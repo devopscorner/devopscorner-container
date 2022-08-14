@@ -132,7 +132,7 @@ ecr-tag-alpine:
 	@echo " Task      : Set Tags Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-tag-alpine.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 ecr-tag-ubuntu:
@@ -140,7 +140,7 @@ ecr-tag-ubuntu:
 	@echo " Task      : Set Tags Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-tag-ubuntu.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 ecr-tag-codebuild:
@@ -148,7 +148,7 @@ ecr-tag-codebuild:
 	@echo " Task      : Set Tags Image AWS CodeBuild to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag-codebuild.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-tag-codebuild.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 # ======================== #
@@ -184,7 +184,7 @@ ecr-push-alpine:
 	@echo " Task      : Push Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-push-alpine.sh $(ARGS) $(TAGS)
 	@echo '- DONE -'
 
 ecr-push-ubuntu:
@@ -192,7 +192,7 @@ ecr-push-ubuntu:
 	@echo " Task      : Push Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-push-ubuntu.sh $(ARGS) $(TAGS)
 	@echo '- DONE -'
 
 ecr-push-codebuild:
@@ -200,5 +200,5 @@ ecr-push-codebuild:
 	@echo " Task      : Push Image AWS CodeBuild to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push-codebuild.sh $(ARGS)
+	@cd ${PATH_COMPOSE} && ./ecr-push-codebuild.sh $(ARGS) $(TAGS)
 	@echo '- DONE -'
