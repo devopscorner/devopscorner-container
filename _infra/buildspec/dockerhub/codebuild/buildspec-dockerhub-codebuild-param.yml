@@ -33,7 +33,7 @@ env:
     AWS_DEFAULT_REGION: "ap-southeast-1"
     INFRA_CICD: "terraform/environment/providers/aws/infra/resources"
     INFRA_CICD_PATH: "cicd"
-    INFRA_ECR_PATH: "YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild"
+    INFRA_ECR_PATH: "devopscorner/cicd"
     TF_VERSION: "1.1.7"
 
 phases:
@@ -65,21 +65,19 @@ phases:
       - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
       # ============= #
       #  Build Image  #
-      # ============= #
-      - make ecr-build-codebuild ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
-      # ============== #
-      #  Unit Testing  #
-      # ============== #
-      # - make unit-test
+      #============== #
+      - make build-cicd-codebuild ARGS=${STORE_AWS_ACCOUNT}
       # ============ #
       #  Tags Image  #
-      # ============ #
-      - make ecr-tag-codebuild ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
+      #============= #
+      - make dockerhub-tag-codebuild
       - docker images --format "{{.Repository}}:{{.Tag}}" | grep ${INFRA_ECR_PATH}
       # ============ #
       #  Push Image  #
-      # ============ #
-      - make ecr-push-codebuild ARGS=${STORE_AWS_ACCOUNT} TAGS=${INFRA_ECR_PATH}
+      #============= #
+      # Login DockerHub (Inside Script)
+      # Push to DockerHub
+      - make dockerhub-push-codebuild
       - echo '-- ALL DONE --'
 
 artifacts:

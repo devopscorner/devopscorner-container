@@ -1,0 +1,88 @@
+version: 0.2
+
+env:
+  # ===================================== #
+  #  Ref: Pipeline Environment Variables  #
+  # ===================================== #
+  variables:
+    env_aws_account: "${STORE_AWS_ACCOUNT}"
+    env_aws_access_key: "${STORE_AWS_ACCESS_KEY}"
+    env_aws_secret_key: "${STORE_AWS_SECRET_KEY}"
+    env_repo_username: "${STORE_REPO_USERNAME}"
+    env_repo_password: "${STORE_REPO_PASSWORD}"
+    env_dockerhub_username: "${STORE_DOCKERHUB_USERNAME}"
+    env_dockerhub_password: "${STORE_DOCKERHUB_PASSWORD}"
+    env_repo_url: "${STORE_REPO_URL}"
+    env_repo_branch: "${STORE_REPO_BRANCH}"
+    env_repo_folder: "${STORE_REPO_FOLDER}"
+    env_eks_cluster: "${STORE_EKS_CLUSTER}"
+    env_base64_pub_key: "${STORE_BASE64_PUB_KEY}"
+    env_base64_priv_key: "${STORE_BASE64_PRIV_KEY}"
+    env_base64_pem_key: "${STORE_BASE64_PEM_KEY}"
+    env_base64_ssh_config: "${STORE_BASE64_SSH_CONFIG}"
+    env_base64_known_hosts: "${STORE_BASE64_KNOWN_HOSTS}"
+    env_base64_kubeconfig: "${STORE_BASE64_KUBECONFIG}"
+    ENV_CICD: "dev"
+    CONTAINER_IMAGE: "devopscorner/cicd:codebuild"
+    AWS_DEFAULT_REGION: "ap-southeast-1"
+    INFRA_CICD: "terraform/environment/providers/aws/infra/resources"
+    INFRA_CICD_PATH: "cicd"
+    INFRA_ECR_PATH: "YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild"
+    TF_VERSION: "1.1.7"
+
+phases:
+  pre_build:
+    commands:
+      # ======================= #
+      #  Setup Auth Repository  #
+      # ======================= #
+      - mkdir -p ~/.ssh
+      - echo "${env_base64_pub_key}" | base64 -d > ~/.ssh/id_rsa.pub
+      - echo "${env_base64_priv_key}" | base64 -d > ~/.ssh/id_rsa
+      - echo "${env_base64_known_hosts}" | base64 -d > ~/.ssh/known_hosts
+      - echo "${env_base64_ssh_config}" | base64 -d > ~/.ssh/config
+      - chmod 400 ~/.ssh/id_rsa*
+      - chmod 400 ~/.ssh/config*
+      - chmod 644 ~/.ssh/known_hosts
+      - eval "$(ssh-agent -s)"
+      - ssh-add ~/.ssh/id_rsa
+      # =========================== #
+      #  Using Spesific Repository  #
+      # =========================== #
+      # - GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes -F /dev/null' git clone --depth 5 ${STORE_REPO_URL}
+      - echo '- DONE -'
+  build:
+    commands:
+      # ========================= #
+      #  Refactoring AWS Account  #
+      # ========================= #
+      - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${env_aws_account}/g" {} \;
+      # ============= #
+      #  Build Image  #
+      # ============= #
+      - make ecr-build-codebuild ARGS=${env_aws_account} CI_PATH=${INFRA_ECR_PATH}
+      # ============== #
+      #  Unit Testing  #
+      # ============== #
+      # - make unit-test
+      # ============ #
+      #  Tags Image  #
+      # ============ #
+      - make ecr-tag-codebuild ARGS=${env_aws_account} CI_PATH=${INFRA_ECR_PATH}
+      - docker images --format "{{.Repository}}:{{.Tag}}" | grep ${INFRA_ECR_PATH}
+      # ============ #
+      #  Push Image  #
+      # ============ #
+      - make ecr-push-codebuild ARGS=${env_aws_account} TAGS=${INFRA_ECR_PATH}
+      - echo '-- ALL DONE --'
+
+artifacts:
+  files:
+    - _infra/*
+    - compose/*
+    - scripts/*
+    - container-dockerhub.sh
+    - container-ecr.sh
+    - README.md
+    - run-docker.sh
+  name: "artifact-$(date '+%Y%m%d-%H%M%S')"

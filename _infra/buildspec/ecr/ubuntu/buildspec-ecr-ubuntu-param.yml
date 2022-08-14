@@ -29,11 +29,11 @@ env:
   # ===================================== #
   variables:
     ENV_CICD: "dev"
-    CONTAINER_IMAGE: "devopscorner/cicd:codebuild"
+    CONTAINER_IMAGE: "devopscorner/cicd:ubuntu"
     AWS_DEFAULT_REGION: "ap-southeast-1"
     INFRA_CICD: "terraform/environment/providers/aws/infra/resources"
     INFRA_CICD_PATH: "cicd"
-    INFRA_ECR_PATH: "YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild"
+    INFRA_ECR_PATH: "YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu"
     TF_VERSION: "1.1.7"
 
 phases:
@@ -66,7 +66,7 @@ phases:
       # ============= #
       #  Build Image  #
       # ============= #
-      - make ecr-build-codebuild ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
+      - make ecr-build-ubuntu ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
       # ============== #
       #  Unit Testing  #
       # ============== #
@@ -74,12 +74,12 @@ phases:
       # ============ #
       #  Tags Image  #
       # ============ #
-      - make ecr-tag-codebuild ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
+      - make ecr-tag-ubuntu ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
       - docker images --format "{{.Repository}}:{{.Tag}}" | grep ${INFRA_ECR_PATH}
       # ============ #
       #  Push Image  #
       # ============ #
-      - make ecr-push-codebuild ARGS=${STORE_AWS_ACCOUNT} TAGS=${INFRA_ECR_PATH}
+      - make ecr-push-ubuntu ARGS=${STORE_AWS_ACCOUNT} TAGS=${INFRA_ECR_PATH}
       - echo '-- ALL DONE --'
 
 artifacts:
