@@ -5,7 +5,7 @@
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg)](https://hub.docker.com/r/devopscorner/cicd/)
 [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd.svg?sort=date)](https://hub.docker.com/r/devopscorner/cicd/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
-![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.1/total)
+![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.3/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/devopscorner-container/blob/main/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
@@ -66,7 +66,7 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
-    
+
     # CodeBuild
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:latest
@@ -106,7 +106,7 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
-    
+
     # CodeBuild
 
     docker push YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild
@@ -149,7 +149,7 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine (Latest)
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine devopscorner/cicd:alpine
-    
+
     # CodeBuild (Latest)
 
     docker tag YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine devopscorner/cicd:codebuild
@@ -190,7 +190,7 @@ Docker Container Images Repository for DevOpsCorner.id
     # Alpine
 
     docker push devopscorner-cicd:alpine
-    
+
     # CodeBuild
 
     docker push devopscorner-cicd:alpine
