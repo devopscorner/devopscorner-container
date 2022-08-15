@@ -67,6 +67,7 @@ RUN apt-get install -y \
       openssh-client \
       net-tools \
       vim-tiny \
+      telnet \
       nano \
       zip \
       unzip \
@@ -104,6 +105,10 @@ RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
+      # =============== #
+      #  Install TFSec  #
+      # =============== #
+      curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync &&\
       # =================== #
       #  Install Infracost  #
       # =================== #
