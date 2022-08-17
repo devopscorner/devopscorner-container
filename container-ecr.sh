@@ -1,30 +1,43 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Build, Tag & Push Container for DockerHub
+#  Docker Build, Tag & Push Container for ECR
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni (@zeroc0d3)
 #  License    : Apache v2
 # -----------------------------------------------------------------------------
 
+export AWS_ACCOUNT_ID=$1
 export PATH_COMPOSE='compose'
 export PATH_DOCKER='docker'
 
-export CONTAINER_ALPINE="$PATH_COMPOSE/$PATH_DOCKER/cicd-alpine"
-export CONTAINER_CODEBUILD="$PATH_COMPOSE/$PATH_DOCKER/cicd-codebuild"
-export CONTAINER_UBUNTU="$PATH_COMPOSE/$PATH_DOCKER/cicd-ubuntu"
+export CONTAINER_ALPINE="cicd-alpine"
+export CONTAINER_CODEBUILD="cicd-codebuild"
+export CONTAINER_UBUNTU="cicd-ubuntu"
 
 export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
 export CI_ECR_PATH="devopscorner/cicd"
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
 
-docker build -f $CONTAINER_ALPINE/Dockerfile -t $IMAGE:alpine . &&\
-docker build -f $CONTAINER_CODEBUILD/Dockerfile -t $IMAGE:codebuild . &&\
-docker build -f $CONTAINER_UBUNTU/Dockerfile -t $IMAGE:ubuntu . &&\
+cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_ALPINE
+echo "Build Image => $IMAGE:alpine"
+docker build -f Dockerfile -t $IMAGE:alpine .
+cd ../../../
 
-./ecr-tag-alpine.sh &&\
-./ecr-tag-codebuild.sh &&\
-./ecr-tag-ubuntu.sh &&\
-./ecr-push-alpine.sh &&\
-./ecr-push-codebuild.sh &&\
-./ecr-push-ubuntu.sh \
+cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_UBUNTU
+echo "Build Image => $IMAGE:ubuntu"
+docker build -f Dockerfile -t $IMAGE:ubuntu .
+cd ../../../
+
+cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_CODEBUILD
+echo "Build Image => $IMAGE:codebuild"
+docker build -f Dockerfile -t $IMAGE:codebuild .
+cd ../../../
+
+cd $PATH_COMPOSE
+./ecr-tag.sh ${AWS_ACCOUNT_ID} alpine 3.16 devopscorner/cicd &&\
+./ecr-tag.sh ${AWS_ACCOUNT_ID} ubuntu 22.04 devopscorner/cicd &&\
+./ecr-tag.sh ${AWS_ACCOUNT_ID} codebuild 4.0 devopscorner/cicd &&\
+./ecr-push.sh ${AWS_ACCOUNT_ID} alpine devopscorner/cicd &&\
+./ecr-push.sh ${AWS_ACCOUNT_ID} ubuntu devopscorner/cicd &&\
+./ecr-push.sh ${AWS_ACCOUNT_ID} codebuild devopscorner/cicd
