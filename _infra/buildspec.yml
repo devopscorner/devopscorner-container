@@ -29,11 +29,10 @@ env:
   # ===================================== #
   variables:
     ENV_CICD: "dev"
-    CONTAINER_IMAGE: "devopscorner/cicd:codebuild"
     AWS_DEFAULT_REGION: "ap-southeast-1"
     INFRA_CICD: "terraform/environment/providers/aws/infra/resources"
     INFRA_CICD_PATH: "cicd"
-    INFRA_ECR_PATH: "YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild"
+    INFRA_ECR_PATH: "devopscorner/cicd"
     TF_VERSION: "1.1.7"
 
 phases:
