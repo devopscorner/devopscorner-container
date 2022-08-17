@@ -1,5 +1,12 @@
 # DevOpsCorner Docker Container
 
+## Features - v2.5
+
+- All features from version 2.4
+- Remove unused build, tag, push & pull scripts
+- Refactoring into single script for build, tag, push & pull for Alpine, Ubuntu & CodeBuild
+- Refactoring pipeline in Makefile
+
 ## Features - v2.4
 
 - Buildspec for pipeline ci/cd using Alpine, CodeBuild, Ubuntu
