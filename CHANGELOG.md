@@ -1,5 +1,11 @@
 # DevOpsCorner Docker Container
 
+## Features - v2.6
+
+- All features from version 2.5
+- Update base image from NGINX 1.21 to NGINX 1.23
+- Refactoring pipeline in Makefile using OS version
+
 ## Features - v2.5
 
 - All features from version 2.4
