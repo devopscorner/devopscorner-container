@@ -131,21 +131,21 @@ ecr-build-alpine:
 	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) alpine Dockerfile alpine-${ALPINE_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) alpine Dockerfile ${ALPINE_VERSION}
 
 ecr-build-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile ubuntu-${UBUNTU_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile ${UBUNTU_VERSION}
 
 ecr-build-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD AWS CodeBuild Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) codebuild Dockerfile codebuild-${CODEBUILD_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) codebuild Dockerfile ${CODEBUILD_VERSION}
 
 # ======================== #
 #   TAGS CONTAINER CI/CD   #
