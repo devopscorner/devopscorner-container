@@ -15,6 +15,8 @@
 
 Docker Container Images Repository for DevOpsCorner.id
 
+---
+
 ## Available Tags
 
 ### Alpine
@@ -41,7 +43,7 @@ Docker Container Images Repository for DevOpsCorner.id
 | `devopscorner/cicd:ubuntu-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/ubuntu-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=ubuntu-latest) |
 | `devopscorner/cicd:ubuntu-20.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/ubuntu-20.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=ubuntu-20.04) |
 | `devopscorner/cicd:ubuntu-22.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/ubuntu-22.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=ubuntu-22.04) |
-  
+
 ### AWS Linux (CodeBuild)
 
 | Image name | Size |
@@ -53,7 +55,7 @@ Docker Container Images Repository for DevOpsCorner.id
 | `devopscorner/cicd:codebuild-3.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-3.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-3.0) |
 | `devopscorner/cicd:codebuild-4.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-4.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-4.0) |
 
-
+---
 
 ## Build Container Image
 
