@@ -57,6 +57,11 @@ Docker Container Images Repository for DevOpsCorner.id
 
 ---
 
+## Prerequirements
+
+- Docker (`docker`)
+- Docker Compose (`docker-compose`)
+
 ## Build Container Image
 
 - Clone this repository
