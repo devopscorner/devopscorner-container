@@ -16,7 +16,7 @@ export PROJECT_NAME="container"
 
 export CI_REGISTRY     ?= $(ARGS).dkr.ecr.ap-southeast-1.amazonaws.com
 export CI_PROJECT_PATH ?= devopscorner
-export CI_PROJECT_NAME ?= ci/cd
+export CI_PROJECT_NAME ?= cicd
 
 IMAGE   = $(CI_REGISTRY)/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}
 DIR     = $(shell pwd)
