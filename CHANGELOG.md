@@ -1,10 +1,19 @@
 # DevOpsCorner Docker Container
 
+## Features - v2.6.1
+
+- All features from version 2.6
+- Refactoring all documentation
+
+---
+
 ## Features - v2.6
 
 - All features from version 2.5
 - Update base image from NGINX 1.21 to NGINX 1.23
 - Refactoring pipeline in Makefile using OS version
+
+---
 
 ## Features - v2.5
 
@@ -12,6 +21,8 @@
 - Remove unused build, tag, push & pull scripts
 - Refactoring into single script for build, tag, push & pull for Alpine, Ubuntu & CodeBuild
 - Refactoring pipeline in Makefile
+
+---
 
 ## Features - v2.4
 
