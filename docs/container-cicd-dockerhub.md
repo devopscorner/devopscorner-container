@@ -45,6 +45,7 @@ Docker Container Images Repository for DevOpsCorner.id
   export PATH_COMPOSE="compose"
   export PATH_DOCKER="$PATH_COMPOSE/docker"
   export BASE_IMAGE="alpine"  ## alpine | ubuntu | codebuild
+  export IMAGE="devopscorner/cicd"
   export TAG="latest"
   ```
 
