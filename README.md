@@ -65,7 +65,7 @@ Docker Container Images Repository for DevOpsCorner.id
 ## Documentation
 
 - Build, Tag & Push container cicd image to **DockerHub**, go to [this](docs/container-cicd-dockerhub.md) link
-- Build, Tag & Push container cicd image to **Amazon ECR (Elastic Container Registry)**, go to [this](docs/ontainer-cicd-ecr.md) link
+- Build, Tag & Push container cicd image to **Amazon ECR (Elastic Container Registry)**, go to [this](docs/container-cicd-ecr.md) link
 
 ## Security Check
 
