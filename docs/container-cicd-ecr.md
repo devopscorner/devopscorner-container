@@ -1,5 +1,7 @@
 # DevOpsCorner Docker Container - Amazon ECR (Elastic Container Registry)
 
+Docker Container Images Repository for DevOpsCorner.id
+
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg)](https://hub.docker.com/r/devopscorner/cicd/)
@@ -11,8 +13,6 @@
 ![forks](https://img.shields.io/github/forks/devopscorner/devopscorner-container)
 ![stars](https://img.shields.io/github/stars/devopscorner/devopscorner-container)
 [![license](https://img.shields.io/github/license/devopscorner/devopscorner-container)](https://img.shields.io/github/license/devopscorner/devopscorner-container)
-
-Docker Container Images Repository for DevOpsCorner.id
 
 ---
 
@@ -45,9 +45,8 @@ Docker Container Images Repository for DevOpsCorner.id
   export PATH_COMPOSE="compose"
   export PATH_DOCKER="$PATH_COMPOSE/docker"
   export BASE_IMAGE="alpine"  ## alpine | ubuntu | codebuild
-  export TAG="latest"
-
   export IMAGE="YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd"
+  export TAG="latest"
   ```
 
 - Execute Build Image
