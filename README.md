@@ -4,7 +4,7 @@
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg)](https://hub.docker.com/r/devopscorner/cicd/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
-![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.6/total)
+![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.6.1/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/devopscorner-container/blob/main/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
