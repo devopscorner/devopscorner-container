@@ -1,4 +1,4 @@
-FROM ubuntu:${UBUNTU_VERSION:-20.04}
+FROM ubuntu:${UBUNTU_VERSION:-16.04}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -7,18 +7,18 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="forticlient"
-ENV IMG_VERSION="20.04"
-ENV IMG_DESC="Docker Image Forticlient from Ubuntu 20.04"
+ENV IMG_NAME="openfortivpn"
+ENV IMG_VERSION="16.04"
+ENV IMG_DESC="Docker Image OpenFortiVPN from Ubuntu 16.04"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV UBUNTU_VERSION="20.04"
-ENV FORTICLIENT_VERSION="7.0"
+ENV UBUNTU_VERSION="16.04"
+ENV OPENFORTIVPN_VERSION="1.19.0"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
       ubuntu-version="$UBUNTU_VERSION" \
-      forticlient-version="$FORTICLIENT_VERSION" \
+      openfortivpn-version="$OPENFORTIVPN_VERSION" \
       org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="$IMG_NAME" \
       org.label-schema.description="$IMG_DESC" \
@@ -38,19 +38,20 @@ LABEL maintainer="$AUTHOR" \
       fr.hbis.docker.base.vendor="$VENDOR" \
       fr.hbis.docker.base.version="$BUILD_VERSION"
 
-COPY rootfs /
-
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV VPNADDR host:port
-ENV VPNUSER user@domain
-ENV VPNPASS secret
-ENV VPNTIMEOUT 10
+ENV VPN_HOST host
+ENV VPN_PORT port
+ENV VPN_ADDR host:port
+ENV VPN_USER user@domain
+ENV VPN_PASS secret
+ENV VPN_TRUST_CERT 1234567890987654321
+ENV VPN_TIMEOUT 10
 
 USER root
 RUN apt -o APT::Sandbox::User=root update; sync
 RUN apt-get update; sync
-RUN apt-get install -y -o APT::Install-Recommends=false -o APT::Install-Suggests=false \
+RUN apt-get install -y \
       git \
       bash \
       curl \
@@ -62,19 +63,14 @@ RUN apt-get install -y -o APT::Install-Recommends=false -o APT::Install-Suggests
       net-tools \
       expect \
       iproute2 \
-      ipppd \
       iptables \
+      openfortivpn \
+      gettext-base \
+      network-manager-fortisslvpn \
       iputils-ping; sync
 
-RUN chmod +x /tmp/*.sh; sync
-
-# Install fortivpn client unofficial .deb
-# RUN curl -o forticlient-sslvpn_amd64.deb 'https://github.com/devopscorner/devopscorner-container/blob/master/compose/docker/forticlient/rootfs/tmp/forticlient-sslvpn_4.4.2329-1_amd64.deb'; sync
-RUN curl -o forticlient_vpn_amd64.deb 'https://filestore.fortinet.com/forticlient/downloads/forticlient_vpn_7.0.0.0018_amd64.deb'; sync
-
 COPY rootfs /
-
-RUN dpkg -x forticlient_vpn_amd64.deb /usr/share/forticlient/; sync
+RUN chmod +x /tmp/*.sh; sync
 
 # Copy runfiles
 COPY rootfs/tmp/start.sh /start.sh
