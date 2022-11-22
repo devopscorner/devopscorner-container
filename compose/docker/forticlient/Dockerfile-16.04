@@ -13,7 +13,7 @@ ENV IMG_DESC="Docker Image Forticlient from Ubuntu 16.04"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV UBUNTU_VERSION="16.04"
-ENV FORTICLIENT_VERSION="4.4"
+ENV FORTICLIENT_VERSION="7.0"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
@@ -66,16 +66,17 @@ RUN apt-get install -y -o APT::Install-Recommends=false -o APT::Install-Suggests
       iptables \
       iputils-ping; sync
 
-RUN chmod +x /tmp/*.sh
+RUN chmod +x /tmp/*.sh; sync
 
 # Install fortivpn client unofficial .deb
 # RUN curl -o forticlient-sslvpn_amd64.deb 'https://github.com/devopscorner/devopscorner-container/blob/master/compose/docker/forticlient/rootfs/tmp/forticlient-sslvpn_4.4.2329-1_amd64.deb'; sync
+RUN curl -o forticlient_vpn_amd64.deb 'https://filestore.fortinet.com/forticlient/downloads/forticlient_vpn_7.0.0.0018_amd64.deb'; sync
 
 COPY rootfs /
-RUN dpkg -x /tmp/forticlient-sslvpn_amd64.deb /usr/share/forticlient; sync
+
+RUN dpkg -x forticlient_vpn_amd64.deb /usr/share/forticlient/; sync
 
 # Copy runfiles
-COPY rootfs/tmp/forticlient /usr/bin/forticlient
 COPY rootfs/tmp/start.sh /start.sh
 
 RUN apt-get clean -q && apt-get autoremove --purge; sync
