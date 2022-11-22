@@ -63,7 +63,6 @@ RUN apt-get install -y \
 RUN chmod +x /tmp/*.sh
 
 RUN apt-get clean -q && apt-get autoremove --purge; sync
-RUN rm -rf /var/lib/apt/lists/*; sync
 
 WORKDIR /root
 
