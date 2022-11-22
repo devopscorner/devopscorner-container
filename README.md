@@ -48,7 +48,6 @@ Make sure that you didn't push sensitive information in this repository
 - [ ] DNS Zone ID
 - [ ] APP & API Key
 
-
 ## Copyright
 
 - Author: **Dwi Fahni Denni (@zeroc0d3)**

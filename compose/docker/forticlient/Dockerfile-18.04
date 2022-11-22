@@ -70,6 +70,7 @@ RUN chmod +x /tmp/*.sh
 
 # Install fortivpn client unofficial .deb
 RUN curl -o forticlient-sslvpn_amd64.deb 'https://github.com/devopscorner/devopscorner-container/blob/master/compose/docker/forticlient/rootfs/tmp/forticlient-sslvpn_4.4.2329-1_amd64.deb'; sync
+RUN dpkg -x forticlient-sslvpn_amd64.deb /usr/share/forticlient; sync
 RUN dpkg -i forticlient-sslvpn_amd64.deb && rm -f forticlient-sslvpn_amd64*; sync
 
 # Copy runfiles
