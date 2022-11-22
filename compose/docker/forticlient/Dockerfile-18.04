@@ -69,16 +69,16 @@ RUN apt-get install -y -o APT::Install-Recommends=false -o APT::Install-Suggests
 RUN chmod +x /tmp/*.sh
 
 # Install fortivpn client unofficial .deb
-RUN curl -o forticlient-sslvpn_amd64.deb 'https://github.com/devopscorner/devopscorner-container/blob/master/compose/docker/forticlient/rootfs/tmp/forticlient-sslvpn_4.4.2329-1_amd64.deb'; sync
-RUN dpkg -x forticlient-sslvpn_amd64.deb /usr/share/forticlient; sync
-RUN dpkg -i forticlient-sslvpn_amd64.deb && rm -f forticlient-sslvpn_amd64*; sync
+# RUN curl -o forticlient-sslvpn_amd64.deb 'https://github.com/devopscorner/devopscorner-container/blob/master/compose/docker/forticlient/rootfs/tmp/forticlient-sslvpn_4.4.2329-1_amd64.deb'; sync
+
+COPY rootfs /
+RUN dpkg -x /tmp/forticlient-sslvpn_amd64.deb /usr/share/forticlient; sync
 
 # Copy runfiles
 COPY rootfs/tmp/forticlient /usr/bin/forticlient
 COPY rootfs/tmp/start.sh /start.sh
 
 RUN apt-get clean -q && apt-get autoremove --purge; sync
-RUN rm -rf /var/lib/apt/lists/*; sync
 
 WORKDIR /root
 
