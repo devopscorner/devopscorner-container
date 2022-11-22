@@ -21,12 +21,12 @@ volumes:
       o: bind
       type: none
       device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
-  vol_forticlient:
+  vol_openfortivpn:
     driver: ${VOLUMES_DRIVER:-local}
     driver_opts:
       o: bind
       type: none
-      device: ${DATA_FORTICLIENT:-/opt/data/docker/forticlient22.04}
+      device: ${DATA_OPENFORTIVPN:-/opt/data/docker/openfortivpn22.04}
 
 services:
 #================================================================================================
@@ -52,30 +52,33 @@ services:
         ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.4}
 
 #================================================================================================
-# FORTICLIENT
+# OPENFORTIVPN
 #================================================================================================
-  forticlient:
-    image: devopscorner/forticlient:${FORTICLIENT:-22.04}
+  openfortivpn:
+    image: devopscorner/openfortivpn:${OPENFORTIVPN_VERSION:-22.04}
     # build:
-    #   context: ./forticlient
+    #   context: ./openfortivpn
     #   dockerfile: Dockerfile
-    container_name: ${CONTAINER_FORTICLIENT:-devopscorner_forticlient}
+    container_name: ${CONTAINER_OPENFORTIVPN:-devopscorner_openfortivpn}
     restart: unless-stopped
-    hostname: myforticlient
+    hostname: myopenfortivpn
     environment:
-      - FORTICLIENT_VERSION=${FORTICLIENT_VERSION:-22.04}
-      - VPNADDR=host:port
-      - VPNUSER=me@domain
-      - VPNPASS=secret
-      - VPNTIMEOUT=${VPNTIMEOUT:-10}
+      - OPENFORTIVPN_VERSION=${OPENFORTIVPN_VERSION:-22.04}
+      - VPN_HOST=host
+      - VPN_PORT=port
+      - VPN_ADDR=host:port
+      - VPN_USER=user@domain
+      - VPN_PASS=secret
+      - VPN_TRUST_CERT=1234567890987654321
+      - VPN_TIMEOUT=${VPNTIMEOUT:-10}
     volumes:
   #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
   #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
-      - vol_forticlient:/data
+      - vol_openfortivpn:/data
     ports:
-      - 8080:8080    # HTTP
-      - 8443:8443    # HTTPS
+      - 5214:8080    # HTTP
+      - 5215:8443    # HTTPS
     privileged: true
     networks:
       devopscorner_net:
-        ipv4_address: ${CONTAINER_IP_FORTICLIENT:-172.146.146.105}
+        ipv4_address: ${CONTAINER_IP_OPENFORTIVPN:-172.146.146.105}

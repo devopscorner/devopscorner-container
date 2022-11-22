@@ -8,7 +8,7 @@
 set -e
 
 export CI_PROJECT_PATH="devopscorner"
-export CI_PROJECT_NAME="forticlient"
+export CI_PROJECT_NAME="openfortivpn"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 # export IMAGE=$3
@@ -42,7 +42,7 @@ docker_tag() {
 }
 
 main() {
-  # set_tag 22.04 latest devopscorner/forticlient
+  # set_tag 22.04 latest devopscorner/openfortivpn
   set_tag $1 $2 $3
   docker_tag
   echo ''

@@ -8,7 +8,7 @@
 set -e
 
 export CI_PROJECT_PATH="devopscorner"
-export CI_PROJECT_NAME="forticlient"
+export CI_PROJECT_NAME="openfortivpn"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 # export IMAGE=$4
@@ -36,7 +36,7 @@ docker_build() {
 }
 
 main() {
-  # docker_build 22.04 Dockerfile latest devopscorner/forticlient
+  # docker_build 22.04 Dockerfile latest devopscorner/openfortivpn
   docker_build $1 $2 $3 $4
   echo ''
   echo '-- ALL DONE --'

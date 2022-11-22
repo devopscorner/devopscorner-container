@@ -20,7 +20,7 @@ Docker Container Images Repository for DevOpsCorner.id
 ## Available Tags
 
 - Container `devopscorner/cicd` [Tags](docs/CONTAINER-CICD.md)
-- Container `devopscorner/forticlient` [Tags](docs/CONTAINER-FORTICLIENT.md)
+- Container `devopscorner/openfortivpn` [Tags](docs/CONTAINER-OPENFORTIVPN.md)
 
 ---
 
