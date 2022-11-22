@@ -1,4 +1,4 @@
-FROM postgis/postgis:11-2.5
+FROM postgis/postgis:15-3.3
 
 ARG BUILD_DATE
 ARG BUILD_VERSION

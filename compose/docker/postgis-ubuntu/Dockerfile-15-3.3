@@ -42,16 +42,10 @@ ENV POSTGRES_USER=${POSTGRES_USER:-postgres}
 ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 # ENV PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
 
-ENV DATADOG_AGENT_MAJOR_VERSION=${DATADOG_AGENT_MAJOR_VERSION:-7}
-ENV DATADOG_API_KEY=${DATADOG_API_KEY}
-ENV DATADOG_SITE=${DATADOG_SITE:-datadoghq.com}
-
 RUN apt -o APT::Sandbox::User=root update; sync
 RUN apt-get update; sync
 RUN apt-get install -y \
       curl
-
-RUN DD_AGENT_MAJOR_VERSION=${DATADOG_AGENT_MAJOR_VERSION} DD_API_KEY=${DATADOG_API_KEY} DD_SITE=${DATADOG_SITE} bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
 
 # COPY config/postgresql/postgresql.conf /var/lib/postgresql
 COPY rootfs /

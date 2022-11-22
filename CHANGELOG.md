@@ -1,5 +1,16 @@
 # DevOpsCorner Docker Container
 
+## Features - v2.7.0
+
+- All features from version 2.6.1
+- Added & set default Ubuntu 22.04 Container
+- Added & set default Postgis 15-3.3 Container
+- Added Nifi 1.18.0 Container
+- Added Nifi-Registry 1.18.0 Container
+- Added Forticlient 4.4 Container
+
+---
+
 ## Features - v2.6.1
 
 - All features from version 2.6

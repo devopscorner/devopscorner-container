@@ -1,4 +1,4 @@
-FROM postgis/postgis:15-3.3
+FROM postgis/postgis:11-2.5
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -8,11 +8,11 @@ ARG GIT_URL
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
 ENV IMG_NAME="postgis"
-ENV IMG_VERSION="15-3.3"
+ENV IMG_VERSION="11-2.5"
 ENV IMG_DESC="Postgis Docker Image"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV POSTGIS_VERSION="15-3.3"
+ENV POSTGIS_VERSION="11-2.5"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
@@ -42,16 +42,10 @@ ENV POSTGRES_USER=${POSTGRES_USER:-postgres}
 ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 # ENV PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
 
-ENV DATADOG_AGENT_MAJOR_VERSION=${DATADOG_AGENT_MAJOR_VERSION:-7}
-ENV DATADOG_API_KEY=${DATADOG_API_KEY}
-ENV DATADOG_SITE=${DATADOG_SITE:-datadoghq.com}
-
 RUN apt -o APT::Sandbox::User=root update; sync
 RUN apt-get update; sync
 RUN apt-get install -y \
       curl
-
-RUN DD_AGENT_MAJOR_VERSION=${DATADOG_AGENT_MAJOR_VERSION} DD_API_KEY=${DATADOG_API_KEY} DD_SITE=${DATADOG_SITE} bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
 
 # COPY config/postgresql/postgresql.conf /var/lib/postgresql
 COPY rootfs /
