@@ -4,10 +4,10 @@ Docker Container Images Repository for DevOpsCorner.id
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
-[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg)](https://hub.docker.com/r/devopscorner/cicd/)
+[![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
-![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/devopscorner-container/blob/main/clone.json?raw=True&logo=github)
+![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/devopscorner-container/master/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
 ![pull requests](https://img.shields.io/github/issues-pr/devopscorner/devopscorner-container)
 ![forks](https://img.shields.io/github/forks/devopscorner/devopscorner-container)
@@ -22,8 +22,8 @@ Docker Container Images Repository for DevOpsCorner.id
 
 | Image name | Size |
 |------------|------|
-| `devopscorner/openfortivpn:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=latest) |
-| `devopscorner/openfortivpn:22.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/22.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=22.04) |
+| `devopscorner/openfortivpn:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=latest) ![default-openfortivpn](https://img.shields.io/static/v1?label=latest&message=default&color=brightgreen) |
+| `devopscorner/openfortivpn:22.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/22.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=22.04) ![latest-ubuntu](https://img.shields.io/static/v1?label=latest&message=ubuntu&color=orange) |
 | `devopscorner/openfortivpn:22.04-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/22.04-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=22.04-latest) |
 | `devopscorner/openfortivpn:22.04-1.19.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/22.04-1.19.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=22.04-1.19.0) |
 | `devopscorner/openfortivpn:20.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/openfortivpn/20.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/openfortivpn/tags?page=1&ordering=last_updated&name=20.04) |

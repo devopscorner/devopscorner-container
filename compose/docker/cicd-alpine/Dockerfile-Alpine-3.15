@@ -150,11 +150,18 @@ RUN wget -O /usr/local/bin/kubectl \
       https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
+# ================ #
+#  Install AWSCli  #
+# ================ #
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&\
+      unzip awscliv2.zip &&\
+      ./aws/Install; sync
+
 # ========================= #
 # Install Python Libraries  #
 # ========================= #
 RUN python3 -m pip install pip==22.0.4 &&\
-      pip3 install --upgrade pip cffi awscli &&\
+      pip3 install --upgrade pip cffi &&\
       # ================= #
       #  Install Ansible  #
       # ================= #
@@ -170,7 +177,8 @@ RUN python3 -m pip install pip==22.0.4 &&\
       # ================= #
       #  Install Checkov  #
       # ================= #
-      checkov==${CHECKOV_VERSION} &&\
+      # checkov==${CHECKOV_VERSION} &&\
+      checkov &&\
       # setup root .ssh directory
       mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
 

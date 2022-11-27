@@ -69,11 +69,18 @@ RUN yum install -y \
       bzip2-deve \
       python37; sync
 
+# ================ #
+#  Install AWSCli  #
+# ================ #
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&\
+      unzip awscliv2.zip &&\
+      ./aws/Install; sync
+
 RUN yum install -y \
-      # ================ #
-      #  Install AWSCli  #
-      # ================ #
-      awscli python3-pip &&\
+      # ===================== #
+      #  Install Python3-Pip  #
+      # ===================== #
+      python3-pip &&\
       # =================== #
       #  Install Terraform  #
       # =================== #
@@ -171,7 +178,8 @@ RUN python3 -m pip install pip==22.0.4 &&\
       # ================= #
       #  Install Checkov  #
       # ================= #
-      checkov==${CHECKOV_VERSION} &&\
+      # checkov==${CHECKOV_VERSION} &&\
+      checkov &&\
       # setup root .ssh directory
       mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
 
