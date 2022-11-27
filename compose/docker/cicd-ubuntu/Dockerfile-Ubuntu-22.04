@@ -51,6 +51,7 @@ ENV TERRAGRUNT_VERSION=v0.41.0
 ENV TERRASCAN_VERSION=1.17.0
 ENV HELMFILE_VERSION=v0.144.0
 ENV KUBECTL_VERSION=v1.25.4
+ENV CHECKOV_VERSION=2.2.96
 
 USER root
 RUN apt -o APT::Sandbox::User=root update; sync
@@ -174,7 +175,7 @@ RUN python3 -m pip install pip==22.0.4 &&\
       # ================= #
       #  Install Checkov  #
       # ================= #
-      checkov &&\
+      checkov==${CHECKOV_VERSION} &&\
       # setup root .ssh directory
       mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
 
