@@ -40,15 +40,16 @@ LABEL maintainer="$AUTHOR" \
 
 COPY rootfs /
 
-ENV ANSIBLE_VERSION=2.14.0
-ENV ANSIBLE_TOWER_CLI_VERSION=3.3.9
+ENV ANSIBLE_VERSION=2.12.2
+# ENV ANSIBLE_TOWER_CLI_VERSION=3.3.9   # Depreciated, change to AWX-Cli (awxkit)
+ENV AWXKIT_VERSION=21.9.0
 ENV PACKER_VERSION=1.8.4
 ENV TERRAFORM_VERSION=1.3.5
 ENV TERRAGRUNT_VERSION=v0.41.0
 ENV TERRASCAN_VERSION=1.17.0
 ENV HELMFILE_VERSION=v0.144.0
 ENV KUBECTL_VERSION=v1.25.4
-ENV CHECKOV_VERSION=2.2.96
+ENV CHECKOV_VERSION=2.2.97
 
 USER root
 RUN yum update -y; sync
@@ -158,17 +159,25 @@ RUN wget -O /usr/local/bin/kubectl \
       https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
+# ================ #
+#  Install AWSCli  #
+# ================ #
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&\
+      unzip awscliv2.zip &&\
+      ./aws/Install; sync
+
 # ========================= #
 # Install Python Libraries  #
 # ========================= #
-RUN python3 -m pip install pip==22.0.4 &&\
-      pip install --upgrade pip cffi awscli &&\
+RUN python3 -m pip install pip &&\
+      pip3 install --upgrade pip==22.3.1 cffi &&\
       # ================= #
       #  Install Ansible  #
       # ================= #
-      pip install --no-cache-dir \
-      pip install ansible-core==${ANSIBLE_VERSION} \
-      ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
+      pip3 install --no-cache-dir \
+      ansible-core==${ANSIBLE_VERSION} \
+      # ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
+      awxkit==${AWXKIT_VERSION} \
       PyYaml \
       Jinja2 \
       httplib2 \
@@ -192,4 +201,4 @@ RUN yum clean all; sync
 
 WORKDIR /root
 
-EXPOSE 22
+EXPOSE 22 80
