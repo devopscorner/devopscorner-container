@@ -21,6 +21,9 @@ ENV NIFI_REGISTRY_BINARY=nifi-registry-1.18.0-bin.zip
 ENV NIFI_REGISTRY_BINARY_PATH=nifi/1.18.0/nifi-registry-1.18.0-bin.zip
 ENV NIFI_REGISTRY_BINARY_URL=https://downloads.apache.org/nifi/1.18.0/nifi-registry-1.18.0-bin.zip
 
+ENV AWS_CLI_VERSION=2.9.1
+ENV VERIFY_CHECKSUM=false
+
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
       nifi-registry-version="$NIFI_REGISTRY_VERSION" \
@@ -70,11 +73,20 @@ RUN apt-get install -y \
       python3-apt \
       iputils-ping; sync
 
+# =================== #
+#  Install AWSCli v2  #
+# =================== #
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+      unzip awscliv2.zip &&\
+      ./aws/install; sync
+# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
 # ========================= #
 # Install Python Libraries  #
 # ========================= #
-RUN python3 -m pip install pip==22.0.4 &&\
-      pip3 install --upgrade pip cffi awscli &&\
+RUN python3 -m pip install pip &&\
+      pip3 install --upgrade pip==22.3.1 cffi &&\
       pip3 install --no-cache-dir \
       PyYaml \
       Jinja2 \
@@ -88,10 +100,11 @@ RUN python3 -m pip install pip==22.0.4 &&\
       scrapy==2.6.2 \
       SQLAlchemy==1.4.43 \
       psycopg2-binary \
-      ivy-core \
-      checkov &&\
+      ivy-core &&\
       # setup root .ssh directory
-      mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
+      mkdir -p /root/.ssh &&\
+      chmod 0700 /root/.ssh &&\
+      chown -R root. /root/.ssh; sync
 
 RUN chmod +x /tmp/*.sh
 
