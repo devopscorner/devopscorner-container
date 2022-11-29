@@ -1,6 +1,6 @@
-# DevOpsCorner Docker Container
+# DevOpsCorner CI/CD
 
-Docker Container Images Repository for DevOpsCorner.id
+DevOps Corner Indonesia - CI/CD Container Image
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
@@ -27,7 +27,6 @@ Docker Container Images Repository for DevOpsCorner.id
 | `devopscorner/cicd:alpine-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-latest) |
 | `devopscorner/cicd:alpine-3.15` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-3.15.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-3.15) |
 | `devopscorner/cicd:alpine-3.16` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-3.16.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-3.16) |
-| `devopscorner/cicd:alpine-nginx-1.23` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-nginx-1.23.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-nginx-1.23) |
 
 ### Ubuntu
 
@@ -61,6 +60,7 @@ Docker Container Images Repository for DevOpsCorner.id
 | `devopscorner/cicd:1.0.3-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.3-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.3-alpine) |
 | `devopscorner/cicd:1.0.5` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.5.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.5) |
 | `devopscorner/cicd:1.0.5-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.5-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.5-alpine) |
+| `devopscorner/cicd:alpine-nginx-1.23` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-nginx-1.23.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-nginx-1.23) |
 
 ### Previous Version - Ubuntu
 
@@ -68,3 +68,4 @@ Docker Container Images Repository for DevOpsCorner.id
 |------------|------|
 | `devopscorner/cicd:1.0.3-ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.3-ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.3-ubuntu) |
 | `devopscorner/cicd:1.0.5-ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.5-ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.5-ubuntu) |
+| `devopscorner/cicd:ubuntu-nginx-1.23` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/ubuntu-nginx-1.23.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=ubuntu-nginx-1.23) |

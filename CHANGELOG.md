@@ -1,5 +1,51 @@
 # DevOpsCorner Docker Container
 
+![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
+![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
+[![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/)
+[![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/)
+![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
+![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.7.0/total)
+![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
+![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/devopscorner-container/master/clone.json?raw=True&logo=github)
+![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
+![pull requests](https://img.shields.io/github/issues-pr/devopscorner/devopscorner-container)
+![forks](https://img.shields.io/github/forks/devopscorner/devopscorner-container)
+![stars](https://img.shields.io/github/stars/devopscorner/devopscorner-container)
+[![license](https://img.shields.io/github/license/devopscorner/devopscorner-container)](https://img.shields.io/github/license/devopscorner/devopscorner-container)
+
+---
+
+## Features - v2.8.0
+
+- All features from version 2.7.0
+- Update Binary version for `devopscorner/cicd` container
+  ```
+  ANSIBLE_VERSION=2.12.2
+  ## ANSIBLE_TOWER_CLI_VERSION=3.3.9   # Last version depreciated in 2020, change to AWX-Cli (awxkit)
+  AWXKIT_VERSION=21.9.0
+  PACKER_VERSION=1.8.4
+  TERRAFORM_VERSION=1.3.5
+  TERRAGRUNT_VERSION=v0.41.0
+  TERRASCAN_VERSION=1.17.0
+  HELMFILE_VERSION=v0.144.0
+  KUBECTL_VERSION=v1.25.4
+  CHECKOV_VERSION=2.1.244
+  ```
+- Update `awscli v2.x`
+- Downscale version `ANSIBLE_VERSION=2.14.0` to `2.12.2` due to incompability with `Checkov=2.2.97` for Python 3.11
+- Remove `ANSIBLE_TOWER_CLI_VERSION`, replace with `AWXKIT_VERSION=21.9.0` since discontinue development (archived)
+- Python3 version
+  ```
+  python3 --version
+  ---
+  Python 3.10.8
+  ```
+- Added Container `devopscorner/aws-cli`
+- Added Container `devopscorner/phpfpm`
+
+---
+
 ## Features - v2.7.0
 
 - All features from version 2.6.1
@@ -7,7 +53,7 @@
 - Added & set default Postgis 15-3.3 Container
 - Added Nifi 1.18.0 Container
 - Added Nifi-Registry 1.18.0 Container
-- Added Forticlient 4.4 Container
+- Added OpenFortiVPN Client Container
 
 ---
 
