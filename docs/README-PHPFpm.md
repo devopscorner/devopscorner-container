@@ -4,7 +4,7 @@ DevOps Corner Indonesia - PHPFpm Container Image
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
-[![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/laravel.svg?label=phpfpm%20container&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/)
+[![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/phpfpm.svg?label=phpfpm%20container&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/devopscorner-container/master/clone.json?raw=True&logo=github)
@@ -22,10 +22,10 @@ DevOps Corner Indonesia - PHPFpm Container Image
 
 | Image name | Size |
 |------------|------|
-| `devopscorner/phpfpm:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=latest) |
-| `devopscorner/phpfpm:alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=alpine) |
-| `devopscorner/phpfpm:8.1-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.1-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.1-alpine) |
-| `devopscorner/phpfpm:8.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.1) |
+| `devopscorner/phpfpm:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=latest) ![default-phpfpm](https://img.shields.io/static/v1?label=latest&message=default&color=brightgreen) ![latest-phpfpm](https://img.shields.io/static/v1?label=latest&message=alpine&color=orange) |
+| `devopscorner/phpfpm:alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=alpine) ![latest-phpfpm-alpine](https://img.shields.io/static/v1?label=latest&message=alpine&color=orange) |
+| `devopscorner/phpfpm:8.1-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.1-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.1-alpine) ![latest-8.1-phpfpm-alpine](https://img.shields.io/static/v1?label=latest&message=8.1-alpine&color=orange) |
+| `devopscorner/phpfpm:8.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.1) ![latest-8.1-phpfpm](https://img.shields.io/static/v1?label=latest&message=8.1-alpine&color=orange) |
 | `devopscorner/phpfpm:8.0-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.0-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.0-alpine) |
 | `devopscorner/phpfpm:8.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/8.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=8.0) |
 | `devopscorner/phpfpm:7.4-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/phpfpm/7.4-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/phpfpm/tags?page=1&ordering=last_updated&name=7.4-alpine) |
