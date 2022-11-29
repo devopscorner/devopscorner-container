@@ -56,14 +56,17 @@ ENV VERIFY_CHECKSUM=false
 USER root
 RUN yum update -y; sync
 RUN yum groupinstall "Development Tools" -y; sync
+
 RUN yum install -y \
       git \
-      bash \
       curl \
-      wget \
-      jq \
       zip \
       unzip \
+      wget; sync
+
+RUN yum install -y \
+      bash \
+      jq \
       vim-enhanced \
       telnet \
       openssl11 \
@@ -109,7 +112,7 @@ RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/
 #  Install TFenv  #
 # =============== #
 RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
-      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile &&\
+      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc; sync &&\
       ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
       mkdir -p ~/.local/bin/ &&\
       ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
@@ -117,7 +120,8 @@ RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv use ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+      /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #

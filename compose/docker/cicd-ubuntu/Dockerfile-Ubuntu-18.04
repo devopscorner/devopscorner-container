@@ -46,23 +46,26 @@ ENV ANSIBLE_VERSION=2.12.2
 ENV AWXKIT_VERSION=21.9.0
 ENV PACKER_VERSION=1.8.4
 ENV TERRAFORM_VERSION=1.3.5
-ENV TERRAGRUNT_VERSION=v0.41.0
+ENV TERRAGRUNT_VERSION=0.41.0
 ENV TERRASCAN_VERSION=1.17.0
-ENV HELMFILE_VERSION=v0.144.0
-ENV KUBECTL_VERSION=v1.25.4
+ENV HELMFILE_VERSION=0.144.0
+ENV KUBECTL_VERSION=1.25.4
 ENV CHECKOV_VERSION=2.1.244
 ENV AWS_CLI_VERSION=2.9.1
 ENV VERIFY_CHECKSUM=false
 
 USER root
-RUN apt -o APT::Sandbox::User=root update; sync
-RUN apt-get update; sync
+RUN apt-get -o APT::Sandbox::User=root update; sync
 RUN apt-get install -y \
       git \
-      bash \
       curl \
+      zip \
+      unzip \
+      wget; sync
+
+RUN apt-get install -y \
+      bash \
       jq \
-      wget \
       apt-transport-https \
       ca-certificates \
       openssl \
@@ -72,8 +75,6 @@ RUN apt-get install -y \
       vim-tiny \
       telnet \
       nano \
-      zip \
-      unzip \
       libffi-dev \
       bzip2-dev \
       python3-minimal \
@@ -86,7 +87,7 @@ RUN apt-get install -y \
 #  Install Terragrunt  #
 # ==================== #
 RUN wget -O /usr/local/bin/terragrunt \
-      https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
+      https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
       # ================ #
       #  Install Packer  #
@@ -100,7 +101,7 @@ RUN wget -O /usr/local/bin/terragrunt \
       # =================== #
       wget -O terrascan.tar.gz \
       https://github.com/accurics/terrascan/releases/download/v${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION}_Linux_x86_64.tar.gz &&\
-      tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
+      tar -zxvf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
       # =================== #
@@ -118,7 +119,7 @@ RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/
 #  Install TFenv  #
 # =============== #
 RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
-      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile &&\
+      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc; sync &&\
       ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
       mkdir -p ~/.local/bin/ &&\
       ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
@@ -126,7 +127,8 @@ RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv use ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+      /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #
@@ -149,7 +151,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
+      https://github.com/roboll/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
       chmod +x /usr/local/bin/helmfile &&\
       helmfile --version; sync
 
@@ -157,7 +159,7 @@ RUN wget -O /usr/local/bin/helmfile \
 #  Install Kubectl  #
 # ================= #
 RUN wget -O /usr/local/bin/kubectl \
-      https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
 # =================== #
@@ -200,7 +202,7 @@ RUN chmod +x /tmp/*.sh
 #  Cleanup All  #
 # ============= #
 RUN apt-get clean &&\
-      apt-get autoremove -y; sync
+      apt autoremove -y; sync
 
 WORKDIR /root
 
