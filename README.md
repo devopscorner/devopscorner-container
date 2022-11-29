@@ -4,8 +4,6 @@ DevOpsCorner.id Container Images
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
-[![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/)
-[![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
 ![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.8.0/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
@@ -20,10 +18,12 @@ DevOpsCorner.id Container Images
 
 ## Available Tags
 
-- Container `devopscorner/aws-cli` [Tags](docs/README-AWS-Cli.md)
-- Container `devopscorner/cicd` [Tags](docs/README-CICD.md)
-- Container `devopscorner/openfortivpn` [Tags](docs/README-OpenFortiVPN.md)
-- Container `devopscorner/phpfpm` [Tags](docs/README-PHPFpm.md)
+| Container  | Pulls |
+|------------|------|
+| Container `devopscorner/aws-cli` [Tags](docs/README-AWS-Cli.md) | [![aws-cli pulls](https://img.shields.io/docker/pulls/devopscorner/aws-cli.svg?label=aws-cli%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/aws-cli/) |
+| Container `devopscorner/cicd` [Tags](docs/README-CICD.md) | [![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/) |
+| Container `devopscorner/openfortivpn` [Tags](docs/README-OpenFortiVPN.md) | [![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/) |
+| Container `devopscorner/phpfpm` [Tags](docs/README-PHPFpm.md) | [![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/phpfpm.svg?label=phpfpm%20pulls&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/) |
 
 ---
 

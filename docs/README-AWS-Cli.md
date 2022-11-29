@@ -22,7 +22,7 @@ DevOps Corner Indonesia - AWS Cli v2 Container Image (`Alpine 3.16` & `Python 3.
 
 | Image name | Size |
 |------------|------|
-| `devopscorner/aws-cli:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=latest) ![default-aws-cli](https://img.shields.io/static/v1?label=latest&message=default&color=brightgreen) ![latest-aws-cli](https://img.shields.io/static/v1?label=latest&message=ubuntu&color=orange) |
+| `devopscorner/aws-cli:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=latest) ![default-aws-cli](https://img.shields.io/static/v1?label=latest&message=default&color=brightgreen) ![latest-aws-cli](https://img.shields.io/static/v1?label=latest&message=alpine&color=orange) |
 | `devopscorner/aws-cli:2.9.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/2.9.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=2.9.1) |
 | `devopscorner/aws-cli:python3.10.8-2.9.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.8-2.9.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.8-2.9.1) |
 
