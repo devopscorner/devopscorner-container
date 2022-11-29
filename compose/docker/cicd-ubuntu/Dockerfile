@@ -14,7 +14,7 @@ ENV IMG_DESC="Docker Image CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV UBUNTU_VERSION="22.04"
-ENV CICD_VERSION="1.0.44"
+ENV CICD_VERSION="1.23"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
@@ -41,16 +41,18 @@ LABEL maintainer="$AUTHOR" \
 
 COPY rootfs /
 
-ENV DEBIAN_FRONTEND noninteractive
-
 ENV ANSIBLE_VERSION=2.12.2
-ENV ANSIBLE_TOWER_CLI_VERSION=3.3.4
-ENV PACKER_VERSION=1.7.10
-ENV TERRAFORM_VERSION=1.1.7
-ENV TERRAGRUNT_VERSION=v0.36.1
-ENV TERRASCAN_VERSION=1.14.0
+# ENV ANSIBLE_TOWER_CLI_VERSION=3.3.9   # Depreciated, change to AWX-Cli (awxkit)
+ENV AWXKIT_VERSION=21.9.0
+ENV PACKER_VERSION=1.8.4
+ENV TERRAFORM_VERSION=1.3.5
+ENV TERRAGRUNT_VERSION=v0.41.0
+ENV TERRASCAN_VERSION=1.17.0
 ENV HELMFILE_VERSION=v0.144.0
-ENV KUBECTL_VERSION=v1.24.0
+ENV KUBECTL_VERSION=v1.25.4
+ENV CHECKOV_VERSION=2.1.244
+ENV AWS_CLI_VERSION=2.9.1
+ENV VERIFY_CHECKSUM=false
 
 USER root
 RUN apt -o APT::Sandbox::User=root update; sync
@@ -59,10 +61,11 @@ RUN apt-get install -y \
       git \
       bash \
       curl \
-      wget \
       jq \
+      wget \
       apt-transport-https \
       ca-certificates \
+      openssl \
       openssh-server \
       openssh-client \
       net-tools \
@@ -71,23 +74,18 @@ RUN apt-get install -y \
       nano \
       zip \
       unzip \
+      libffi-dev \
+      bzip2-dev \
       python3-minimal \
       python3-distutils \
       python3-pip \
       python3-apt \
       iputils-ping; sync
 
-# =================== #
-#  Install Terraform  #
-# =================== #
-RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-      https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&\
-      unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
-      rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip; sync &&\
-      # ==================== #
-      #  Install Terragrunt  #
-      # ==================== #
-      wget -O /usr/local/bin/terragrunt \
+# ==================== #
+#  Install Terragrunt  #
+# ==================== #
+RUN wget -O /usr/local/bin/terragrunt \
       https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
       # ================ #
@@ -105,14 +103,16 @@ RUN wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
       tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
-      # =============== #
-      #  Install TFSec  #
-      # =============== #
-      curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync &&\
       # =================== #
       #  Install Infracost  #
       # =================== #
       curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash; sync
+
+# =============== #
+#  Install TFSec  #
+# =============== #
+RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync
+# COPY --from=aquasec/tfsec:latest /usr/bin/tfsec /usr/local/bin/tfsec
 
 # =============== #
 #  Install TFenv  #
@@ -123,11 +123,17 @@ RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
       mkdir -p ~/.local/bin/ &&\
       ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
 
+# =================== #
+#  Install Terraform  #
+# =================== #
+RUN /usr/local/bin/tfenv use ${TERRAFORM_VERSION} &&\
+      /usr/local/bin/terraform version; sync
+
 # ============== #
 #  Install Helm  #
 # ============== #
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
-      chmod 700 get_helm.sh &&\
+      chmod +x get_helm.sh &&\
       ./get_helm.sh &&\
       helm version; sync
 
@@ -154,17 +160,25 @@ RUN wget -O /usr/local/bin/kubectl \
       https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
+# =================== #
+#  Install AWSCli v2  #
+# =================== #
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+      unzip awscliv2.zip &&\
+      ./aws/install; sync
+
 # ========================= #
 # Install Python Libraries  #
 # ========================= #
-RUN python3 -m pip install pip==22.0.4 &&\
-      pip3 install --upgrade pip cffi awscli &&\
+RUN python3 -m pip install pip &&\
+      pip3 install --upgrade pip==22.3.1 cffi &&\
       # ================= #
       #  Install Ansible  #
       # ================= #
       pip3 install --no-cache-dir \
       ansible-core==${ANSIBLE_VERSION} \
-      ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
+      # ansible-tower-cli==${ANSIBLE_TOWER_CLI_VERSION} \
+      awxkit==${AWXKIT_VERSION} \
       PyYaml \
       Jinja2 \
       httplib2 \
@@ -174,13 +188,17 @@ RUN python3 -m pip install pip==22.0.4 &&\
       # ================= #
       #  Install Checkov  #
       # ================= #
-      checkov &&\
+      checkov==${CHECKOV_VERSION} &&\
       # setup root .ssh directory
-      mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
+      mkdir -p /root/.ssh &&\
+      chmod 0700 /root/.ssh &&\
+      chown -R root. /root/.ssh; sync
 
 RUN chmod +x /tmp/*.sh
 
-# cleanup cache
+# ============= #
+#  Cleanup All  #
+# ============= #
 RUN apt-get clean &&\
       apt-get autoremove -y; sync
 
