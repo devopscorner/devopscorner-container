@@ -13,7 +13,7 @@ export CI_PROJECT_NAME="cicd"
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 # export IMAGE=$3
 
-# export CICD_VERSION="1.0.5"
+# export CICD_VERSION="1.23"
 # export ALPINE_VERSION="3.16"
 # export UBUNTU_VERSION="22.04"
 # export CODEBUILD_VERSION="4.0"

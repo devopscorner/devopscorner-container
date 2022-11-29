@@ -13,7 +13,7 @@ export CI_ECR_PATH="devopscorner/cicd"
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
 
-# export CICD_VERSION="1.0.5"
+# export CICD_VERSION="1.23"
 # export ALPINE_VERSION="3.16"
 # export UBUNTU_VERSION="22.04"
 # export CODEBUILD_VERSION="4.0"
