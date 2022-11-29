@@ -49,7 +49,9 @@ ENV TERRAGRUNT_VERSION=v0.41.0
 ENV TERRASCAN_VERSION=1.17.0
 ENV HELMFILE_VERSION=v0.144.0
 ENV KUBECTL_VERSION=v1.25.4
-ENV CHECKOV_VERSION=2.2.97
+ENV CHECKOV_VERSION=2.1.244
+ENV AWS_CLI_VERSION=2.9.1
+ENV VERIFY_CHECKSUM=false
 
 USER root
 RUN yum update -y; sync
@@ -67,32 +69,14 @@ RUN yum install -y \
       openssl11 \
       openssl11-devel \
       libffi-devel \
-      bzip2-deve \
-      python37; sync
+      bzip2-devel \
+      python37 \
+      python3-pip; sync
 
-# ================ #
-#  Install AWSCli  #
-# ================ #
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&\
-      unzip awscliv2.zip &&\
-      ./aws/Install; sync
-
-RUN yum install -y \
-      # ===================== #
-      #  Install Python3-Pip  #
-      # ===================== #
-      python3-pip &&\
-      # =================== #
-      #  Install Terraform  #
-      # =================== #
-      wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
-      https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&\
-      unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
-      rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip; sync &&\
-      # ==================== #
-      #  Install Terragrunt  #
-      # ==================== #
-      wget -O /usr/local/bin/terragrunt \
+# ==================== #
+#  Install Terragrunt  #
+# ==================== #
+RUN wget -O /usr/local/bin/terragrunt \
       https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
       # ================ #
@@ -110,14 +94,16 @@ RUN yum install -y \
       tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
-      # =============== #
-      #  Install TFSec  #
-      # =============== #
-      curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync &&\
       # =================== #
       #  Install Infracost  #
       # =================== #
       curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | bash; sync
+
+# =============== #
+#  Install TFSec  #
+# =============== #
+RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync
+# COPY --from=aquasec/tfsec:latest /usr/bin/tfsec /usr/local/bin/tfsec
 
 # =============== #
 #  Install TFenv  #
@@ -128,11 +114,17 @@ RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
       mkdir -p ~/.local/bin/ &&\
       ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
 
+# =================== #
+#  Install Terraform  #
+# =================== #
+RUN /usr/local/bin/tfenv use ${TERRAFORM_VERSION} &&\
+      /usr/local/bin/terraform version; sync
+
 # ============== #
 #  Install Helm  #
 # ============== #
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
-      chmod 700 get_helm.sh &&\
+      chmod +x get_helm.sh &&\
       ./get_helm.sh &&\
       helm version; sync
 
@@ -162,9 +154,9 @@ RUN wget -O /usr/local/bin/kubectl \
 # ================ #
 #  Install AWSCli  #
 # ================ #
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&\
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
       unzip awscliv2.zip &&\
-      ./aws/Install; sync
+      ./aws/install; sync
 
 # ========================= #
 # Install Python Libraries  #
@@ -187,10 +179,11 @@ RUN python3 -m pip install pip &&\
       # ================= #
       #  Install Checkov  #
       # ================= #
-      # checkov==${CHECKOV_VERSION} &&\
-      checkov &&\
+      checkov==${CHECKOV_VERSION} &&\
       # setup root .ssh directory
-      mkdir -p /root/.ssh && chmod 0700 /root/.ssh && chown -R root. /root/.ssh
+      mkdir -p /root/.ssh &&\
+      chmod 0700 /root/.ssh &&\
+      chown -R root. /root/.ssh; sync
 
 RUN chmod +x /tmp/*.sh
 
