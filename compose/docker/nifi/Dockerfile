@@ -55,22 +55,28 @@ COPY rootfs /
 ENV DEBIAN_FRONTEND noninteractive
 
 USER root
-RUN apt -o APT::Sandbox::User=root update; sync
-RUN apt-get update; sync
+RUN apt-get -o APT::Sandbox::User=root update; sync
 RUN apt-get install -y \
       git \
-      bash \
       curl \
-      wget \
+      zip \
+      unzip \
+      wget; sync
+
+RUN apt-get install -y \
+      bash \
+      jq \
       apt-transport-https \
       ca-certificates \
+      openssl \
       openssh-server \
       openssh-client \
       net-tools \
       vim-tiny \
+      telnet \
       nano \
-      zip \
-      unzip \
+      libffi-dev \
+      bzip2-dev \
       python3-minimal \
       python3-distutils \
       python3-pip \
@@ -80,11 +86,11 @@ RUN apt-get install -y \
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
-RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
-      unzip awscliv2.zip &&\
-      ./aws/install; sync
-# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
-# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+# RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+#       unzip awscliv2.zip; sync &&\
+#       ./aws/install --bin-dir /usr/local/bin/; sync
+COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
 
 # ========================= #
 # Install Python Libraries  #
