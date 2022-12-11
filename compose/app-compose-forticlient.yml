@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 #================================================================================================
 # NETWORK SETUP
@@ -29,9 +29,9 @@ volumes:
       device: ${DATA_FORTICLIENT:-/opt/data/docker/forticlient22.04}
 
 services:
-#================================================================================================
-# PORTAINER
-#================================================================================================
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
   portainer:
     image: dockerframework/portainer:${PORTAINER_VERSION:-2.9.0}
     container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
@@ -40,8 +40,8 @@ services:
     ports:
       - "${PORT_PORTAINER:-5213}:9000"
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_portainer:/data
     environment:
       - PORTAINER_TEMPLATE=generic
@@ -51,9 +51,9 @@ services:
       devopscorner_net:
         ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.4}
 
-#================================================================================================
-# FORTICLIENT
-#================================================================================================
+  #================================================================================================
+  # FORTICLIENT
+  #================================================================================================
   forticlient:
     image: devopscorner/forticlient:${FORTICLIENT:-22.04}
     # build:
@@ -69,12 +69,12 @@ services:
       - VPNPASS=secret
       - VPNTIMEOUT=${VPNTIMEOUT:-10}
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_forticlient:/data
     ports:
-      - 8080:8080    # HTTP
-      - 8443:8443    # HTTPS
+      - 8080:8080 # HTTP
+      - 8443:8443 # HTTPS
     privileged: true
     networks:
       devopscorner_net:
