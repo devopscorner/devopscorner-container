@@ -36,14 +36,14 @@ cd ../../../
 
 cd $PATH_COMPOSE
 # ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
-./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine 3.16 &&
-    ./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu 22.04 &&
-    ./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild 4.0 &&
+./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine 3.16
+./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu 22.04
+./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild 4.0
 
-    # ./ecr-push.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
-    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd latest &&
-    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine &&
-    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu &&
-    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild
+# ./ecr-push.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
+./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd latest
+./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine
+./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu
+./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild
 
 echo "-- ALL DONE --"

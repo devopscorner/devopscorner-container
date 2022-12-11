@@ -32,14 +32,14 @@ cd ../../../
 
 cd $PATH_COMPOSE
 # ./dockerhub-tag.sh devopscorner/cicd [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
-./dockerhub-tag.sh devopscorner/cicd alpine 3.16 &&
-    ./dockerhub-tag.sh devopscorner/cicd ubuntu 22.04 &&
-    ./dockerhub-tag.sh devopscorner/cicd codebuild 4.0 &&
+./dockerhub-tag.sh devopscorner/cicd alpine 3.16
+./dockerhub-tag.sh devopscorner/cicd ubuntu 22.04
+./dockerhub-tag.sh devopscorner/cicd codebuild 4.0
 
-    # ./dockerhub-push.sh devopscorner/cicd [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
-    ./dockerhub-push.sh devopscorner/cicd latest &&
-    ./dockerhub-push.sh devopscorner/cicd alpine &&
-    ./dockerhub-push.sh devopscorner/cicd ubuntu &&
-    ./dockerhub-push.sh devopscorner/cicd codebuild
+# ./dockerhub-push.sh devopscorner/cicd [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
+./dockerhub-push.sh devopscorner/cicd latest
+./dockerhub-push.sh devopscorner/cicd alpine
+./dockerhub-push.sh devopscorner/cicd ubuntu
+./dockerhub-push.sh devopscorner/cicd codebuild
 
 echo "-- ALL DONE --"
