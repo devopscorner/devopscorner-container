@@ -45,5 +45,11 @@ cd $PATH_COMPOSE
 ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine
 ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu
 ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild
+echo ""
+
+echo "Cleanup Unknown Tags"
+echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
+docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
+echo ""
 
 echo "-- ALL DONE --"
