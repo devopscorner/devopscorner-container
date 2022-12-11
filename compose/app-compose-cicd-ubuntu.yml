@@ -39,8 +39,8 @@ services:
     ports:
       - "${PORT_PORTAINER:-5212}:9000"
     volumes:
-    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
       - PORTAINER_TEMPLATE=generic
@@ -62,8 +62,8 @@ services:
     ports:
       - "${PORT_CICD_UBUNTU:-5280}:22"
     volumes:
-    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_cicd_ubuntu/ssh:/root/.ssh
       - vol_cicd_ubuntu/deploy:/root/deploy
       - vol_cicd_ubuntu/repo:/root/GitHub

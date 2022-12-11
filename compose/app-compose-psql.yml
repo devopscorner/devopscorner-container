@@ -1,4 +1,4 @@
-version: '3.6'
+version: "3.6"
 
 #================================================================================================
 # NETWORK SETUP
@@ -35,9 +35,9 @@ volumes:
       device: ${DATA_POSTGRESQL:-/opt/data/docker/postgresql/pgdata}
 
 services:
-#================================================================================================
-# PORTAINER
-#================================================================================================
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
   portainer:
     image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
     container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
@@ -45,8 +45,8 @@ services:
     ports:
       - "${PORT_PORTAINER:-5212}:9000"
     volumes:
-    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
       - PORTAINER_TEMPLATE=generic
@@ -56,9 +56,9 @@ services:
       devopscorner_net:
         ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}
 
-#================================================================================================
-# POSTGRESQL
-#================================================================================================
+  #================================================================================================
+  # POSTGRESQL
+  #================================================================================================
   postgresql:
     build:
       context: ./docker/psql-ubuntu
@@ -71,8 +71,8 @@ services:
     ports:
       - "${PORT_POSTGRESQL:-5432}:5432"
     volumes:
-    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_postgres:/var/lib/postgresql
       ## Path config postgresql.conf ##
       - ${CONFIG_POSTGRESQL:-./docker/psql-ubuntu/config/postgresql.conf}:/var/lib/postgresql/postgresql.conf
@@ -94,9 +94,9 @@ services:
       devopscorner_net:
         ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.6}
 
-#================================================================================================
-# PGADMIN
-#================================================================================================
+  #================================================================================================
+  # PGADMIN
+  #================================================================================================
   pgadmin:
     image: dockerframework/pgadmin:${PGADMIN_VERSION:-latest}
     container_name: ${CONTAINER_PGADMIN:-devopscorner_pgadmin}
@@ -106,8 +106,8 @@ services:
     depends_on:
       - postgresql
     volumes:
-    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - ${SESSION_PGADMIN:-/opt/data/docker/pgadmin/sessions}:/sessions
       - vol_pgadmin:/var/lib/pgadmin/storage
       ## Path services ##
