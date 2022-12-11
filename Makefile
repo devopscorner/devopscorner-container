@@ -50,41 +50,45 @@ stop:
 	@echo '- DONE -'
 
 .PHONY: build-ubuntu push-ubuntu push-container-ubuntu
+# ./dockerhub-build.sh Dockerfile [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
 build-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Create Container Image Ubuntu "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh $(ARGS)
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh Dockerfile $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 	@echo '- DONE -'
 
+# ./dockerhub-push.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
 push-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Push Container Image Ubuntu"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(ARGS)
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(CI_PATH) ubuntu
 	@echo '- DONE -'
 
+# ./dockerhub-push.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
 build-push-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Build & Push Container Image Ubuntu "
 	@echo " Date/Time : `date`"
-	@echo "========================================================"
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh $(ARGS)
-	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(ARGS)
+	@echo "========================================================"s
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-build.sh Dockerfile $(CI_PATH) ubuntu ${UBUNTU_VERSION}
+	@cd ${PATH_DOCKER}/ubuntu && ./docker-push.sh $(CI_PATH) ubuntu
 	@echo '- DONE -'
 
 # ========================= #
 #   BUILD CONTAINER CI/CD   #
 # ========================= #
 .PHONY: build-cicd-alpine build-cicd-ubuntu build-cicd-codebuild
+# ./dockerhub-build.sh Dockerfile [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
 build-cicd-alpine:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh $(ARGS)
+	@cd ${PATH_DOCKER}/cicd-alpine && ./docker-build.sh Dockerfile $(CI_PATH) alpine latest
 	@echo '- DONE -'
 
 build-cicd-ubuntu:
@@ -92,7 +96,7 @@ build-cicd-ubuntu:
 	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh $(ARGS)
+	@cd ${PATH_DOCKER}/cicd-ubuntu && ./docker-build.sh Dockerfile $(CI_PATH) ubuntu latest
 	@echo '- DONE -'
 
 build-cicd-codebuild:
@@ -100,7 +104,7 @@ build-cicd-codebuild:
 	@echo " Task      : Create Container CI/CD AWS CodeBuild Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_DOCKER}/cicd-codebuild && ./docker-build.sh $(ARGS)
+	@cd ${PATH_DOCKER}/cicd-codebuild && ./docker-build.sh Dockerfile $(CI_PATH) codebuild latest
 	@echo '- DONE -'
 
 .PHONY: dockerhub-build-alpine dockerhub-build-ubuntu dockerhub-build-codebuild
@@ -109,132 +113,137 @@ dockerhub-build-alpine:
 	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh alpine Dockerfile ${ALPINE_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh Dockerfile $(CI_PATH) alpine ${ALPINE_VERSION}
 
 dockerhub-build-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh ubuntu Dockerfile ${UBUNTU_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh Dockerfile $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 
 dockerhub-build-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD AWS CodeBuild Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh codebuild Dockerfile ${CODEBUILD_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-build.sh Dockerfile $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 
+# ./ecr-build.sh [AWS_ACCOUNT] Dockerfile [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
 .PHONY: ecr-build-alpine ecr-build-ubuntu ecr-build-codebuild
 ecr-build-alpine:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD Alpine Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) alpine Dockerfile ${ALPINE_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) Dockerfile $(CI_PATH) alpine ${ALPINE_VERSION}
 
 ecr-build-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD Ubuntu Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile ${UBUNTU_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) Dockerfile $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 
 ecr-build-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Create Container CI/CD AWS CodeBuild Image "
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) codebuild Dockerfile ${CODEBUILD_VERSION}
+	@cd ${PATH_COMPOSE} && ./ecr-build.sh $(ARGS) Dockerfile $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 
 # ======================== #
 #   TAGS CONTAINER CI/CD   #
 # ======================== #
+# ./dockerhub-tag.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
 .PHONY: tag-dockerhub-alpine tag-dockerhub-ubuntu tag-dockerhub-codebuild tag-ecr-alpine tag-ecr-ubuntu tag-ecr-codebuild
 dockerhub-tag-alpine:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image Alpine to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh alpine ${ALPINE_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh $(CI_PATH) alpine ${ALPINE_VERSION}
 
 dockerhub-tag-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image Ubuntu to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh ubuntu ${UBUNTU_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 
 dockerhub-tag-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image AWS CodeBuild to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh codebuild ${CODEBUILD_VERSION}
+	@cd ${PATH_COMPOSE} && ./dockerhub-tag.sh $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 
+# ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
 ecr-tag-alpine:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) alpine ${ALPINE_VERSION} $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) $(CI_PATH) alpine ${ALPINE_VERSION}
 
 ecr-tag-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) ubuntu ${UBUNTU_VERSION} $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 
 ecr-tag-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Set Tags Image AWS CodeBuild to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) codebuild ${CODEBUILD_VERSION} $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-tag.sh $(ARGS) $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 
 # ======================== #
 #   PUSH CONTAINER CI/CD   #
 # ======================== #
+# ./dockerhub-push.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
 .PHONY: dockerhub-push-alpine dockerhub-push-ubuntu dockerhub-push-codebuild ecr-push-alpine ecr-push-ubuntu ecr-push-codebuild
 dockerhub-push-alpine:
 	@echo "========================================================"
 	@echo " Task      : Push Image Alpine to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh alpine $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh $(CI_PATH) alpine
 
 dockerhub-push-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Push Image Ubuntu to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh ubuntu $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh $(CI_PATH) ubuntu
 
 dockerhub-push-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Push Image AWS CodeBuild to DockerHub"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh codebuild $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./dockerhub-push.sh $(CI_PATH) codebuid
 
+# ./ecr-push.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
 ecr-push-alpine:
 	@echo "========================================================"
 	@echo " Task      : Push Image Alpine to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) alpine $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) $(CI_PATH) alpine
 
 ecr-push-ubuntu:
 	@echo "========================================================"
 	@echo " Task      : Push Image Ubuntu to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) ubuntu $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) $(CI_PATH) ubuntu
 
 ecr-push-codebuild:
 	@echo "========================================================"
 	@echo " Task      : Push Image AWS CodeBuild to ECR"
 	@echo " Date/Time : `date`"
 	@echo "========================================================"
-	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) codebuild $(CI_PATH)
+	@cd ${PATH_COMPOSE} && ./ecr-push.sh $(ARGS) $(CI_PATH) codebuild
