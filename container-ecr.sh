@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Build, Tag & Push Container for ECR
+#  Docker Build, Tag & Push Container for Elastic Container Registry (ECR)
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni (@zeroc0d3)
 #  License    : Apache v2
