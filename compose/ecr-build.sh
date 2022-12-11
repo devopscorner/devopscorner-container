@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Push Container (DockerHub)
+#  Docker Build Container (Elastic Container Registry - ECR)
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
@@ -9,52 +9,68 @@ set -e
 
 export AWS_ACCOUNT_ID=$1
 export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
-export CI_ECR_PATH="devopscorner/cicd"
+export CI_ECR_PATH=$3
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
 
-login_ecr() {
-  echo "============="
-  echo "  Login ECR  "
-  echo "============="
-  PASSWORD=`aws ecr get-login-password --region ap-southeast-1`
-  echo $PASSWORD | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com
-  echo '- DONE -'
-  echo ''
-}
-
 docker_build() {
-  export TAGS_ID=$2
-  export PATH_DOCKERFILE="docker/cicd-$2"
-  export FILE=$3
-  export CUSTOM_TAGS=$4
+  export FILE=$2
+  export BASE_IMAGE=$4
+  export TAGS_ID=$5
+  export CUSTOM_TAGS=$6
 
-  cd $PATH_DOCKERFILE
   if [ "$CUSTOM_TAGS" = "" ]; then
+    echo "Build Image => $IMAGE:${BASE_IMAGE}"
+    echo ">> docker build -t $IMAGE:${BASE_IMAGE} -f $FILE ."
+    docker build -t $IMAGE:${BASE_IMAGE} -f $FILE .
+    echo '---'
+
     echo "Build Image => $IMAGE:${TAGS_ID}"
-    echo "docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
+    echo ">> docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
     docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+    echo '---'
+
+    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}"
+    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE ."
+    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE .
+    echo '---'
   else
+    echo "Build Image => $IMAGE:${BASE_IMAGE}"
+    echo ">> docker build -t $IMAGE:${BASE_IMAGE} -f $FILE ."
+    docker build -t $IMAGE:${BASE_IMAGE} -f $FILE .
+    echo '---'
+
     echo "Build Image => $IMAGE:${TAGS_ID}"
     echo "docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
     docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+    echo '---'
+
+    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}"
+    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE ."
+    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE .
+    echo '---'
 
     echo "Build Image => $IMAGE:${TAGS_ID}-${CUSTOM_TAGS}"
-    echo "docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
     docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
+    echo ">> docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
+    echo '---'
+
+    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS}"
+    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
+    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
+    echo '---'
   fi
-  cd ../../
 }
 
 main() {
-  # login_ecr
-  # docker_build 0987654321 alpine Dockerfile alpine-3.16
-  # docker_build 0987654321 ubuntu Dockerfile ubuntu-22.04
-  # docker_build 0987654321 codebuild Dockerfile codebuild-4.0
-  docker_build $1 $2 $3 $4
+  # docker_build [AWS_ACCOUNT] Dockerfile devopscorner/cicd [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+  docker_build $1 $2 $3 $4 $5 $6
   echo ''
   echo '-- ALL DONE --'
 }
 
 ### START HERE ###
-main $1 $2 $3 $4
+main $1 $2 $3 $4 $5 $6
+
+### How to Execute ###
+# ./ecr-build.sh [AWS_ACCOUNT] Dockerfile [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]

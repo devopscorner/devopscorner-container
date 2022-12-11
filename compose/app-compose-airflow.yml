@@ -91,7 +91,8 @@ services:
     ports:
       - "${PORT_PORTAINER:-5212}:9000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_portainer:/data
     environment:
       - PORTAINER_TEMPLATE=generic
@@ -133,8 +134,8 @@ services:
     ports:
       - "${PORT_POSTGRESQL:-5432}:5432"
     volumes:
-      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_postgres14:/var/lib/postgresql
     command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
     environment:

@@ -21,23 +21,29 @@ export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
 
 cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_ALPINE
 echo "Build Image => $IMAGE:alpine"
-docker build -f Dockerfile -t $IMAGE:alpine .
+docker build --no-cache -f Dockerfile -t $IMAGE:alpine .
 cd ../../../
 
 cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_UBUNTU
 echo "Build Image => $IMAGE:ubuntu"
-docker build -f Dockerfile -t $IMAGE:ubuntu .
+docker build --no-cache -f Dockerfile -t $IMAGE:ubuntu .
 cd ../../../
 
 cd $PATH_COMPOSE/$PATH_DOCKER/$CONTAINER_CODEBUILD
 echo "Build Image => $IMAGE:codebuild"
-docker build -f Dockerfile -t $IMAGE:codebuild .
+docker build --no-cache -f Dockerfile -t $IMAGE:codebuild .
 cd ../../../
 
 cd $PATH_COMPOSE
-./ecr-tag.sh ${AWS_ACCOUNT_ID} alpine 3.16 devopscorner/cicd &&\
-./ecr-tag.sh ${AWS_ACCOUNT_ID} ubuntu 22.04 devopscorner/cicd &&\
-./ecr-tag.sh ${AWS_ACCOUNT_ID} codebuild 4.0 devopscorner/cicd &&\
-./ecr-push.sh ${AWS_ACCOUNT_ID} alpine devopscorner/cicd &&\
-./ecr-push.sh ${AWS_ACCOUNT_ID} ubuntu devopscorner/cicd &&\
-./ecr-push.sh ${AWS_ACCOUNT_ID} codebuild devopscorner/cicd
+# ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine 3.16 &&
+    ./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu 22.04 &&
+    ./ecr-tag.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild 4.0 &&
+
+    # ./ecr-push.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
+    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd latest &&
+    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd alpine &&
+    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd ubuntu &&
+    ./ecr-push.sh ${AWS_ACCOUNT_ID} devopscorner/cicd codebuild
+
+echo "-- ALL DONE --"

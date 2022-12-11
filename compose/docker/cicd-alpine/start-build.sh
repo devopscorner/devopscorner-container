@@ -41,3 +41,5 @@ TAG="1.23-apline"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
+
+echo "-- ALL DONE --"

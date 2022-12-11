@@ -46,3 +46,5 @@ TAG="latest"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
+
+echo "-- ALL DONE --"
