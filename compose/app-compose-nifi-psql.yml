@@ -52,8 +52,8 @@ services:
     ports:
       - "${PORT_PORTAINER:-5213}:9000"
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_portainer:/data
     environment:
       - PORTAINER_TEMPLATE=generic
@@ -94,8 +94,8 @@ services:
       start_period: "5s"
       retries: 5
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - ./nifi-${NIFI_VERSION:-1.18.0}/content_repository:/opt/nifi/nifi-current/content_repository
       - ./nifi-${NIFI_VERSION:-1.18.0}/database_repository:/opt/nifi/nifi-current/database_repository
       - ./nifi-${NIFI_VERSION:-1.18.0}/flowfile_repository:/opt/nifi/nifi-current/flowfile_repository
@@ -140,8 +140,8 @@ services:
       #- NIFI_REGISTRY_DB_USERNAME=postgres
       #- NIFI_REGISTRY_DB_PASSWORD=MyP4ssw0rd
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - ./nifi-registry-${NIFI_REGISTRY_VERSION:-1.18.0}/database:/opt/nifi-registry/nifi-registry-current/database
       - ./nifi-registry-${NIFI_REGISTRY_VERSION:-1.18.0}/flow_storage:/opt/nifi-registry/nifi-registry-current/flow_storage
       # Download Java-8:
@@ -169,10 +169,13 @@ services:
     container_name: ${CONTAINER_ZOOKEEPER:-devopscorner_zookeeper}
     restart: unless-stopped
     hostname: myzookeeper
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
     ports:
       - 2181:2181
+    volumes:
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
     privileged: true
     networks:
       devopscorner_net:
@@ -189,8 +192,8 @@ services:
     ports:
       - "${PORT_POSTGRESQL:-5432}:5432"
     volumes:
-  #   - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-  #   - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
+    # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
       - vol_postgres:/var/lib/postgresql
       ## Path config postgresql.conf ##
       - ${CONFIG_POSTGRESQL:-./docker/config/postgresql/postgresql.conf}:/var/lib/postgresql/postgresql.conf

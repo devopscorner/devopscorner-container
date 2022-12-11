@@ -1,5 +1,5 @@
 IMAGE = YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/mariadb
-TAG = 10.5.12-alpine
+TAG = 10.5.18-alpine
 
 clean-local:
 	docker rmi $(CLEAN_OPTIONS) $(IMAGE):$(TAG) || true
