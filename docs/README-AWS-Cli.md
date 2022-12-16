@@ -28,6 +28,39 @@ DevOps Corner Indonesia - AWS Cli v2 Container Image (`Alpine 3.16` & `Python 3.
 
 ---
 
+## AWS CLI Environment Variables
+
+### References
+ - [CLI Configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+
+### Linux
+```
+$ export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+$ export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+$ export AWS_DEFAULT_REGION=ap-southeast-3
+```
+
+### Windows
+```
+## To set for all sessions
+C:\> setx AWS_ACCESS_KEY_ID AKIAIOSFODNN7EXAMPLE
+C:\> setx AWS_SECRET_ACCESS_KEY wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+C:\> setx AWS_DEFAULT_REGION ap-southeast-3
+
+## To set for current session only
+C:\> set AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+C:\> set AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+C:\> set AWS_DEFAULT_REGION=ap-southeast-3
+```
+
+### PowerShell
+
+```
+PS C:\> $Env:AWS_ACCESS_KEY_ID="AKIAIOSFODNN7EXAMPLE"
+PS C:\> $Env:AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+PS C:\> $Env:AWS_DEFAULT_REGION="ap-southeast-3"
+```
+
 ## Environment
 
 ```docker

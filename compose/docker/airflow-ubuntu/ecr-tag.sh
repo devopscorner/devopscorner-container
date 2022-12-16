@@ -1,22 +1,22 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Tag Container (DockerHub)
+#  Docker Tag Container (Elastic Container Registry - ECR)
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
 # -----------------------------------------------------------------------------
 set -e
 
-# export CI_PROJECT_PATH="devopscorner"
-# export CI_PROJECT_NAME="airflow"
+export AWS_ACCOUNT_ID=$1
+export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
+export CI_ECR_PATH=$2
 
-# export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
-export IMAGE=$1
+export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
 
 set_tag() {
-  export BASE_IMAGE=$2
-  export TAGS_ID=$3
-  export CUSTOM_TAGS=$4
+  export BASE_IMAGE=$3
+  export TAGS_ID=$4
+  export CUSTOM_TAGS=$5
   export COMMIT_HASH=$(git log -1 --format=format:"%H")
 
   if [ "$CUSTOM_TAGS" = "" ]; then
@@ -44,15 +44,15 @@ docker_tag() {
 }
 
 main() {
-  # set_tag devopscorner/airflow [alpine|ubuntu] [version|latest|tags] [custom-tags]
-  set_tag $1 $2 $3 $4
+  # set_tag [AWS_ACCOUNT] devopscorner/airflow [alpine|ubuntu] [version|latest|tags] [custom-tags]
+  set_tag $1 $2 $3 $4 $5
   docker_tag
   echo ''
   echo '-- ALL DONE --'
 }
 
 ### START HERE ###
-main $1 $2 $3 $4
+main $1 $2 $3 $4 $5
 
 ### How to Execute ###
-# ./dockerhub-tag.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu] [version|latest|tags] [custom-tags]
+# ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu] [version|latest|tags] [custom-tags]

@@ -1,4 +1,4 @@
-FROM postgres:${POSTGRES_VERSION:-14.1}
+FROM apache/airflow:2.5.0-python3.10
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -7,54 +7,100 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="psql"
-ENV IMG_VERSION="14.1"
-ENV IMG_DESC="PostgreSQL Docker Image"
+ENV IMG_NAME="airflow"
+ENV IMG_VERSION="2.5.0"
+ENV IMG_DESC="Docker Image Airflow 2.5.0 with Python-3.10"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV POSTGRES_VERSION="14.1"
+ENV AWS_CLI_VERSION=2.9.1
+ENV AIRFLOW_VERSION=2.5.0
+ENV VERIFY_CHECKSUM=false
 
 LABEL maintainer="$AUTHOR" \
-      architecture="$IMG_ARCH" \
-      postgres-version="$POSTGRES_VERSION" \
-      org.label-schema.build-date="$BUILD_DATE" \
-      org.label-schema.name="$IMG_NAME" \
-      org.label-schema.description="$IMG_DESC" \
-      org.label-schema.vcs-ref="$GIT_COMMIT" \
-      org.label-schema.vcs-url="$GIT_URL" \
-      org.label-schema.vendor="$VENDOR" \
-      org.label-schema.version="$BUILD_VERSION" \
-      org.label-schema.schema-version="$IMG_VERSION" \
-      org.opencontainers.image.authors="$AUTHOR" \
-      org.opencontainers.image.description="$IMG_DESC" \
-      org.opencontainers.image.vendor="$VENDOR" \
-      org.opencontainers.image.version="$IMG_VERSION" \
-      org.opencontainers.image.revision="$GIT_COMMIT" \
-      org.opencontainers.image.created="$BUILD_DATE" \
-      fr.hbis.docker.base.build-date="$BUILD_DATE" \
-      fr.hbis.docker.base.name="$IMG_NAME" \
-      fr.hbis.docker.base.vendor="$VENDOR" \
-      fr.hbis.docker.base.version="$BUILD_VERSION"
+    architecture="$IMG_ARCH" \
+    airflow-version="$AIRFLOW_VERSION" \
+    org.label-schema.build-date="$BUILD_DATE" \
+    org.label-schema.name="$IMG_NAME" \
+    org.label-schema.description="$IMG_DESC" \
+    org.label-schema.vcs-ref="$GIT_COMMIT" \
+    org.label-schema.vcs-url="$GIT_URL" \
+    org.label-schema.vendor="$VENDOR" \
+    org.label-schema.version="$BUILD_VERSION" \
+    org.label-schema.schema-version="$IMG_VERSION" \
+    org.opencontainers.image.authors="$AUTHOR" \
+    org.opencontainers.image.description="$IMG_DESC" \
+    org.opencontainers.image.vendor="$VENDOR" \
+    org.opencontainers.image.version="$IMG_VERSION" \
+    org.opencontainers.image.revision="$GIT_COMMIT" \
+    org.opencontainers.image.created="$BUILD_DATE" \
+    fr.hbis.docker.base.build-date="$BUILD_DATE" \
+    fr.hbis.docker.base.name="$IMG_NAME" \
+    fr.hbis.docker.base.vendor="$VENDOR" \
+    fr.hbis.docker.base.version="$BUILD_VERSION"
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-ENV POSTGRES_USER=${POSTGRES_USER:-airflow}
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-airflow}
-ENV POSTGRES_DB=${POSTGRES_DB:-airflow}
-# ENV PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
-
-RUN apt -o APT::Sandbox::User=root update; sync
-RUN apt-get update; sync
-RUN apt-get install -y \
-      curl
-
-COPY config/postgresql.conf /var/lib/postgresql
 COPY rootfs /
 
-RUN apt-get clean; sync
+ENV DEBIAN_FRONTEND noninteractive
 
-VOLUME /var/lib/postgresql/data
+USER root
+RUN apt-get -o APT::Sandbox::User=root update; sync
+RUN apt-get install -y \
+    git \
+    curl \
+    zip \
+    unzip \
+    wget; sync
 
-EXPOSE 5432
+RUN apt-get install -y \
+    bash \
+    jq \
+    apt-transport-https \
+    ca-certificates \
+    openssl \
+    openssh-server \
+    openssh-client \
+    net-tools \
+    vim-tiny \
+    telnet \
+    nano \
+    libffi-dev \
+    bzip2 \
+    python3-minimal \
+    python3-distutils \
+    python3-pip \
+    python3-apt \
+    gcc \
+    iputils-ping; sync
 
-CMD ["postgres"]
+# =================== #
+#  Install AWSCli v2  #
+# =================== #
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+    unzip awscliv2.zip; sync &&\
+    ./aws/install --bin-dir /usr/local/bin/; sync
+# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# ========================= #
+# Install Python Libraries  #
+# ========================= #
+RUN python3 -m pip install pip &&\
+    pip3 install --upgrade pip==22.3.1 cffi &&\
+    pip3 install --no-cache-dir \
+    PyYaml \
+    Jinja2 \
+    httplib2 \
+    six \
+    requests \
+    ivy-core &&\
+    # setup root .ssh directory
+    mkdir -p /root/.ssh &&\
+    chmod 0700 /root/.ssh &&\
+    chown -R root. /root/.ssh; sync
+
+USER airflow
+
+ENV AWS_ACCESS_KEY_ID=$SET_AWS_ACCESS_KEY_ID
+ENV AWS_SECRET_ACCESS_KEY=$SET_AWS_SECRET_ACCESS_KEY
+
+RUN pip install -r /tmp/airflow/requirements.txt
