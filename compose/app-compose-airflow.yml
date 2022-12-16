@@ -61,10 +61,14 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "true"
     AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    AWS_ACCESS_KEY_ID: "AWS_ACCESS_KEY_ID"
+    AWS_SECRET_ACCESS_KEY: "AWS_SECRET_ACCESS_KEY"
+    AWS_DEFAULT_REGION: "ap-southeast-1"
   volumes:
     - vol_airflow_dags:/opt/airflow/dags
     - vol_airflow_logs:/opt/airflow/logs
     - vol_airflow_plugins:/opt/airflow/plugins
+    - ./airflow.cfg:/opt/airflow/airflow.cfg
   user: "${AIRFLOW_UID:-50000}:0"
   ulimits:
     nproc: 131072
