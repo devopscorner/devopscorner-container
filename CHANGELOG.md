@@ -17,11 +17,33 @@
 
 | Containers  | Pulls |
 |-------------|-------|
+| Container `devopscorner/airflow` [Tags](docs/README-Airflow.md) | [![airflow pulls](https://img.shields.io/docker/pulls/devopscorner/airflow.svg?label=airflow%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/airflow/) |
 | Container `devopscorner/aws-cli` [Tags](docs/README-AWS-Cli.md) | [![aws-cli pulls](https://img.shields.io/docker/pulls/devopscorner/aws-cli.svg?label=aws-cli%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/aws-cli/) |
 | Container `devopscorner/cicd` [Tags](docs/README-CICD.md) | [![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/) |
 | Container `devopscorner/openfortivpn` [Tags](docs/README-OpenFortiVPN.md) | [![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/) |
 | Container `devopscorner/phpfpm` [Tags](docs/README-PHPFpm.md) | [![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/phpfpm.svg?label=phpfpm%20pulls&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/) |
 
+
+---
+
+## Features - v2.9.1
+
+- Refactoring script container Airflow
+- Added Python libraries inside container Airflow
+  ```
+  pandas==1.5.2
+  boto3==1.26.22
+  plotly==5.11.0
+  paramiko==2.12.0
+  psycopg2-binary
+  scikit-learn==0.24.1
+  cryptography==36.0.2
+  ```
+- Added AWS CLI inside container Airflow
+  ```
+  ENV AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
+  ENV AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
+  ```
 
 ---
 
