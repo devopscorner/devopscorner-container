@@ -1,79 +1,30 @@
-version: "3.7"
-
-#================================================================================================
-# NETWORK SETUP
-#================================================================================================
-networks:
-  devopscorner_net:
-    name: devopscorner_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.146.146.0/16
-
-#================================================================================================
-# VOLUME SETUP
-#================================================================================================
-volumes:
-  vol_container: &volume_default
-    driver: ${VOLUMES_DRIVER:-local}
-    driver_opts: &driver_default
-      o: bind
-      type: none
-  vol_portainer:
-    <<: *volume_default
-    driver_opts:
-      <<: *driver_default
-      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
-  vol_postgres14:
-    <<: *volume_default
-    driver_opts:
-      <<: *driver_default
-      device: ${DATA_POSTGRESQL:-/opt/data/docker/postgresql14/pgdata}
-  vol_airflow_dags:
-    <<: *volume_default
-    driver_opts:
-      <<: *driver_default
-      device: ${DATA_AIRFLOW_DAGS:-/opt/data/docker/airflow/dags}
-  vol_airflow_logs:
-    <<: *volume_default
-    driver_opts:
-      <<: *driver_default
-      device: ${DATA_AIRFLOW_LOGS:-/opt/data/docker/airflow/logs}
-  vol_airflow_plugins:
-    <<: *volume_default
-    driver_opts:
-      <<: *driver_default
-      device: ${DATA_AIRFLOW_PLUGINS:-/opt/data/docker/airflow/plugins}
-
-#================================================================================================
-# AIRFLOW GLOBAL
-#================================================================================================
+---
+version: "3"
 x-airflow-common: &airflow-common
+  # In order to add custom dependencies or upgrade provider packages you can use your extended image.
+  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
+  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
+
   image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.2.4}
+  # build: .
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgresql/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgresql/airflow
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    # For backward compatibility, with Airflow <2.3
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ""
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
     AIRFLOW__CORE__LOAD_EXAMPLES: "true"
-    AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.basic_auth"
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
-    - vol_airflow_dags:/opt/airflow/dags
-    - vol_airflow_logs:/opt/airflow/logs
-    - vol_airflow_plugins:/opt/airflow/plugins
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
+    - ./airflow.cfg:/opt/airflow/airflow.cfg
   user: "${AIRFLOW_UID:-50000}:0"
-  ulimits:
-    nproc: 131072
-    nofile:
-      soft: 8192
-      hard: 131072
-    memlock:
-      soft: -1
-      hard: -1
   depends_on: &airflow-common-depends-on
     redis:
       condition: service_healthy
@@ -81,109 +32,54 @@ x-airflow-common: &airflow-common
       condition: service_healthy
 
 services:
-  #================================================================================================
-  # PORTAINER
-  #================================================================================================
-  portainer:
-    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
-    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
-    restart: unless-stopped
-    ports:
-      - "${PORT_PORTAINER:-5212}:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - vol_portainer:/data
+  postgres:
+    image: postgres:14
+    container_name: devopscorner_postgres
     environment:
-      - PORTAINER_TEMPLATE=generic
-      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
-    privileged: true
-    networks:
-      devopscorner_net:
-        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.146.146.5}
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
 
-  #================================================================================================
-  # REDIS
-  #================================================================================================
   redis:
     image: redis:latest
-    container_name: ${CONTAINER_REDIS:-devopscorner_redis}
-    restart: always
-    ports:
-      - 6379:6379
+    container_name: devopscorner_redis
+    expose:
+      - 6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 30s
       retries: 50
-    privileged: true
-    tty: true
-    networks:
-      devopscorner_net:
-        ipv4_address: ${CONTAINER_IP_REDIS:-172.146.146.212}
-
-  #================================================================================================
-  # POSTGRESQL
-  #================================================================================================
-  postgresql:
-    build:
-      context: docker/airflow-ubuntu
-      dockerfile: Dockerfile
-    container_name: ${CONTAINER_POSTGRESQL:-devopscorner_postgresql}
     restart: always
-    ports:
-      - "${PORT_POSTGRESQL:-5432}:5432"
-    volumes:
-      #- /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
-      #- /var/run/docker.sock:/var/run/docker.sock  ## Do not use it in k8s
-      - vol_postgres14:/var/lib/postgresql
-    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
-    environment:
-      - TZ="Asia/Jakarta"
-      - POSTGRES_VERSION=${POSTGRES_VERSION:-14.1}
-      - POSTGRES_USER=${POSTGRES_USER:-airflow}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-airflow}
-      - POSTGRES_DB=${POSTGRES_DB:-airflow}
-      #- PGDATA=${PGDATA:-/var/lib/postgresql/pgdata}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
-    privileged: true
-    tty: true
-    networks:
-      devopscorner_net:
-        ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.6}
 
-  #================================================================================================
-  # AIRFLOW
-  #================================================================================================
   airflow-webserver:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_WEB:-devopscorner_airflow_web}
-    restart: always
+    command: webserver
+    container_name: devopscorner_airflow_webserver
     ports:
       - 8080:8080
-    command: webserver
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
       timeout: 10s
       retries: 5
+    restart: always
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-    privileged: true
-    tty: true
-    networks:
-      devopscorner_net:
-        ipv4_address: ${CONTAINER_IP_POSTGRESQL:-172.146.146.7}
 
   airflow-scheduler:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_SCHEDULER:-devopscorner_airflow_scheduler}
-    restart: always
     command: scheduler
+    container_name: devopscorner_airflow_scheduler
     healthcheck:
       test:
         [
@@ -193,6 +89,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    restart: always
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -200,14 +97,8 @@ services:
 
   airflow-worker:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_WORKER:-devopscorner_airflow_worker}
-    restart: always
     command: celery worker
-    environment:
-      <<: *airflow-common-env
-      # Required to handle warm shutdown of the celery workers properly
-      # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
-      DUMB_INIT_SETSID: "0"
+    container_name: devopscorner_airflow_worker
     healthcheck:
       test:
         - "CMD-SHELL"
@@ -215,6 +106,12 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    environment:
+      <<: *airflow-common-env
+      # Required to handle warm shutdown of the celery workers properly
+      # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
+      DUMB_INIT_SETSID: "0"
+    restart: always
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -222,9 +119,8 @@ services:
 
   airflow-triggerer:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_TRIGGER:-devopscorner_airflow_trigger}
-    restart: always
     command: triggerer
+    container_name: devopscorner_airflow_triggerer
     healthcheck:
       test:
         [
@@ -234,6 +130,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    restart: always
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -241,8 +138,8 @@ services:
 
   airflow-init:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_INIT:-devopscorner_airflow_init}
     entrypoint: /bin/bash
+    container_name: devopscorner_airflow_init
     # yamllint disable rule:line-length
     command:
       - -c
@@ -250,7 +147,7 @@ services:
         function ver() {
           printf "%04d%04d%04d%04d" $${1//./ }
         }
-        airflow_version=$$(gosu airflow airflow version)
+        airflow_version=$$(AIRFLOW__LOGGING__LOGGING_LEVEL=INFO && gosu airflow airflow version)
         airflow_version_comparable=$$(ver $${airflow_version})
         min_airflow_version=2.2.0
         min_airflow_version_comparable=$$(ver $${min_airflow_version})
@@ -267,7 +164,7 @@ services:
           echo "If you are on Linux, you SHOULD follow the instructions below to set "
           echo "AIRFLOW_UID environment variable, otherwise files will be owned by root."
           echo "For other operating systems you can get rid of the warning with manually created .env file:"
-          echo "    See: https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html#setting-the-right-airflow-user"
+          echo "    See: https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#setting-the-right-airflow-user"
           echo
         fi
         one_meg=1048576
@@ -300,7 +197,7 @@ services:
           echo
           echo -e "\033[1;33mWARNING!!!: You have not enough resources to run Airflow (see above)!\e[0m"
           echo "Please follow the instructions to increase amount of resources available:"
-          echo "   https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html#before-you-begin"
+          echo "   https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#before-you-begin"
           echo
         fi
         mkdir -p /sources/logs /sources/dags /sources/plugins
@@ -313,15 +210,16 @@ services:
       _AIRFLOW_WWW_USER_CREATE: "true"
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
       _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+      _PIP_ADDITIONAL_REQUIREMENTS: ""
     user: "0:0"
     volumes:
       - .:/sources
 
   airflow-cli:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_CLI:-devopscorner_airflow_cli}
     profiles:
       - debug
+    container_name: devopscorner_airflow_cli
     environment:
       <<: *airflow-common-env
       CONNECTION_CHECK_MAX_COUNT: "0"
@@ -331,11 +229,15 @@ services:
       - -c
       - airflow
 
+  # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
+  # or by explicitly targeted on the command line e.g. docker-compose up flower.
+  # See: https://docs.docker.com/compose/profiles/
   flower:
     <<: *airflow-common
-    container_name: ${CONTAINER_AIRFLOW_FLOWER:-devopscorner_airflow_flower}
-    restart: always
     command: celery flower
+    container_name: devopscorner_airflow_flower
+    profiles:
+      - flower
     ports:
       - 5555:5555
     healthcheck:
@@ -343,7 +245,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    restart: always
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+volumes:
+  postgres-db-volume:
