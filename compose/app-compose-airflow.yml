@@ -50,7 +50,7 @@ volumes:
 # AIRFLOW GLOBAL
 #================================================================================================
 x-airflow-common: &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.2.2}
+  image: ${AIRFLOW_IMAGE_NAME:-devopscorner/airflow:2.5.0}
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgresql/airflow
@@ -63,7 +63,7 @@ x-airflow-common: &airflow-common
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AWS_ACCESS_KEY_ID: "AWS_ACCESS_KEY_ID"
     AWS_SECRET_ACCESS_KEY: "AWS_SECRET_ACCESS_KEY"
-    AWS_DEFAULT_REGION: "ap-southeast-1"
+    AWS_DEFAULT_REGION: "ap-southeast-3"
   volumes:
     - vol_airflow_dags:/opt/airflow/dags
     - vol_airflow_logs:/opt/airflow/logs
@@ -95,7 +95,7 @@ services:
     ports:
       - "${PORT_PORTAINER:-5212}:9000"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
@@ -138,7 +138,7 @@ services:
     ports:
       - "${PORT_POSTGRESQL:-5432}:5432"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_postgres14:/var/lib/postgresql
     command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
