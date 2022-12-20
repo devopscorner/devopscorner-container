@@ -58,3 +58,10 @@ echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-8.1-fpm -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG $IMAGE:1.18
 echo ""
+
+echo "Cleanup Unknown Tags"
+echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
+docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
+echo ""
+
+echo "-- ALL DONE --"
