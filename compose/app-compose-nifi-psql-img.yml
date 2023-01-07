@@ -52,7 +52,7 @@ services:
     ports:
       - "${PORT_PORTAINER:-5213}:9000"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
@@ -69,7 +69,7 @@ services:
   nifi:
     image: devopscorner/nifi:${NIFI_VERSION:-1.18.0}
     # build:
-    #   context: ./nifi
+    #   context: docker/nifi
     #   dockerfile: Dockerfile
     container_name: ${CONTAINER_NIFI:-devopscorner_nifi}
     restart: unless-stopped
@@ -94,7 +94,7 @@ services:
       start_period: "5s"
       retries: 5
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - ./nifi-${NIFI_VERSION:-1.18.0}/content_repository:/opt/nifi/nifi-current/content_repository
       - ./nifi-${NIFI_VERSION:-1.18.0}/database_repository:/opt/nifi/nifi-current/database_repository
@@ -120,7 +120,7 @@ services:
   nifi-registry:
     image: devopscorner/nifi-registry:${NIFI_REGISTRY_VERSION:-1.18.0}
     # build:
-    #   context: ./nifi-registry
+    #   context: docker/nifi-registry
     #   dockerfile: Dockerfile
     container_name: ${CONTAINER_NIFI_REGISTRY:-devopscorner_nifi_registry}
     restart: unless-stopped
@@ -140,7 +140,7 @@ services:
       #- NIFI_REGISTRY_DB_USERNAME=postgres
       #- NIFI_REGISTRY_DB_PASSWORD=MyP4ssw0rd
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - ./nifi-registry-${NIFI_REGISTRY_VERSION:-1.18.0}/database:/opt/nifi-registry/nifi-registry-current/database
       - ./nifi-registry-${NIFI_REGISTRY_VERSION:-1.18.0}/flow_storage:/opt/nifi-registry/nifi-registry-current/flow_storage
@@ -172,7 +172,7 @@ services:
     ports:
       - 2181:2181
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
@@ -192,7 +192,7 @@ services:
     ports:
       - "${PORT_POSTGRESQL:-5432}:5432"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_postgres:/var/lib/postgresql
       ## Path config postgresql.conf ##
