@@ -1,24 +1,23 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Build Container (Elastic Container Registry - ECR)
+#  Docker Build Container (DockerHub)
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
 # -----------------------------------------------------------------------------
 set -e
 
-export AWS_ACCOUNT_ID=$1
-export AWS_REGION="ap-southeast-1"
-export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
-export CI_ECR_PATH=$3
+# export CI_PROJECT_PATH="devopscorner"
+# export CI_PROJECT_NAME="sftp"
 
-export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
+# export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
+export IMAGE=$2
 
 docker_build() {
-  export FILE=$2
-  export BASE_IMAGE=$4
-  export TAGS_ID=$5
-  export CUSTOM_TAGS=$6
+  export FILE=$1
+  export BASE_IMAGE=$3
+  export TAGS_ID=$4
+  export CUSTOM_TAGS=$5
 
   if [ "$CUSTOM_TAGS" = "" ]; then
     echo "Build Image => $IMAGE:${BASE_IMAGE}"
@@ -64,14 +63,14 @@ docker_build() {
 }
 
 main() {
-  # docker_build [AWS_ACCOUNT] Dockerfile devopscorner/cicd [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
-  docker_build $1 $2 $3 $4 $5 $6
+  # docker_build Dockerfile devopscorner/sftp [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+  docker_build $1 $2 $3 $4 $5
   echo ''
   echo '-- ALL DONE --'
 }
 
 ### START HERE ###
-main $1 $2 $3 $4 $5 $6
+main $1 $2 $3 $4 $5
 
 ### How to Execute ###
-# ./ecr-build.sh [AWS_ACCOUNT] Dockerfile [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+# ./dockerhub-build.sh Dockerfile [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]

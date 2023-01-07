@@ -45,4 +45,9 @@ echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
 docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
 echo ""
 
+echo "Cleanup Unknown Tags"
+echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
+docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
+echo ""
+
 echo "-- ALL DONE --"

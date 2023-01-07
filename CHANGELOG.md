@@ -15,14 +15,22 @@
 
 ## Available Tags
 
-| Containers  | Pulls |
-|-------------|-------|
-| Container `devopscorner/airflow` [Tags](docs/README-Airflow.md) | [![airflow pulls](https://img.shields.io/docker/pulls/devopscorner/airflow.svg?label=airflow%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/airflow/) |
-| Container `devopscorner/aws-cli` [Tags](docs/README-AWS-Cli.md) | [![aws-cli pulls](https://img.shields.io/docker/pulls/devopscorner/aws-cli.svg?label=aws-cli%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/aws-cli/) |
-| Container `devopscorner/cicd` [Tags](docs/README-CICD.md) | [![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/) |
+| Containers                                                                | Pulls                                                                                                                                                                                    |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Container `devopscorner/airflow` [Tags](docs/README-Airflow.md)           | [![airflow pulls](https://img.shields.io/docker/pulls/devopscorner/airflow.svg?label=airflow%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/airflow/)                       |
+| Container `devopscorner/aws-cli` [Tags](docs/README-AWS-Cli.md)           | [![aws-cli pulls](https://img.shields.io/docker/pulls/devopscorner/aws-cli.svg?label=aws-cli%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/aws-cli/)                       |
+| Container `devopscorner/cicd` [Tags](docs/README-CICD.md)                 | [![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/)                                   |
 | Container `devopscorner/openfortivpn` [Tags](docs/README-OpenFortiVPN.md) | [![openfortivpn pulls](https://img.shields.io/docker/pulls/devopscorner/openfortivpn.svg?label=openfortivpn%20pulls&logo=fortinet)](https://hub.docker.com/r/devopscorner/openfortivpn/) |
-| Container `devopscorner/phpfpm` [Tags](docs/README-PHPFpm.md) | [![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/phpfpm.svg?label=phpfpm%20pulls&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/) |
+| Container `devopscorner/phpfpm` [Tags](docs/README-PHPFpm.md)             | [![phpfpm pulls](https://img.shields.io/docker/pulls/devopscorner/phpfpm.svg?label=phpfpm%20pulls&logo=php)](https://hub.docker.com/r/devopscorner/phpfpm/)                              |
 
+---
+
+## Features - v2.9.2
+
+- All features from version 2.9.1
+- Added custom config for
+  - mariadb
+  - postgresql
 
 ---
 
@@ -122,6 +130,7 @@
 ## Features - v2.4
 
 - Buildspec for pipeline ci/cd using Alpine, CodeBuild, Ubuntu
+
   - With Environment Variable
   - With Parameter Store
   - Without Repository Source
@@ -133,6 +142,7 @@
   ```
 
 - Telnet
+
   - Alpine
 
     ```
@@ -152,6 +162,7 @@
     ```
 
 - Static Code Analysis for Terraform
+
   - [`terrascan`](https://terrascan.readthedocs.io/en/latest/readme.html)
   - [`tfsec`](https://github.com/aquasecurity/tfsec)
 
@@ -162,10 +173,10 @@
 
 - Helm Plugins
 
-   ```
-   Helm Diff: https://github.com/databus23/helm-diff
-   Helm S3: https://github.com/hypnoglow/helm-s3.git
-   ```
+  ```
+  Helm Diff: https://github.com/databus23/helm-diff
+  Helm S3: https://github.com/hypnoglow/helm-s3.git
+  ```
 
 - Deploy Kubernetes HelmChart with [`helmfile`](https://github.com/roboll/helmfile)
 - Kubectl

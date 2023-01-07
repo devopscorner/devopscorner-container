@@ -8,41 +8,28 @@
 set -e
 
 export CI_PROJECT_PATH="devopscorner"
-export CI_PROJECT_NAME="nifi-registry"
+export CI_PROJECT_NAME="sftp"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 
-TAG="latest"
+TAG="alpine-3.16"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
-TAG="1.16.3"
+TAG="alpine"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-1.16 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:1.16
+docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
-TAG="1.17.0"
+TAG="alpine-latest"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-1.17 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:1.17
+docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
-TAG="1.18.0"
+TAG="1.23-apline"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-1.18 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:1.18
-echo ""
-
-TAG="1.18-ubuntu"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-1.18 -t $IMAGE:$TAG .
-echo ""
-
-echo "Cleanup Unknown Tags"
-echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
-docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
+docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
 echo "Cleanup Unknown Tags"

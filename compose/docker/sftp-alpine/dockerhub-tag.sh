@@ -1,23 +1,22 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Tag Container (Elastic Container Registry - ECR)
+#  Docker Tag Container (DockerHub)
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
 # -----------------------------------------------------------------------------
 set -e
 
-export AWS_ACCOUNT_ID=$1
-export AWS_REGION="ap-southeast-1"
-export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
-export CI_ECR_PATH=$2
+# export CI_PROJECT_PATH="devopscorner"
+# export CI_PROJECT_NAME="sftp"
 
-export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
+# export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
+export IMAGE=$1
 
 set_tag() {
-  export BASE_IMAGE=$3
-  export TAGS_ID=$4
-  export CUSTOM_TAGS=$5
+  export BASE_IMAGE=$2
+  export TAGS_ID=$3
+  export CUSTOM_TAGS=$4
   export COMMIT_HASH=$(git log -1 --format=format:"%H")
 
   if [ "$CUSTOM_TAGS" = "" ]; then
@@ -45,15 +44,15 @@ docker_tag() {
 }
 
 main() {
-  # set_tag [AWS_ACCOUNT] devopscorner/cicd [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
-  set_tag $1 $2 $3 $4 $5
+  # set_tag devopscorner/sftp [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+  set_tag $1 $2 $3 $4
   docker_tag
   echo ''
   echo '-- ALL DONE --'
 }
 
 ### START HERE ###
-main $1 $2 $3 $4 $5
+main $1 $2 $3 $4
 
 ### How to Execute ###
-# ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+# ./dockerhub-tag.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
