@@ -13,8 +13,9 @@ export PATH_COMPOSE="compose"
 export PATH_DOCKER="$(PATH_COMPOSE)/docker"
 export PATH_HELM="$(PATH_COMPOSE)/helm"
 export PROJECT_NAME="container"
+export AWS_DEFAULT_REGION="ap-southeast-1"
 
-export CI_REGISTRY     ?= $(ARGS).dkr.ecr.ap-southeast-1.amazonaws.com
+export CI_REGISTRY     ?= $(ARGS).dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 export CI_PROJECT_PATH ?= devopscorner
 export CI_PROJECT_NAME ?= cicd
 
@@ -23,9 +24,9 @@ DIR     = $(shell pwd)
 VERSION ?= 1.3.0
 
 export BASE_IMAGE=alpine
-export BASE_VERSION=3.16
+export BASE_VERSION=3.17
 
-export ALPINE_VERSION=3.16
+export ALPINE_VERSION=3.17
 export UBUNTU_VERSION=22.04
 export CODEBUILD_VERSION=4.0
 
