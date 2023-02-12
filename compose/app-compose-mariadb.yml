@@ -45,7 +45,7 @@ services:
     ports:
       - "${PORT_ADMINER:-5210}:8080"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_adminer:/sessions
     environment:
@@ -71,7 +71,7 @@ services:
     ports:
       - "${PORT_MARIADB:-3306}:3306"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       # - ./docker/mariadb-alpine/rootfs/etc/my.cnf:/etc/my.cnf
       # - ./docker/mariadb-alpine/rootfs/etc/my.cnf.d/mariadb-server.cnf:/etc/my.cnf.d/mariadb-server.cnf
@@ -107,7 +107,7 @@ services:
     ports:
       - "${PORT_PORTAINER:-5212}:9000"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
