@@ -27,8 +27,10 @@
 
 ## Features - v2.9.3
 
+- All features from version 2.9.2
 - Refactoring all variables from automation scripts
 - Added alpine-3.17 distribution container
+- Added phpfpm-8.2 for alpine-3.16 & alpine-3.17  distribution container
 
 ## Features - v2.9.2
 
