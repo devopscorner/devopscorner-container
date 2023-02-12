@@ -8,7 +8,7 @@
 set -e
 
 # export CI_PROJECT_PATH="devopscorner"
-# export CI_PROJECT_NAME="nifi-registry"
+# export CI_PROJECT_NAME="openfortivpn"
 
 # export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export IMAGE=$1
@@ -24,7 +24,7 @@ login_docker() {
 
 docker_push() {
   export TAGS_ID=$2
-  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID})
+  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:$TAGS_ID)
   for IMG in $IMAGES; do
     echo "Docker Push => $IMG"
     echo ">> docker push $IMG"
