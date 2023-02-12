@@ -25,6 +25,11 @@
 
 ---
 
+## Features - v2.9.3
+
+- Refactoring all variables from automation scripts
+- Added alpine-3.17 distribution container
+
 ## Features - v2.9.2
 
 - All features from version 2.9.1
