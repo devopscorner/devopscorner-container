@@ -40,7 +40,7 @@ services:
     ports:
       - "${PORT_PORTAINER:-5213}:9000"
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_portainer:/data
     environment:
@@ -72,7 +72,7 @@ services:
       - VPN_TRUST_CERT=1234567890987654321
       - VPN_TIMEOUT=${VPNTIMEOUT:-10}
     volumes:
-      # - /etc/localtime:/etc/localtime:ro           ## Do not use it in mac
+      # - /etc/localtime:/etc/localtime:ro        ## Do not use it in mac
       - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
       - vol_openfortivpn:/data
     ports:
