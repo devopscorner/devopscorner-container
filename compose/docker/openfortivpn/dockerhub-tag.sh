@@ -8,7 +8,7 @@
 set -e
 
 # export CI_PROJECT_PATH="devopscorner"
-# export CI_PROJECT_NAME="nifi-registry"
+# export CI_PROJECT_NAME="openfortivpn"
 
 # export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export IMAGE=$1
@@ -20,16 +20,16 @@ set_tag() {
   export COMMIT_HASH=$(git log -1 --format=format:"%H")
 
   if [ "$CUSTOM_TAGS" = "" ]; then
-    export TAGS="${TAGS_ID} \
-    ${BASE_IMAGE}-${TAGS_ID} \
-    ${TAGS_ID}-${COMMIT_HASH} \
-    ${BASE_IMAGE}-${COMMIT_HASH} "
+    export TAGS="$TAGS_ID \
+    $BASE_IMAGE-$TAGS_ID \
+    $TAGS_ID-${COMMIT_HASH} \
+    $BASE_IMAGE-${COMMIT_HASH} "
   else
-    export TAGS="${TAGS_ID} \
-    ${BASE_IMAGE}-${TAGS_ID} \
-    ${TAGS_ID}-${COMMIT_HASH} \
-    ${BASE_IMAGE}-${COMMIT_HASH} \
-    ${TAGS_ID}-${CUSTOM_TAGS}"
+    export TAGS="$TAGS_ID \
+    $BASE_IMAGE-$TAGS_ID \
+    $TAGS_ID-${COMMIT_HASH} \
+    $BASE_IMAGE-${COMMIT_HASH} \
+    $TAGS_ID-$CUSTOM_TAGS"
   fi
 }
 
