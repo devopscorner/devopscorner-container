@@ -17,14 +17,14 @@ login_docker() {
   echo '==================='
   echo '  Login DockerHub  '
   echo '==================='
-  echo ${DOCKERHUB_PASSWORD} | docker login --username ${DOCKERHUB_USERNAME} --password-stdin
+  echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
   echo '- DONE -'
   echo ''
 }
 
 docker_push() {
   export TAGS_ID=$2
-  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID})
+  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:$TAGS_ID)
   for IMG in $IMAGES; do
     echo "Docker Push => $IMG"
     echo ">> docker push $IMG"

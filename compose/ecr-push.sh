@@ -8,8 +8,8 @@
 set -e
 
 export AWS_ACCOUNT_ID=$1
-export AWS_REGION="ap-southeast-1"
-export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+export AWS_DEFAULT_REGION="ap-southeast-1"
+export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 export CI_ECR_PATH=$2
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
@@ -18,15 +18,15 @@ login_ecr() {
   echo "============="
   echo "  Login ECR  "
   echo "============="
-  PASSWORD=$(aws ecr get-login-password --region $AWS_REGION)
-  echo $PASSWORD | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  PASSWORD=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+  echo $PASSWORD | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   echo '- DONE -'
   echo ''
 }
 
 docker_push() {
   export TAGS_ID=$3
-  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID})
+  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:$TAGS_ID)
   for IMG in $IMAGES; do
     echo "Docker Push => $IMG"
     echo ">> docker push $IMG"

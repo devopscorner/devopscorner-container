@@ -25,7 +25,7 @@ login_ecr() {
 
 docker_push() {
   export TAGS_ID=$3
-  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID})
+  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:$TAGS_ID)
   for IMG in $IMAGES; do
     echo "Docker Push => $IMG"
     echo ">> docker push $IMG"

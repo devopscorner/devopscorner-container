@@ -8,8 +8,8 @@
 set -e
 
 export AWS_ACCOUNT_ID=$1
-export AWS_REGION="ap-southeast-1"
-export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+export AWS_DEFAULT_REGION="ap-southeast-1"
+export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 export CI_ECR_PATH=$2
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
@@ -21,16 +21,16 @@ set_tag() {
   export COMMIT_HASH=$(git log -1 --format=format:"%H")
 
   if [ "$CUSTOM_TAGS" = "" ]; then
-    export TAGS="${TAGS_ID} \
-    ${BASE_IMAGE}-${TAGS_ID} \
-    ${TAGS_ID}-${COMMIT_HASH} \
-    ${BASE_IMAGE}-${COMMIT_HASH} "
+    export TAGS="$TAGS_ID \
+    $BASE_IMAGE-$TAGS_ID \
+    $TAGS_ID-$COMMIT_HASH \
+    $BASE_IMAGE-$COMMIT_HASH "
   else
-    export TAGS="${TAGS_ID} \
-    ${BASE_IMAGE}-${TAGS_ID} \
-    ${TAGS_ID}-${COMMIT_HASH} \
-    ${BASE_IMAGE}-${COMMIT_HASH} \
-    ${TAGS_ID}-${CUSTOM_TAGS}"
+    export TAGS="$TAGS_ID \
+    $BASE_IMAGE-$TAGS_ID \
+    $TAGS_ID-$COMMIT_HASH \
+    $BASE_IMAGE-$COMMIT_HASH \
+    $TAGS_ID-$CUSTOM_TAGS"
   fi
 }
 

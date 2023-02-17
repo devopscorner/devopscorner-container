@@ -8,8 +8,8 @@
 set -e
 
 export AWS_ACCOUNT_ID=$1
-export AWS_REGION="ap-southeast-1"
-export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+export AWS_DEFAULT_REGION="ap-southeast-1"
+export CI_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 export CI_ECR_PATH=$3
 
 export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
@@ -21,44 +21,44 @@ docker_build() {
   export CUSTOM_TAGS=$6
 
   if [ "$CUSTOM_TAGS" = "" ]; then
-    echo "Build Image => $IMAGE:${BASE_IMAGE}"
-    echo ">> docker build -t $IMAGE:${BASE_IMAGE} -f $FILE ."
-    docker build -t $IMAGE:${BASE_IMAGE} -f $FILE .
+    echo "Build Image => $IMAGE:$BASE_IMAGE"
+    echo ">> docker build -t $IMAGE:$BASE_IMAGE -f $FILE ."
+    docker build -t $IMAGE:$BASE_IMAGE -f $FILE .
     echo '---'
 
-    echo "Build Image => $IMAGE:${TAGS_ID}"
-    echo ">> docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
-    docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+    echo "Build Image => $IMAGE:$TAGS_ID"
+    echo ">> docker build -t $IMAGE:$TAGS_ID -f $FILE ."
+    docker build -t $IMAGE:$TAGS_ID -f $FILE .
     echo '---'
 
-    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}"
-    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE ."
-    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE .
+    echo "Build Image => $IMAGE:$BASE_IMAGE-$TAGS_ID"
+    echo ">> docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID -f $FILE ."
+    docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID -f $FILE .
     echo '---'
   else
-    echo "Build Image => $IMAGE:${BASE_IMAGE}"
-    echo ">> docker build -t $IMAGE:${BASE_IMAGE} -f $FILE ."
-    docker build -t $IMAGE:${BASE_IMAGE} -f $FILE .
+    echo "Build Image => $IMAGE:$BASE_IMAGE"
+    echo ">> docker build -t $IMAGE:$BASE_IMAGE -f $FILE ."
+    docker build -t $IMAGE:$BASE_IMAGE -f $FILE .
     echo '---'
 
-    echo "Build Image => $IMAGE:${TAGS_ID}"
-    echo "docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
-    docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+    echo "Build Image => $IMAGE:$TAGS_ID"
+    echo "docker build -t $IMAGE:$TAGS_ID -f $FILE ."
+    docker build -t $IMAGE:$TAGS_ID -f $FILE .
     echo '---'
 
-    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}"
-    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE ."
-    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID} -f $FILE .
+    echo "Build Image => $IMAGE:$BASE_IMAGE-$TAGS_ID"
+    echo ">> docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID -f $FILE ."
+    docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID -f $FILE .
     echo '---'
 
-    echo "Build Image => $IMAGE:${TAGS_ID}-${CUSTOM_TAGS}"
-    docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
-    echo ">> docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
+    echo "Build Image => $IMAGE:$TAGS_ID-$CUSTOM_TAGS"
+    docker build -t $IMAGE:$TAGS_ID-$CUSTOM_TAGS -f $FILE .
+    echo ">> docker build -t $IMAGE:$TAGS_ID-$CUSTOM_TAGS -f $FILE ."
     echo '---'
 
-    echo "Build Image => $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS}"
-    echo ">> docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
-    docker build -t $IMAGE:${BASE_IMAGE}-${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
+    echo "Build Image => $IMAGE:$BASE_IMAGE-$TAGS_ID-$CUSTOM_TAGS"
+    echo ">> docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID-$CUSTOM_TAGS -f $FILE ."
+    docker build -t $IMAGE:$BASE_IMAGE-$TAGS_ID-$CUSTOM_TAGS -f $FILE .
     echo '---'
   fi
 }
