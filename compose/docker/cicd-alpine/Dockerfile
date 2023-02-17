@@ -113,7 +113,7 @@ RUN wget -O /usr/local/bin/terragrunt \
 #  Install TFSec  #
 # =============== #
 # RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync
-COPY --from=aquasec/tfsec-alpine:latest /usr/bin/tfsec /usr/local/bin/tfsec
+COPY --from=aquasec/tfsec:v1.28 /usr/bin/tfsec /usr/local/bin/tfsec
 
 # =============== #
 #  Install TFenv  #
