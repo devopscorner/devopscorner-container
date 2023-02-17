@@ -25,7 +25,7 @@ echo ""
 
 TAG="alpine-3.16-AnsibleTower"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.16-Ansible-Tower -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-Alpine-3.16-Ansible-Tower -t
 echo ""
 
 TAG="alpine-3.16-AWX"
@@ -36,12 +36,12 @@ echo ""
 
 TAG="alpine-3.17-AnsibleTower"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.17-Ansible-Tower -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-Alpine-3.17-Ansible-Tower -t
 echo ""
 
 TAG="alpine-3.17-AWX"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.17-AWX -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-Alpine-3.17-AWX -t
 echo ""
 
 TAG="alpine-nginx-1.23"
