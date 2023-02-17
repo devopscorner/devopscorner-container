@@ -27,24 +27,13 @@ echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-CodeBuild-4.0 -t $IMAGE:$TAG .
 echo ""
 
-TAG="codebuild"
+TAG="codebuild-5.0"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="codebuild-latest"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="1.23-codebuild"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="latest"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-CodeBuild-5.0 -t $IMAGE:$TAG .
+docker tag $IMAGE:$TAG $IMAGE:codebuild
+docker tag $IMAGE:$TAG $IMAGE:codebuild-latest
+docker tag $IMAGE:$TAG $IMAGE:1.23-latest
+docker tag $IMAGE:$TAG $IMAGE:latest
 echo ""
 
 echo "Cleanup Unknown Tags"
