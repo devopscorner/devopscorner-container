@@ -8,32 +8,30 @@
 set -e
 
 export CI_PROJECT_PATH="devopscorner"
-export CI_PROJECT_NAME="cicd"
+export CI_PROJECT_NAME="aws-cli"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 
-TAG="codebuild-2.0"
+TAG="alpine-3.17"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-CodeBuild-2.0 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-Alpine-3.17 -t $IMAGE:$TAG .
+docker tag $IMAGE:$TAG $IMAGE:alpine3.17-2.10.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.17-python3.10.10-2.10.0
+docker tag $IMAGE:$TAG $IMAGE:2.10.0
+docker tag $IMAGE:$TAG $IMAGE:python3.10.10
+docker tag $IMAGE:$TAG $IMAGE:python3.10.10-2.10.0
 echo ""
 
-TAG="codebuild-3.0"
+TAG="alpine-3.16"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-CodeBuild-3.0 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-Alpine-3.16 -t $IMAGE:$TAG .
+docker tag $IMAGE:$TAG $IMAGE:alpine3.16-2.10.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.16-python3.10.10-2.10.0
 echo ""
 
-TAG="codebuild-4.0"
+TAG="latest"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-CodeBuild-4.0 -t $IMAGE:$TAG .
-echo ""
-
-TAG="codebuild-5.0"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-CodeBuild-5.0 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:codebuild
-docker tag $IMAGE:$TAG $IMAGE:codebuild-latest
-docker tag $IMAGE:$TAG $IMAGE:1.23-latest
-docker tag $IMAGE:$TAG $IMAGE:latest
+docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
 echo "Cleanup Unknown Tags"
