@@ -15,18 +15,18 @@ export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 TAG="alpine-3.17"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-Alpine-3.17 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:alpine3.17-2.10.0
-docker tag $IMAGE:$TAG $IMAGE:alpine3.17-python3.10.10-2.10.0
-docker tag $IMAGE:$TAG $IMAGE:2.10.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.17-2.11.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.17-python3.10.10-2.11.0
+docker tag $IMAGE:$TAG $IMAGE:2.11.0
 docker tag $IMAGE:$TAG $IMAGE:python3.10.10
-docker tag $IMAGE:$TAG $IMAGE:python3.10.10-2.10.0
+docker tag $IMAGE:$TAG $IMAGE:python3.10.10-2.11.0
 echo ""
 
 TAG="alpine-3.16"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-Alpine-3.16 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:alpine3.16-2.10.0
-docker tag $IMAGE:$TAG $IMAGE:alpine3.16-python3.10.10-2.10.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.16-2.11.0
+docker tag $IMAGE:$TAG $IMAGE:alpine3.16-python3.10.10-2.11.0
 echo ""
 
 TAG="latest"

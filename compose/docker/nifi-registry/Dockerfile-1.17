@@ -21,7 +21,7 @@ ENV NIFI_REGISTRY_BINARY=nifi-registry-1.17.0-bin.zip
 ENV NIFI_REGISTRY_BINARY_PATH=nifi/1.17.0/nifi-registry-1.17.0-bin.zip
 ENV NIFI_REGISTRY_BINARY_URL=https://downloads.apache.org/nifi/1.17.0/nifi-registry-1.17.0-bin.zip
 
-ENV AWS_CLI_VERSION=2.9.1
+ENV AWS_CLI_VERSION=2.11.0
 ENV VERIFY_CHECKSUM=false
 
 LABEL maintainer="$AUTHOR" \
