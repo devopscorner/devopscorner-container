@@ -5,7 +5,7 @@ ARG GIT_URL
 ARG ALPINE_VERSION=3.16
 
 ### Builder ###
-FROM python:3.10.10-alpine${ALPINE_VERSION} as builder
+FROM python:3.10.10-alpine${ALPINE_VERSION:-3.16} as builder
 
 ARG AWS_CLI_VERSION=2.11.0
 RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
@@ -28,7 +28,7 @@ RUN find /usr/local/aws-cli/v2/current/dist/awscli/data -name completions-1*.jso
 RUN find /usr/local/aws-cli/v2/current/dist/awscli/botocore/data -name examples-1.json -delete
 
 ### Binary ###
-FROM alpine:${ALPINE_VERSION}
+FROM alpine:${ALPINE_VERSION:-3.16}
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
