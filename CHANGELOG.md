@@ -25,6 +25,17 @@
 
 ---
 
+## Features - v2.9.5
+
+- All features from version 2.9.4
+- Update binary
+  ```
+  AWS_CLI_VERSION=2.11.0
+  ```
+- Fixing builder script for container `devopscorner/cicd`
+
+---
+
 ## Features - v2.9.4
 
 - All features from version 2.9.3

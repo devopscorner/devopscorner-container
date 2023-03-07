@@ -25,7 +25,7 @@ ENV NIFI_TOOLKIT_HOME=/opt/nifi/nifi-toolkit-current
 ENV NIFI_PID_DIR=/opt/nifi/nifi-current/run
 ENV NIFI_LOG_DIR=/opt/nifi/nifi-current/logs
 
-ENV AWS_CLI_VERSION=2.9.1
+ENV AWS_CLI_VERSION=2.11.0
 ENV VERIFY_CHECKSUM=false
 
 LABEL maintainer="$AUTHOR" \

@@ -25,7 +25,7 @@ echo ""
 
 TAG="alpine-3.16-AnsibleTower"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.16-Ansible-Tower -t
+docker build --no-cache -f Dockerfile-Alpine-3.16-Ansible-Tower -t $IMAGE:$TAG .
 echo ""
 
 TAG="alpine-3.16-AWX"
@@ -36,12 +36,12 @@ echo ""
 
 TAG="alpine-3.17-AnsibleTower"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.17-Ansible-Tower -t
+docker build --no-cache -f Dockerfile-Alpine-3.17-Ansible-Tower -t $IMAGE:$TAG .
 echo ""
 
 TAG="alpine-3.17-AWX"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-Alpine-3.17-AWX -t
+docker build --no-cache -f Dockerfile-Alpine-3.17-AWX -t $IMAGE:$TAG .
 echo ""
 
 TAG="alpine-nginx-1.23"
@@ -52,6 +52,11 @@ docker tag $IMAGE:$TAG $IMAGE:alpine
 docker tag $IMAGE:$TAG $IMAGE:alpine-latest
 docker tag $IMAGE:$TAG $IMAGE:1.23-alpine
 docker tag $IMAGE:$TAG $IMAGE:latest
+echo ""
+
+echo "Cleanup Unknown Tags"
+echo "docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi"
+docker images -a | grep none | awk '{ print $3; }' | xargs docker rmi
 echo ""
 
 echo "Cleanup Unknown Tags"

@@ -24,19 +24,32 @@ DevOps Corner Indonesia - AWS Cli v2 Container Image (`Alpine 3.17` & `Python 3.
 |------------|------|
 | `devopscorner/aws-cli:latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=latest) ![default-aws-cli](https://img.shields.io/static/v1?label=latest&message=default&color=brightgreen) ![latest-aws-cli](https://img.shields.io/static/v1?label=latest&message=alpine&color=orange) |
 | `devopscorner/aws-cli:alpine-3.17` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine-3.17.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine-3.17) |
+| `devopscorner/aws-cli:alpine3.17-2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.17-2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.17-2.11.0) |
+| `devopscorner/aws-cli:alpine3.17-python3.10.10-2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.17-2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.17-2.11.0) |
+| `devopscorner/aws-cli:2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=2.11.0) |
+| `devopscorner/aws-cli:python3.10.10` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.10.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.10) |
+| `devopscorner/aws-cli:python3.10.10-2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.10-2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.10-2.11.0) |
+
+
+### Alpine 3.17 (Depreciated)
+
+| Image name | Size |
+|------------|------|
 | `devopscorner/aws-cli:alpine3.17-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.17-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.17-2.10.0) |
 | `devopscorner/aws-cli:alpine3.17-python3.10.10-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.17-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.17-2.10.0) |
 | `devopscorner/aws-cli:2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=2.10.0) |
 | `devopscorner/aws-cli:python3.10.10` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.10.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.10) |
 | `devopscorner/aws-cli:python3.10.10-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.10-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.10-2.10.0) |
 
+
 ### Alpine 3.16
 
 | Image name | Size |
 |------------|------|
 | `devopscorner/aws-cli:alpine-3.16` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine-3.16.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine-3.16) |
-| `devopscorner/aws-cli:alpine3.16-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.10.0) |
-| `devopscorner/aws-cli:alpine3.16-python3.10.10-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.10.0) |
+| `devopscorner/aws-cli:alpine3.16-2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.11.0) |
+| `devopscorner/aws-cli:alpine3.16-python3.10.10-2.11.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.11.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.11.0) |
+
 
 ### Alpine 3.16 (Depreciated)
 
@@ -45,6 +58,8 @@ DevOps Corner Indonesia - AWS Cli v2 Container Image (`Alpine 3.17` & `Python 3.
 | `devopscorner/aws-cli:2.9.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/2.9.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=2.9.1) |
 | `devopscorner/aws-cli:python3.10.8-2.9.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/python3.10.8-2.9.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=python3.10.8-2.9.1) |
 | `devopscorner/aws-cli:alpine3.16-python3.10.8-2.9.1` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-python3.10.8-2.9.1.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-python3.10.8-2.9.1) |
+| `devopscorner/aws-cli:alpine3.16-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.10.0) |
+| `devopscorner/aws-cli:alpine3.16-python3.10.10-2.10.0` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/aws-cli/alpine3.16-2.10.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/aws-cli/tags?page=1&ordering=last_updated&name=alpine3.16-2.10.0) |
 
 ---
 
@@ -85,7 +100,7 @@ PS C:\> $Env:AWS_DEFAULT_REGION="ap-southeast-1"
 
 ```docker
 ARG ALPINE_VERSION=3.17
-ARG AWS_CLI_VERSION=2.10.0
+ARG AWS_CLI_VERSION=2.11.0
 ENV CICD_VERSION="1.23"
 ```
 
@@ -101,7 +116,7 @@ ARG ALPINE_VERSION=3.17
 ### Builder ###
 FROM python:3.10.10-alpine${ALPINE_VERSION} as builder
 
-ARG AWS_CLI_VERSION=2.10.0
+ARG AWS_CLI_VERSION=2.11.0
 RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
 RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION} https://github.com/aws/aws-cli.git
 
