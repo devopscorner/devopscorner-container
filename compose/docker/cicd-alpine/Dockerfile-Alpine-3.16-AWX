@@ -137,7 +137,8 @@ RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
 # ============== #
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
       chmod +x get_helm.sh; sync &&\
-      export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} && ./get_helm.sh; sync &&\
+      export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
+      ./get_helm.sh; sync &&\
       helm version; sync
 
 # ===================== #
@@ -166,11 +167,18 @@ RUN wget -O /usr/local/bin/kubectl \
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
+# -- version-1 --
 # RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
 #       unzip awscliv2.zip; sync &&\
 #       ./aws/install --bin-dir /usr/local/bin/; sync
-COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
-COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# -- version-2 --
+# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# -- version-3 --
+COPY --from=builder-python /usr/local/aws-cli/ /usr/local/aws-cli/
+COPY --from=builder-python /aws-cli-bin/ /usr/local/bin/
 
 # ========================= #
 # Install Python Libraries  #
