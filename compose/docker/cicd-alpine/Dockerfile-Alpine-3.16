@@ -1,3 +1,27 @@
+### Builder ###
+FROM python:3.10.10-alpine${ALPINE_VERSION:-3.16} as builder-python
+
+ARG AWS_CLI_VERSION=2.11.0
+RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
+RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION:-2.11.0} https://github.com/aws/aws-cli.git
+
+WORKDIR aws-cli
+RUN python -m venv venv
+RUN . venv/bin/activate
+RUN scripts/installers/make-exe
+RUN unzip -q dist/awscli-exe.zip
+RUN aws/install --bin-dir /aws-cli-bin
+RUN /aws-cli-bin/aws --version
+
+# reduce image size: remove autocomplete and examples
+RUN rm -rf \
+    /usr/local/aws-cli/v2/current/dist/aws_completer \
+    /usr/local/aws-cli/v2/current/dist/awscli/data/ac.index \
+    /usr/local/aws-cli/v2/current/dist/awscli/examples
+RUN find /usr/local/aws-cli/v2/current/dist/awscli/data -name completions-1*.json -delete
+RUN find /usr/local/aws-cli/v2/current/dist/awscli/botocore/data -name examples-1.json -delete
+
+
 # FROM alpine:${ALPINE_VERSION:-3.16}
 FROM nginx:${NGINX_VERSION:-1.23-alpine}
 
@@ -123,7 +147,8 @@ RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
       echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc; sync &&\
       ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
       mkdir -p ~/.local/bin/ &&\
-      ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
+      ln -sf ~/.tfenv/bin/* ~/.local/bin && \
+      source ~/.bashrc; sync
 
 # =================== #
 #  Install Terraform  #
@@ -137,7 +162,8 @@ RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
 # ============== #
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
       chmod +x get_helm.sh; sync &&\
-      export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} && ./get_helm.sh; sync &&\
+      export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
+      ./get_helm.sh; sync &&\
       helm version; sync
 
 # ===================== #
@@ -166,11 +192,18 @@ RUN wget -O /usr/local/bin/kubectl \
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
+# -- version-1 --
 # RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
 #       unzip awscliv2.zip; sync &&\
 #       ./aws/install --bin-dir /usr/local/bin/; sync
-COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
-COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# -- version-2 --
+# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# -- version-3 --
+COPY --from=builder-python /usr/local/aws-cli/ /usr/local/aws-cli/
+COPY --from=builder-python /aws-cli-bin/ /usr/local/bin/
 
 # ========================= #
 # Install Python Libraries  #

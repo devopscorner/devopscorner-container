@@ -20,6 +20,7 @@ docker tag $IMAGE:$TAG $IMAGE:alpine3.17-python3.10.10-2.11.0
 docker tag $IMAGE:$TAG $IMAGE:2.11.0
 docker tag $IMAGE:$TAG $IMAGE:python3.10.10
 docker tag $IMAGE:$TAG $IMAGE:python3.10.10-2.11.0
+docker tag $IMAGE:$TAG $IMAGE:latest
 echo ""
 
 TAG="alpine-3.16"
@@ -27,11 +28,6 @@ echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-Alpine-3.16 -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG $IMAGE:alpine3.16-2.11.0
 docker tag $IMAGE:$TAG $IMAGE:alpine3.16-python3.10.10-2.11.0
-echo ""
-
-TAG="latest"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
 echo ""
 
 echo "Cleanup Unknown Tags"

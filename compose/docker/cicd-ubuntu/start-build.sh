@@ -22,19 +22,13 @@ echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile-Ubuntu-22.04 -t $IMAGE:$TAG .
 echo ""
 
-TAG="ubuntu"
+TAG="ubuntu-nginx-1.23"
 echo " Build Image => $IMAGE:$TAG"
 docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="ubuntu-latest"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="1.23-ubuntu"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
+docker tag $IMAGE:$TAG $IMAGE:ubuntu
+docker tag $IMAGE:$TAG $IMAGE:ubuntu-latest
+docker tag $IMAGE:$TAG $IMAGE:1.23-ubuntu
+# docker tag $IMAGE:$TAG $IMAGE:latest
 echo ""
 
 echo "Cleanup Unknown Tags"
