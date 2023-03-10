@@ -51,6 +51,7 @@ ENV HELMFILE_VERSION=v0.145.0
 ENV KUBECTL_VERSION=v1.26.1
 ENV CHECKOV_VERSION=2.3.21
 ENV AWS_CLI_VERSION=2.11.0
+ENV TFSEC_VERSION=1.28
 ENV VERIFY_CHECKSUM=false
 
 USER root
@@ -105,8 +106,8 @@ RUN wget -O /usr/local/bin/terragrunt \
 # =============== #
 #  Install TFSec  #
 # =============== #
-RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync
-# COPY --from=aquasec/tfsec:latest /usr/bin/tfsec /usr/local/bin/tfsec
+# RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash; sync
+COPY --from=aquasec/tfsec:v1.28 /usr/bin/tfsec /usr/local/bin/tfsec
 
 # =============== #
 #  Install TFenv  #
@@ -128,8 +129,9 @@ RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
 #  Install Helm  #
 # ============== #
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
-      chmod +x get_helm.sh &&\
-      ./get_helm.sh &&\
+      chmod +x get_helm.sh; sync &&\
+      export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
+      ./get_helm.sh; sync &&\
       helm version; sync
 
 # ===================== #
@@ -155,12 +157,21 @@ RUN wget -O /usr/local/bin/kubectl \
       https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
-# ================ #
-#  Install AWSCli  #
-# ================ #
+# =================== #
+#  Install AWSCli v2  #
+# =================== #
+# -- version-1 --
 RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
-      unzip awscliv2.zip &&\
-      ./aws/install; sync
+      unzip awscliv2.zip; sync &&\
+      ./aws/install --bin-dir /usr/local/bin/; sync
+
+# -- version-2 --
+# COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
+
+# -- version-3 --
+# COPY --from=builder-python /usr/local/aws-cli/ /usr/local/aws-cli/
+# COPY --from=builder-python /usr/local/bin/ /usr/local/bin/
 
 # ========================= #
 # Install Python Libraries  #

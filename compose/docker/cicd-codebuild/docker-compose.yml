@@ -1,0 +1,75 @@
+version: '3.7'
+
+#================================================================================================
+# NETWORK SETUP
+#================================================================================================
+networks:
+  devopscorner_net:
+    name: devopscorner_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.148.0.0/16
+
+#================================================================================================
+# VOLUME SETUP
+#================================================================================================
+volumes:
+  vol_portainer:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_PORTAINER:-/opt/data/docker/portainer2.9}
+  vol_cicd_codebuild:
+    driver: ${VOLUMES_DRIVER:-local}
+    driver_opts:
+      o: bind
+      type: none
+      device: ${DATA_CICD_ALPINE:-/opt/data/docker/cicd-codebuild}
+
+services:
+  #================================================================================================
+  # PORTAINER
+  #================================================================================================
+  portainer:
+    image: dockerframework/portainer:${PORTAINER_VERSION:-2.9}
+    container_name: ${CONTAINER_PORTAINER:-devopscorner_portainer}
+    restart: unless-stopped
+    ports:
+      - "${PORT_PORTAINER:-5212}:9000"
+    volumes:
+    # - /etc/localtime:/etc/localtime:ro          ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
+      - vol_portainer:/data
+    environment:
+      - PORTAINER_TEMPLATE=generic
+      - PORTAINER_VERSION=${PORTAINER_VERSION:-2.9}
+    privileged: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_PORTAINER:-172.148.148.5}
+
+  #================================================================================================
+  # CICD CONTAINER
+  #================================================================================================
+  cicd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: devopscorner/cicd:codebuild
+    container_name: ${CONTAINER_CICD_ALPINE:-devopscorner_cicd_codebuild}
+    restart: unless-stopped
+    ports:
+      - "${PORT_CICD_ALPINE:-8080}:80"
+    volumes:
+    # - /etc/localtime:/etc/localtime:ro          ## Do not use it in mac
+      - /var/run/docker.sock:/var/run/docker.sock ## Do not use it in k8s
+    environment:
+      - TZ="Asia/Jakarta"
+      - ALPINE_VERSION=${ALPINE_VERSION:-3.16}
+    privileged: true
+    tty: true
+    networks:
+      devopscorner_net:
+        ipv4_address: ${CONTAINER_IP_CICD_ALPINE:-172.148.148.231}
