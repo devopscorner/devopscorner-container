@@ -12,32 +12,21 @@ export CI_PROJECT_NAME="phpfpm"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 
-TAG="latest"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-echo ""
-
-TAG="alpine"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:alpine-3.17
-echo ""
-
 # TAG="7.4"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-7.4-pfm-alpine3.17 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-7.4-fpm-alpine3.17 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
 # echo ""
 
 # TAG="7.4fpm-alpine3.17"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-7.4-pfm-alpine3.17 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-7.4-fpm-alpine3.17 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG
 # echo ""
 
 # TAG="7.4fpm-alpine3.16"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-7.4-pfm-alpine3.16 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-7.4-fpm-alpine3.16 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG
 # echo ""
 
@@ -51,19 +40,19 @@ echo ""
 
 # TAG="8.0"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-8.0-pfm-alpine3.17 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-8.0-fpm-alpine3.17 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
 # echo ""
 
 # TAG="8.0fpm-alpine3.17"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-8.0-pfm-alpine3.17 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-8.0-fpm-alpine3.17 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG
 # echo ""
 
 # TAG="8.0fpm-alpine3.16"
 # echo " Build Image => $IMAGE:$TAG"
-# docker build --no-cache -f Dockerfile-8.0-pfm-alpine3.16 -t $IMAGE:$TAG .
+# docker build --no-cache -f Dockerfile-8.0-fpm-alpine3.16 -t $IMAGE:$TAG .
 # docker tag $IMAGE:$TAG
 # echo ""
 
@@ -77,25 +66,15 @@ echo ""
 
 TAG="8.1"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-pfm-alpine3.17 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.17 -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
-echo ""
-
-TAG="8.1fpm-alpine3.17"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-pfm-alpine3.17 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG
+docker tag $IMAGE:$TAG $IMAGE:8.1-alpine
+docker tag $IMAGE:$TAG $IMAGE:8.1fpm-alpine3.17
 echo ""
 
 TAG="8.1fpm-alpine3.16"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-pfm-alpine3.16 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG
-echo ""
-
-TAG="8.1-alpine"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.17 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.16 -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG
 echo ""
 
@@ -103,25 +82,17 @@ echo ""
 
 TAG="8.2"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.2-pfm-alpine3.17 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-8.2-fpm-alpine3.17 -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
-echo ""
-
-TAG="8.2fpm-alpine3.17"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.2-pfm-alpine3.17 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG
+docker tag $IMAGE:$TAG $IMAGE:8.2-alpine
+docker tag $IMAGE:$TAG $IMAGE:8.2fpm-alpine3.17
+docker tag $IMAGE:$TAG $IMAGE:latest
+docker tag $IMAGE:$TAG $IMAGE:alpine
 echo ""
 
 TAG="8.2fpm-alpine3.16"
 echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.2-pfm-alpine3.16 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG
-echo ""
-
-TAG="8.2-alpine"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.2-fpm-alpine3.17 -t $IMAGE:$TAG .
+docker build --no-cache -f Dockerfile-8.2-fpm-alpine3.16 -t $IMAGE:$TAG .
 docker tag $IMAGE:$TAG
 echo ""
 
