@@ -25,6 +25,15 @@
 
 ---
 
+## Features - v2.9.6
+
+- All features from version 2.9.5
+- Refactoring Dockerfile container `devopscorner/cicd`
+- Remove depreciated phpfpm container version 7.4-8.0
+
+
+---
+
 ## Features - v2.9.5
 
 - All features from version 2.9.4

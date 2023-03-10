@@ -5,7 +5,7 @@ DevOpsCorner.id Container Images
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/devopscorner-container)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/devopscorner-container?sort=semver)
 ![download all](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/total.svg)
-![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.9.5/total)
+![download latest](https://img.shields.io/github/downloads/devopscorner/devopscorner-container/2.9.6/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/devopscorner-container.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/devopscorner-container/master/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/devopscorner-container)
