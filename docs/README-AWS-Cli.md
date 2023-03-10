@@ -118,7 +118,7 @@ FROM python:3.10.10-alpine${ALPINE_VERSION} as builder
 
 ARG AWS_CLI_VERSION=2.11.0
 RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
-RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION} https://github.com/aws/aws-cli.git
+RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION:-2.11.0} https://github.com/aws/aws-cli.git
 
 WORKDIR aws-cli
 RUN python -m venv venv
