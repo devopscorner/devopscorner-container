@@ -64,19 +64,19 @@ export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 
 ### ======================================== ###
 
-TAG="8.1"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.17 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
-docker tag $IMAGE:$TAG $IMAGE:8.1-alpine
-docker tag $IMAGE:$TAG $IMAGE:8.1fpm-alpine3.17
-echo ""
+# TAG="8.1"
+# echo " Build Image => $IMAGE:$TAG"
+# docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.17 -t $IMAGE:$TAG .
+# docker tag $IMAGE:$TAG $IMAGE:$TAG"fpm"
+# docker tag $IMAGE:$TAG $IMAGE:8.1-alpine
+# docker tag $IMAGE:$TAG $IMAGE:8.1fpm-alpine3.17
+# echo ""
 
-TAG="8.1fpm-alpine3.16"
-echo " Build Image => $IMAGE:$TAG"
-docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.16 -t $IMAGE:$TAG .
-docker tag $IMAGE:$TAG
-echo ""
+# TAG="8.1fpm-alpine3.16"
+# echo " Build Image => $IMAGE:$TAG"
+# docker build --no-cache -f Dockerfile-8.1-fpm-alpine3.16 -t $IMAGE:$TAG .
+# docker tag $IMAGE:$TAG
+# echo ""
 
 ### ======================================== ###
 
