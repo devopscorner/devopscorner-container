@@ -133,12 +133,12 @@ docker_clean() {
 }
 
 main() {
-  create_stack
-  use_stack
-  docker_build
-  docker_clean
-  echo ''
-  echo '-- ALL DONE --'
+    create_stack
+    use_stack
+    docker_build
+    docker_clean
+    echo ''
+    echo '-- ALL DONE --'
 }
 
 ### START HERE ###

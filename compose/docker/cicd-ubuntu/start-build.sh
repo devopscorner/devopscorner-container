@@ -51,10 +51,10 @@ docker_clean() {
 }
 
 main() {
-  docker_build
-  docker_clean
-  echo ''
-  echo '-- ALL DONE --'
+    docker_build
+    docker_clean
+    echo ''
+    echo '-- ALL DONE --'
 }
 
 ### START HERE ###
