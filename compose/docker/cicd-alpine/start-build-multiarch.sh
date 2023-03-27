@@ -90,7 +90,7 @@ build_alpine_latest() {
     docker tag $IMAGE:$TAG $IMAGE:alpine
     docker tag $IMAGE:$TAG $IMAGE:alpine-latest
     docker tag $IMAGE:$TAG $IMAGE:1.23-alpine
-    # docker tag $IMAGE:$TAG $IMAGE:latest
+    #docker tag $IMAGE:$TAG $IMAGE:latest
     echo ""
 }
 

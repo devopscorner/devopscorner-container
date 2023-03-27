@@ -65,7 +65,7 @@ build_ubuntu_latest() {
     docker tag $IMAGE:$TAG $IMAGE:ubuntu
     docker tag $IMAGE:$TAG $IMAGE:ubuntu-latest
     docker tag $IMAGE:$TAG $IMAGE:1.23-ubuntu
-    docker tag $IMAGE:$TAG $IMAGE:latest
+    #docker tag $IMAGE:$TAG $IMAGE:latest
     echo ""
 }
 
