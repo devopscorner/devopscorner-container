@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # -----------------------------------------------------------------------------
-#  Docker Build Container
+#  Docker Build Multi Architecture Container
 # -----------------------------------------------------------------------------
 #  Author     : Dwi Fahni Denni
 #  License    : Apache v2
@@ -11,6 +11,38 @@ export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
+export PLATFORM="linux/amd64,linux/arm64"
+
+export STACKS_NAME="devopscorner-multiarch"
+# List PLATFORM:
+# docker buildx inspect $STACKS_NAME
+
+line1="----------------------------------------------------------------------------------------------------"
+line2="===================================================================================================="
+
+create_stack() {
+    echo $line2
+    echo " Build Stacks Multiplatform"
+    echo " Stacks: $STACKS_NAME"
+    echo $line2
+    echo " -> docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap"
+    echo $line1
+    docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap
+    echo " - DONE -"
+    echo ""
+}
+
+use_stack() {
+    echo $line2
+    echo " Use Stacks Multiplatform"
+    echo " Stacks: $STACKS_NAME"
+    echo $line2
+    echo " -> docker buildx use $STACKS_NAME"
+    echo $line1
+    docker buildx use $STACKS_NAME
+    echo " - DONE -"
+    echo ""
+}
 
 build_ubuntu_2004() {
     TAG="ubuntu-20.04"
@@ -33,7 +65,7 @@ build_ubuntu_latest() {
     docker tag $IMAGE:$TAG $IMAGE:ubuntu
     docker tag $IMAGE:$TAG $IMAGE:ubuntu-latest
     docker tag $IMAGE:$TAG $IMAGE:1.23-ubuntu
-    docker tag $IMAGE:$TAG $IMAGE:latest
+    #docker tag $IMAGE:$TAG $IMAGE:latest
     echo ""
 }
 
@@ -51,6 +83,8 @@ docker_clean() {
 }
 
 main() {
+  create_stack
+  use_stack
   docker_build
   docker_clean
   echo ''
