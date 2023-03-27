@@ -7,9 +7,9 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="cicd-codebuild"
+ENV IMG_NAME="cicd-codebuild-localbuild"
 ENV IMG_VERSION="latest"
-ENV IMG_DESC="Docker CodeBuild CI/CD"
+ENV IMG_DESC="Docker CodeBuild CI/CD for Localbuilds"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV CODEBUILD_VERSION="latest"
