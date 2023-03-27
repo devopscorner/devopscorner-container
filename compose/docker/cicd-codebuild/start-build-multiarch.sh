@@ -11,9 +11,12 @@ export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
-export PLATFORM="linux/amd64,linux/arm64"
 
-export STACKS_NAME="devopscorner-multiarch"
+## CodeBuild can't be use for Multi Arch ##
+# export PLATFORM="linux/amd64,linux/arm64"
+export PLATFORM="linux/amd64"
+
+export STACKS_NAME="devopscorner-singlearch"
 # List PLATFORM:
 # docker buildx inspect $STACKS_NAME
 
