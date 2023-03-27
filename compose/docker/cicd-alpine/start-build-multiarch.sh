@@ -62,7 +62,7 @@ build_alpine_315() {
         echo " Build Image => $IMAGE:$TAG"
         docker buildx build --push \
             --platform $PLATFORM \
-            -f  Dockerfile-Alpine-3.15-AWX \
+            -f Dockerfile-Alpine-3.15-AWX \
             -t $IMAGE:$TAG .
         echo ''
     done
@@ -83,7 +83,7 @@ build_alpine_316() {
         echo " Build Image => $IMAGE:$TAG"
         docker buildx build --push \
             --platform $PLATFORM \
-            -f  Dockerfile-Alpine-3.16-AWX \
+            -f Dockerfile-Alpine-3.16-AWX \
             -t $IMAGE:$TAG .
         echo ''
     done
@@ -104,7 +104,7 @@ build_alpine_317() {
         echo " Build Image => $IMAGE:$TAG"
         docker buildx build --push \
             --platform $PLATFORM \
-            -f  Dockerfile-Alpine-3.17-AWX \
+            -f Dockerfile-Alpine-3.17-AWX \
             -t $IMAGE:$TAG .
         echo ''
     done

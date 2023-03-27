@@ -15,26 +15,35 @@ export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 build_ubuntu_2004() {
     TAG="ubuntu-20.04"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-Ubuntu-20.04 -t $IMAGE:$TAG .
+    docker build \
+        -f Dockerfile-Ubuntu-20.04 \
+        -t $IMAGE:$TAG .
     echo ''
 }
 
 build_ubuntu_2204() {
     TAG="ubuntu-22.04"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-Ubuntu-22.04 -t $IMAGE:$TAG .
+    docker build \
+        -f Dockerfile-Ubuntu-22.04 \
+        -t $IMAGE:$TAG .
     echo ''
 }
 
 build_ubuntu_latest() {
-    TAG="ubuntu-nginx-1.23"
-    echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-    docker tag $IMAGE:$TAG $IMAGE:ubuntu
-    docker tag $IMAGE:$TAG $IMAGE:ubuntu-latest
-    docker tag $IMAGE:$TAG $IMAGE:1.23-ubuntu
-    # docker tag $IMAGE:$TAG $IMAGE:latest
-    echo ''
+    TAGS="ubuntu \
+        ubuntu-nginx-1.23 \
+        ubuntu-latest \
+        1.23-ubuntu \
+        latest "
+
+    for TAG in $TAGS; do
+        echo " Build Image => $IMAGE:$TAG"
+        docker build \
+            -f Dockerfile \
+            -t $IMAGE:$TAG .
+        echo ''
+    done
 }
 
 docker_build() {

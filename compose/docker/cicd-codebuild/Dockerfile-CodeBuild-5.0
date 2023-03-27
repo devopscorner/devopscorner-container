@@ -146,7 +146,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
+      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
       chmod +x /usr/local/bin/helmfile &&\
       helmfile --version; sync
 

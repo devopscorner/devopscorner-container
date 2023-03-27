@@ -15,33 +15,44 @@ export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 build_codebuild_20() {
     TAG="codebuild-2.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-CodeBuild-2.0 -t $IMAGE:$TAG .
+    docker build \
+        -f Dockerfile-CodeBuild-2.0 \
+        -t $IMAGE:$TAG .
     echo ''
 }
 
 build_codebuild_30() {
     TAG="codebuild-3.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-CodeBuild-3.0 -t $IMAGE:$TAG .
+    docker build \
+        -f Dockerfile-CodeBuild-3.0 \
+        -t $IMAGE:$TAG .
     echo ''
 }
 
 build_codebuild_40() {
     TAG="codebuild-4.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-CodeBuild-4.0 -t $IMAGE:$TAG .
+    docker build \
+        -f Dockerfile-CodeBuild-4.0 \
+        -t $IMAGE:$TAG .
     echo ''
 }
 
 build_codebuild_latest() {
-    TAG="codebuild-nginx-1.23"
-    echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
-    docker tag $IMAGE:$TAG $IMAGE:codebuild
-    docker tag $IMAGE:$TAG $IMAGE:codebuild-latest
-    docker tag $IMAGE:$TAG $IMAGE:1.23-codebuild
-    docker tag $IMAGE:$TAG $IMAGE:latest
-    echo ''
+    TAGS="codebuild \
+        codebuild-nginx-1.23 \
+        codebuild-latest \
+        1.23-codebuild \
+        latest "
+
+    for TAG in $TAGS; do
+        echo " Build Image => $IMAGE:$TAG"
+        docker build \
+            -f Dockerfile \
+            -t $IMAGE:$TAG .
+        echo ''
+    done
 }
 
 docker_build() {
