@@ -49,7 +49,7 @@ DevOps Corner Indonesia - CI/CD Container Image
 
 ---
 
-### Previous Version - Alpine
+### Previous Version - Alpine (Depreciated)
 
 | Image name | Size |
 |------------|------|
@@ -60,7 +60,7 @@ DevOps Corner Indonesia - CI/CD Container Image
 | `devopscorner/cicd:1.0.5-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.5-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.5-alpine) |
 | `devopscorner/cicd:alpine-nginx-1.23` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/alpine-nginx-1.23.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=alpine-nginx-1.23) |
 
-### Previous Version - Ubuntu
+### Previous Version - Ubuntu (Depreciated)
 
 | Image name | Size |
 |------------|------|
@@ -69,7 +69,7 @@ DevOps Corner Indonesia - CI/CD Container Image
 | `devopscorner/cicd:1.0.5-ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.0.5-ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.0.5-ubuntu) |
 | `devopscorner/cicd:ubuntu-nginx-1.23` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/ubuntu-nginx-1.23.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=ubuntu-nginx-1.23) |
 
-### Previous Version - CodeBuild
+### Previous Version - CodeBuild (Depreciated)
 
 | Image name | Size |
 |------------|------|
