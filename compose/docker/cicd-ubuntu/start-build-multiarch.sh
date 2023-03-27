@@ -27,7 +27,9 @@ create_stack() {
     echo $line2
     echo " -> docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap"
     echo $line1
-    docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap
+    docker buildx create --name $STACKS_NAME \
+        --driver docker-container \
+        --bootstrap
     echo " - DONE -"
     echo ""
 }
@@ -47,21 +49,30 @@ use_stack() {
 build_ubuntu_2004() {
     TAG="ubuntu-20.04"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-Ubuntu-20.04 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-Ubuntu-20.04 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_ubuntu_2204() {
     TAG="ubuntu-22.04"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile-Ubuntu-22.04 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-Ubuntu-22.04 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_ubuntu_latest() {
     TAG="ubuntu-nginx-1.23"
     echo " Build Image => $IMAGE:$TAG"
-    docker build --no-cache -f Dockerfile -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile \
+        -t $IMAGE:$TAG .
     docker tag $IMAGE:$TAG $IMAGE:ubuntu
     docker tag $IMAGE:$TAG $IMAGE:ubuntu-latest
     docker tag $IMAGE:$TAG $IMAGE:1.23-ubuntu

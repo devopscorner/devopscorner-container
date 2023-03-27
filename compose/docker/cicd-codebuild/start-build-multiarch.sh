@@ -27,7 +27,9 @@ create_stack() {
     echo $line2
     echo " -> docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap"
     echo $line1
-    docker buildx create --name $STACKS_NAME --driver docker-container --bootstrap
+    docker buildx create --name $STACKS_NAME \
+        --driver docker-container \
+        --bootstrap
     echo " - DONE -"
     echo ""
 }
@@ -47,35 +49,49 @@ use_stack() {
 build_codebuild_20() {
     TAG="codebuild-2.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker buildx build --platform $PLATFORM --no-cache -f Dockerfile-CodeBuild-2.0 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-CodeBuild-2.0 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_codebuild_30() {
     TAG="codebuild-3.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker buildx build --platform $PLATFORM --no-cache -f Dockerfile-CodeBuild-3.0 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-CodeBuild-3.0 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_codebuild_40() {
     TAG="codebuild-4.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker buildx build --platform $PLATFORM --no-cache -f Dockerfile-CodeBuild-4.0 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-CodeBuild-4.0 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_codebuild_50() {
     TAG="codebuild-5.0"
     echo " Build Image => $IMAGE:$TAG"
-    docker buildx build --platform $PLATFORM --no-cache -f Dockerfile-CodeBuild-4.0 -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile-CodeBuild-4.0 \
+        -t $IMAGE:$TAG .
     echo ""
 }
 
 build_codebuild_latest() {
     TAG="codebuild-nginx-1.23"
     echo " Build Image => $IMAGE:$TAG"
-    docker buildx build --platform $PLATFORM --no-cache -f Dockerfile -t $IMAGE:$TAG .
+    docker buildx build --push \
+        --platform $PLATFORM \
+        --no-cache -f Dockerfile -t $IMAGE:$TAG .
     docker tag $IMAGE:$TAG $IMAGE:codebuild
     docker tag $IMAGE:$TAG $IMAGE:codebuild-latest
     docker tag $IMAGE:$TAG $IMAGE:1.23-codebuild
