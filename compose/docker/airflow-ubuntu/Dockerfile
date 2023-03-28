@@ -75,7 +75,7 @@ RUN apt-get install -y \
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
-RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip; sync &&\
     unzip awscliv2.zip; sync &&\
     ./aws/install --bin-dir /usr/local/bin/; sync
 # COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/

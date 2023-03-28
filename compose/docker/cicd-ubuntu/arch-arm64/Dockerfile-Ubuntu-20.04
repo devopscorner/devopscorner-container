@@ -119,7 +119,7 @@ RUN curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/
 # =============== #
 #  Install TFenv  #
 # =============== #
-RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv &&\
+RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv; sync &&\
       echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bashrc; sync &&\
       ln -sf $HOME/.tfenv/bin/* /usr/local/bin &&\
       mkdir -p $HOME/.local/bin/ &&\
@@ -128,14 +128,14 @@ RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv &&\
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #
 #  Install Helm  #
 # ============== #
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3; sync &&\
       chmod +x get_helm.sh; sync &&\
       export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
       ./get_helm.sh; sync &&\
@@ -154,7 +154,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff &&\
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
       https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_arm64 &&\
-      chmod +x /usr/local/bin/helmfile &&\
+      chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
 # ================= #

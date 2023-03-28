@@ -142,7 +142,7 @@ COPY --from=aquasec/tfsec:v1.28 /usr/bin/tfsec /usr/local/bin/tfsec
 # =============== #
 #  Install TFenv  #
 # =============== #
-RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv &&\
+RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv; sync &&\
       echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bashrc; sync &&\
       ln -sf $HOME/.tfenv/bin/* /usr/local/bin &&\
       mkdir -p $HOME/.local/bin/ &&\
@@ -152,14 +152,14 @@ RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv &&\
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #
 #  Install Helm  #
 # ============== #
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3; sync &&\
       chmod +x get_helm.sh; sync &&\
       export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
       ./get_helm.sh; sync &&\
@@ -177,22 +177,22 @@ RUN helm plugin install https://github.com/databus23/helm-diff; sync &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz &&\
-      chmod +x /usr/local/bin/helmfile &&\
+      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz; sync &&\
+      chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
 # ================= #
 #  Install Kubectl  #
 # ================= #
 RUN wget -O /usr/local/bin/kubectl \
-      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl; sync &&\
       chmod +x /usr/local/bin/kubectl; sync
 
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
 # -- version-1 --
-# RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+# RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip; sync &&\
 #       unzip awscliv2.zip; sync &&\
 #       ./aws/install --bin-dir /usr/local/bin/; sync
 
