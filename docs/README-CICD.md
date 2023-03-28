@@ -46,7 +46,9 @@ DevOps Corner Indonesia - CI/CD Container Image
 | `devopscorner/cicd:codebuild`        | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild) |
 | `devopscorner/cicd:codebuild-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-latest) |
 | `devopscorner/cicd:codebuild-4.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-4.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-4.0) |
-
+| `devopscorner/cicd:codebuild-localbuild`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-localbuild.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-localbuild) |
+| `devopscorner/cicd:codebuild-localbuild-latest`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/codebuild-localbuild-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=codebuild-localbuild-latest) |
+| `devopscorner/cicd:1.23-codebuild-localbuild`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd/1.23-codebuild-localbuild.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/cicd/tags?page=1&ordering=last_updated&name=1.23-codebuild-localbuild) |
 ---
 
 ### Previous Version - Alpine (Depreciated)
