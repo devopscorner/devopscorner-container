@@ -1,4 +1,4 @@
-FROM public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:${CODEBUILD_VERSION:-5.0}
+FROM public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:${CODEBUILD_VERSION:-4.0}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -8,11 +8,11 @@ ARG GIT_URL
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
 ENV IMG_NAME="cicd-codebuild"
-ENV IMG_VERSION="5.0"
+ENV IMG_VERSION="4.0"
 ENV IMG_DESC="Docker CodeBuild CI/CD"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV CODEBUILD_VERSION="5.0"
+ENV CODEBUILD_VERSION="4.0"
 ENV CICD_VERSION="1.23"
 
 LABEL maintainer="$AUTHOR" \
@@ -47,7 +47,7 @@ ENV PACKER_VERSION=1.8.6
 ENV TERRAFORM_VERSION=1.3.9
 ENV TERRAGRUNT_VERSION=v0.43.2
 ENV TERRASCAN_VERSION=1.18.0
-ENV HELMFILE_VERSION=v0.145.0
+ENV HELMFILE_VERSION=v0.151.0
 ENV KUBECTL_VERSION=v1.26.1
 ENV CHECKOV_VERSION=2.3.21
 ENV AWS_CLI_VERSION=2.11.0
@@ -146,7 +146,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/roboll/helmfile/releases/download/${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
+      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
       chmod +x /usr/local/bin/helmfile &&\
       helmfile --version; sync
 

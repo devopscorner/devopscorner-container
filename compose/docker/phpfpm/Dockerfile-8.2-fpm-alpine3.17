@@ -263,7 +263,7 @@ RUN set -eux \
 # Install swoole
     && mkdir /usr/src/php/ext/swoole \
     && curl -Lo swoole.tar.gz https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
-    && tar xfz swoole.tar.gz --strip-components=1 -C /usr/src/php/ext/swoole \
+    && tar zxvf swoole.tar.gz --strip-components=1 -C /usr/src/php/ext/swoole \
     && docker-php-ext-configure swoole \
             --enable-mysqlnd \
             --enable-sockets \

@@ -11,9 +11,16 @@ export CI_PROJECT_PATH="devopscorner"
 export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
-export PLATFORM="linux/amd64,linux/arm64"
 
-export STACKS_NAME="devopscorner-multiarch"
+## CodeBuild can't be use for Multi Arch ##
+## Using Public ECR:
+## public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:2.0
+## public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:3.0
+## public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:4.0
+
+export PLATFORM="linux/amd64"
+
+export STACKS_NAME="devopscorner-singlearch"
 # List PLATFORM:
 # docker buildx inspect $STACKS_NAME
 
@@ -46,31 +53,41 @@ use_stack() {
     echo ''
 }
 
-build_ubuntu_2004() {
-    TAG="ubuntu-20.04"
+build_codebuild_20() {
+    TAG="codebuild-2.0"
     echo " Build Image => $IMAGE:$TAG"
     docker buildx build --push \
         --platform $PLATFORM \
-        -f Dockerfile-Ubuntu-20.04 \
+        -f Dockerfile-CodeBuild-2.0 \
         -t $IMAGE:$TAG .
     echo ''
 }
 
-build_ubuntu_2204() {
-    TAG="ubuntu-22.04"
+build_codebuild_30() {
+    TAG="codebuild-3.0"
     echo " Build Image => $IMAGE:$TAG"
     docker buildx build --push \
         --platform $PLATFORM \
-        -f Dockerfile-Ubuntu-22.04 \
+        -f Dockerfile-CodeBuild-3.0 \
         -t $IMAGE:$TAG .
     echo ''
 }
 
-build_ubuntu_latest() {
-    TAGS="ubuntu \
-        ubuntu-nginx-1.23 \
-        ubuntu-latest \
-        1.23-ubuntu \
+build_codebuild_40() {
+    TAG="codebuild-4.0"
+    echo " Build Image => $IMAGE:$TAG"
+    docker buildx build --push \
+        --platform $PLATFORM \
+        -f Dockerfile-CodeBuild-4.0 \
+        -t $IMAGE:$TAG .
+    echo ''
+}
+
+build_codebuild_latest() {
+    TAGS="codebuild \
+        codebuild-nginx-1.23 \
+        codebuild-latest \
+        1.23-codebuild \
         latest "
 
     for TAG in $TAGS; do
@@ -84,9 +101,10 @@ build_ubuntu_latest() {
 }
 
 docker_build() {
-    build_ubuntu_2004
-    build_ubuntu_2204
-    build_ubuntu_latest
+    build_codebuild_20
+    build_codebuild_30
+    build_codebuild_40
+    build_codebuild_latest
 }
 
 docker_clean() {
@@ -97,7 +115,7 @@ docker_clean() {
 }
 
 main() {
-    create_stack
+    # create_stack
     use_stack
     docker_build
     docker_clean
