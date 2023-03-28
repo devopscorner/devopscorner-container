@@ -34,8 +34,7 @@ build_ubuntu_latest() {
     TAGS="ubuntu \
         ubuntu-nginx-1.23 \
         ubuntu-latest \
-        1.23-ubuntu \
-        latest "
+        1.23-ubuntu "
 
     for TAG in $TAGS; do
         echo " Build Image => $IMAGE:$TAG"

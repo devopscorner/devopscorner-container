@@ -12,12 +12,14 @@ export CI_PROJECT_NAME="cicd"
 
 export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 
+## CodeBuild can't be use for Multi Arch ##
 ## Using Public ECR:
 ## public.ecr.aws/codebuild/local-builds:latest
+## public.ecr.aws/codebuild/local-builds:aarch64
 
-export PLATFORM="linux/amd64,linux/arm64"
+export PLATFORM="linux/amd64"
 
-export STACKS_NAME="devopscorner-multiarch"
+export STACKS_NAME="devopscorner-singlearch"
 # List PLATFORM:
 # docker buildx inspect $STACKS_NAME
 
@@ -59,7 +61,7 @@ build_codebuild_localbuild_latest() {
         echo " Build Image => $IMAGE:$TAG"
         docker buildx build --push \
             --platform $PLATFORM \
-            -f Dockerfile \
+            -f Dockerfile-CodeBuild-LocalBuild \
             -t $IMAGE:$TAG .
         echo ''
     done

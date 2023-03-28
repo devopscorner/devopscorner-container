@@ -114,8 +114,7 @@ build_alpine_latest() {
     TAGS="alpine \
         alpine-nginx-1.23 \
         alpine-latest \
-        1.23-alpine \
-        latest "
+        1.23-alpine "
 
     for TAG in $TAGS; do
         echo " Build Image => $IMAGE:$TAG"
