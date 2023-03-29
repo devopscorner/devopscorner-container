@@ -56,7 +56,7 @@ services:
   cicd:
     build:
       context: arch-amd64/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-CodeBuild-LocalBuild
     # image: devopscorner/cicd:codebuild
     container_name: ${CONTAINER_CICD_ALPINE:-devopscorner_cicd_codebuild}
     restart: unless-stopped
