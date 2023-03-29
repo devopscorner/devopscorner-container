@@ -146,8 +146,10 @@ RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master
 #  Install Helm Plugins #
 # ===================== #
 RUN helm plugin install https://github.com/databus23/helm-diff; sync &&\
+      helm plugin install https://github.com/futuresimple/helm-secrets; sync &&\
       helm plugin install https://github.com/hypnoglow/helm-s3.git; sync &&\
-      helm repo add stable https://charts.helm.sh/stable; sync &&\
+      helm plugin install https://github.com/aslafy-z/helm-git.git; sync &&\
+      helm plugin install https://github.com/rimusz/helm-tiller; sync &&\
       helm repo update; sync
 
 # ================== #
