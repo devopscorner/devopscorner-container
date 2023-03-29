@@ -1,4 +1,4 @@
-FROM public.ecr.aws/codebuild/local-builds:${CODEBUILD_VERSION:-latest}
+FROM public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:${CODEBUILD_VERSION:-4.0}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -7,12 +7,12 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="cicd-codebuild-localbuild"
-ENV IMG_VERSION="latest"
-ENV IMG_DESC="Docker CodeBuild CI/CD for Localbuilds"
-ENV IMG_ARCH="amd64/x86_64"
+ENV IMG_NAME="cicd-codebuild"
+ENV IMG_VERSION="4.0"
+ENV IMG_DESC="Docker CodeBuild CI/CD"
+ENV IMG_ARCH="linux/amd64"
 
-ENV CODEBUILD_VERSION="latest"
+ENV CODEBUILD_VERSION="4.0"
 ENV CICD_VERSION="1.23"
 
 LABEL maintainer="$AUTHOR" \
@@ -45,10 +45,10 @@ ENV ANSIBLE_VERSION=2.12.2
 ENV AWXKIT_VERSION=21.9.0
 ENV PACKER_VERSION=1.8.6
 ENV TERRAFORM_VERSION=1.3.9
-ENV TERRAGRUNT_VERSION=v0.43.2
+ENV TERRAGRUNT_VERSION=0.43.2
 ENV TERRASCAN_VERSION=1.18.0
-ENV HELMFILE_VERSION=v0.151.0
-ENV KUBECTL_VERSION=v1.26.1
+ENV HELMFILE_VERSION=0.144.0
+ENV KUBECTL_VERSION=1.26.3
 ENV CHECKOV_VERSION=2.3.21
 ENV AWS_CLI_VERSION=2.11.0
 ENV TFSEC_VERSION=1.28
@@ -81,7 +81,7 @@ RUN yum install -y \
 #  Install Terragrunt  #
 # ==================== #
 RUN wget -O /usr/local/bin/terragrunt \
-      https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
+      https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
       # ================ #
       #  Install Packer  #
@@ -112,23 +112,23 @@ COPY --from=aquasec/tfsec:v1.28 /usr/bin/tfsec /usr/local/bin/tfsec
 # =============== #
 #  Install TFenv  #
 # =============== #
-RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
-      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc; sync &&\
-      ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
-      mkdir -p ~/.local/bin/ &&\
-      ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
+RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv; sync &&\
+      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bashrc; sync &&\
+      ln -sf $HOME/.tfenv/bin/* /usr/local/bin &&\
+      mkdir -p $HOME/.local/bin/ &&\
+      ln -sf $HOME/.tfenv/bin/* $HOME/.local/bin; sync
 
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #
 #  Install Helm  #
 # ============== #
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3; sync &&\
       chmod +x get_helm.sh; sync &&\
       export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
       ./get_helm.sh; sync &&\
@@ -148,22 +148,22 @@ RUN helm plugin install https://github.com/databus23/helm-diff; sync &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
-      chmod +x /usr/local/bin/helmfile &&\
+      https://github.com/roboll/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64; sync &&\
+      chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
 # ================= #
 #  Install Kubectl  #
 # ================= #
 RUN wget -O /usr/local/bin/kubectl \
-      https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl; sync &&\
       chmod +x /usr/local/bin/kubectl; sync
 
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
 # -- version-1 --
-RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip; sync &&\
       unzip awscliv2.zip; sync &&\
       ./aws/install --bin-dir /usr/local/bin/; sync
 

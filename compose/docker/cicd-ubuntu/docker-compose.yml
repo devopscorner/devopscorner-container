@@ -55,7 +55,7 @@ services:
   #================================================================================================
   cicd:
     build:
-      context: .
+      context: arch-amd64/
       dockerfile: Dockerfile
     # image: devopscorner/cicd:ubuntu
     container_name: ${CONTAINER_CICD_ALPINE:-devopscorner_cicd_ubuntu}

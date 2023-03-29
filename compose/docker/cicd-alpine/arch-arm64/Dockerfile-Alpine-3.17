@@ -1,4 +1,29 @@
-FROM public.ecr.aws/codebuild/local-builds:${CODEBUILD_VERSION:-latest}
+### Builder ###
+FROM python:3.10.10-alpine${ALPINE_VERSION:-3.17} as builder-python
+
+ARG AWS_CLI_VERSION=2.11.0
+RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
+RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION:-2.11.0} https://github.com/aws/aws-cli.git
+
+WORKDIR aws-cli
+RUN python -m venv venv
+RUN . venv/bin/activate
+RUN scripts/installers/make-exe
+RUN unzip -q dist/awscli-exe.zip
+RUN aws/install --bin-dir /aws-cli-bin
+RUN /aws-cli-bin/aws --version
+
+# reduce image size: remove autocomplete and examples
+RUN rm -rf \
+    /usr/local/aws-cli/v2/current/dist/aws_completer \
+    /usr/local/aws-cli/v2/current/dist/awscli/data/ac.index \
+    /usr/local/aws-cli/v2/current/dist/awscli/examples
+RUN find /usr/local/aws-cli/v2/current/dist/awscli/data -name completions-1*.json -delete
+RUN find /usr/local/aws-cli/v2/current/dist/awscli/botocore/data -name examples-1.json -delete
+
+
+# FROM alpine:${ALPINE_VERSION:-3.17}
+FROM nginx:${NGINX_VERSION:-1.23-alpine}
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
@@ -7,17 +32,17 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="cicd-codebuild-localbuild"
-ENV IMG_VERSION="latest"
-ENV IMG_DESC="Docker CodeBuild CI/CD for Localbuilds"
-ENV IMG_ARCH="amd64/x86_64"
+ENV IMG_NAME="cicd-alpine"
+ENV IMG_VERSION="3.17"
+ENV IMG_DESC="Docker Image CI/CD"
+ENV IMG_ARCH="linux/arm64"
 
-ENV CODEBUILD_VERSION="latest"
+ENV ALPINE_VERSION="3.17"
 ENV CICD_VERSION="1.23"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
-      codebuild-version="$CODEBUILD_VERSION" \
+      alpine-version="$ALPINE_VERSION" \
       cicd-version="$CICD_VERSION" \
       org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="$IMG_NAME" \
@@ -43,59 +68,65 @@ COPY rootfs /
 ENV ANSIBLE_VERSION=2.12.2
 # ENV ANSIBLE_TOWER_CLI_VERSION=3.3.9   # Depreciated, change to AWX-Cli (awxkit)
 ENV AWXKIT_VERSION=21.9.0
-ENV PACKER_VERSION=1.8.6
-ENV TERRAFORM_VERSION=1.3.9
-ENV TERRAGRUNT_VERSION=v0.43.2
-ENV TERRASCAN_VERSION=1.18.0
-ENV HELMFILE_VERSION=v0.151.0
-ENV KUBECTL_VERSION=v1.26.1
-ENV CHECKOV_VERSION=2.3.21
+ENV PACKER_VERSION=1.8.4
+ENV TERRAFORM_VERSION=1.3.5
+ENV TERRAGRUNT_VERSION=0.41.0
+ENV TERRASCAN_VERSION=1.17.0
+ENV HELMFILE_VERSION=0.144.0
+ENV KUBECTL_VERSION=1.26.3
+ENV CHECKOV_VERSION=2.1.244
 ENV AWS_CLI_VERSION=2.11.0
 ENV TFSEC_VERSION=1.28
 ENV VERIFY_CHECKSUM=false
 
 USER root
-RUN yum update -y; sync
-RUN yum groupinstall "Development Tools" -y; sync
-
-RUN yum install -y \
+RUN apk add --no-cache \
       git \
       curl \
       zip \
       unzip \
       wget; sync
 
-RUN yum install -y \
+RUN apk add --no-cache \
+      build-base \
       bash \
       jq \
-      vim-enhanced \
-      telnet \
-      openssl11 \
-      openssl11-devel \
-      libffi-devel \
-      bzip2-devel \
-      python37 \
-      python3-pip; sync
+      ca-certificates \
+      openssl \
+      openssh \
+      openssh-server \
+      vim \
+      busybox-extras \
+      nano \
+      gcompat \
+      groff \
+      cmake \
+      libffi-dev \
+      bzip2-dev \
+      python3 \
+      python3-dev \
+      py3-pip &&\
+      set -ex; sync
 
 # ==================== #
 #  Install Terragrunt  #
 # ==================== #
 RUN wget -O /usr/local/bin/terragrunt \
-      https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&\
+      https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_arm64 &&\
       chmod +x /usr/local/bin/terragrunt; sync &&\
       # ================ #
       #  Install Packer  #
       # ================ #
-      wget -O packer_${PACKER_VERSION}_linux_amd64.zip \
-      https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&\
-      unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/local/bin &&\
-      rm -f packer_${PACKER_VERSION}_linux_amd64.zip; sync &&\
+      wget -O packer_${PACKER_VERSION}_linux_arm64.zip \
+      https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_arm64.zip &&\
+      unzip packer_${PACKER_VERSION}_linux_arm64.zip -d /usr/local/bin &&\
+      rm -f packer_${PACKER_VERSION}_linux_arm64.zip; sync &&\
       # =================== #
       #  Install Terrascan  #
       # =================== #
       wget -O terrascan.tar.gz \
-      https://github.com/accurics/terrascan/releases/download/v${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION}_Linux_x86_64.tar.gz &&\
-      tar -zxf terrascan.tar.gz -C /usr/local/bin &&\
+      https://github.com/accurics/terrascan/releases/download/v${TERRASCAN_VERSION}/terrascan_${TERRASCAN_VERSION}_Linux_arm64.tar.gz &&\
+      tar -zxvf terrascan.tar.gz -C /usr/local/bin &&\
       chmod +x /usr/local/bin/terrascan &&\
       rm terrascan.tar.gz; sync &&\
       # =================== #
@@ -112,23 +143,24 @@ COPY --from=aquasec/tfsec:v1.28 /usr/bin/tfsec /usr/local/bin/tfsec
 # =============== #
 #  Install TFenv  #
 # =============== #
-RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv &&\
-      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bashrc; sync &&\
-      ln -sf ~/.tfenv/bin/* /usr/local/bin &&\
-      mkdir -p ~/.local/bin/ &&\
-      ln -sf ~/.tfenv/bin/* ~/.local/bin; sync
+RUN git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv; sync &&\
+      echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bashrc; sync &&\
+      ln -sf $HOME/.tfenv/bin/* /usr/local/bin &&\
+      mkdir -p $HOME/.local/bin/ &&\
+      ln -sf $HOME/.tfenv/bin/* $HOME/.local/bin && \
+      source $HOME/.bashrc; sync
 
 # =================== #
 #  Install Terraform  #
 # =================== #
-RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION} &&\
+RUN /usr/local/bin/tfenv install ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform use ${TERRAFORM_VERSION}; sync &&\
       /usr/local/bin/terraform version; sync
 
 # ============== #
 #  Install Helm  #
 # ============== #
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 &&\
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3; sync &&\
       chmod +x get_helm.sh; sync &&\
       export VERIFY_CHECKSUM=${VERIFY_CHECKSUM} &&\
       ./get_helm.sh; sync &&\
@@ -148,32 +180,32 @@ RUN helm plugin install https://github.com/databus23/helm-diff; sync &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64 &&\
-      chmod +x /usr/local/bin/helmfile &&\
+      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_arm64 &&\
+      chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
 # ================= #
 #  Install Kubectl  #
 # ================= #
 RUN wget -O /usr/local/bin/kubectl \
-      https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/arm64/kubectl &&\
       chmod +x /usr/local/bin/kubectl; sync
 
 # =================== #
 #  Install AWSCli v2  #
 # =================== #
 # -- version-1 --
-RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
-      unzip awscliv2.zip; sync &&\
-      ./aws/install --bin-dir /usr/local/bin/; sync
+# RUN curl -s https://awscli.amazonaws.com/awscli-exe-linux-arm64-${AWS_CLI_VERSION}.zip -o awscliv2.zip &&\
+#       unzip awscliv2.zip; sync &&\
+#       ./aws/install --bin-dir /usr/local/bin/; sync
 
 # -- version-2 --
 # COPY --from=devopscorner/aws-cli:latest /usr/local/aws-cli/ /usr/local/aws-cli/
 # COPY --from=devopscorner/aws-cli:latest /usr/local/bin/ /usr/local/bin/
 
 # -- version-3 --
-# COPY --from=builder-python /usr/local/aws-cli/ /usr/local/aws-cli/
-# COPY --from=builder-python /usr/local/bin/ /usr/local/bin/
+COPY --from=builder-python /usr/local/aws-cli/ /usr/local/aws-cli/
+COPY --from=builder-python /aws-cli-bin/ /usr/local/bin/
 
 # ========================= #
 # Install Python Libraries  #
@@ -207,8 +239,14 @@ RUN chmod +x /tmp/*.sh
 # ============= #
 #  Cleanup All  #
 # ============= #
-RUN yum clean all; sync
+RUN rm -rf /var/cache/apk/* /root/.cache /tmp/*
 
 WORKDIR /root
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 EXPOSE 22 80
+
+STOPSIGNAL SIGQUIT
+
+CMD ["nginx", "-g", "daemon off;"]
