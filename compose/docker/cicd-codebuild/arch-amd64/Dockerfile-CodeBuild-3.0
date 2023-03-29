@@ -47,7 +47,7 @@ ENV PACKER_VERSION=1.8.6
 ENV TERRAFORM_VERSION=1.3.9
 ENV TERRAGRUNT_VERSION=0.43.2
 ENV TERRASCAN_VERSION=1.18.0
-ENV HELMFILE_VERSION=0.151.0
+ENV HELMFILE_VERSION=0.144.0
 ENV KUBECTL_VERSION=1.26.3
 ENV CHECKOV_VERSION=2.3.21
 ENV AWS_CLI_VERSION=2.11.0
@@ -146,7 +146,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_amd64.tar.gz; sync &&\
+      https://github.com/roboll/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64; sync &&\
       chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
