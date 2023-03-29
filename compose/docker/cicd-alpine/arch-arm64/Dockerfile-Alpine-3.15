@@ -180,7 +180,7 @@ RUN helm plugin install https://github.com/databus23/helm-diff; sync &&\
 #  Install Helmfile  #
 # ================== #
 RUN wget -O /usr/local/bin/helmfile \
-      https://github.com/helmfile/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_${HELMFILE_VERSION}_linux_arm64 &&\
+      https://github.com/roboll/helmfile/releases/download/v${HELMFILE_VERSION}/helmfile_linux_amd64; sync &&\
       chmod +x /usr/local/bin/helmfile; sync &&\
       helmfile --version; sync
 
