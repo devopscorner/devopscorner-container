@@ -49,7 +49,14 @@ ENV TERRAFORM_VERSION=1.3.5
 ENV TERRAGRUNT_VERSION=0.41.0
 ENV TERRASCAN_VERSION=1.17.0
 ENV HELMFILE_VERSION=0.144.0
-ENV KUBECTL_VERSION=1.26.3
+ENV KUBECTL_VERSION_1_26=1.26.2
+ENV KUBECTL_VERSION_1_25=1.25.7
+ENV KUBECTL_VERSION_1_24=1.24.11
+ENV KUBECTL_VERSION_1_23=1.23.17
+ENV KUBECTL_VERSION_1_22=1.22.17
+ENV KUBECTL_VERSION_1_21=1.21.14
+ENV KUBECTL_VERSION_1_20=1.20.15
+ENV KUBECTL_VERSION=1.23.17
 ENV CHECKOV_VERSION=2.1.244
 ENV AWS_CLI_VERSION=2.11.0
 ENV TFSEC_VERSION=1.28
@@ -163,9 +170,45 @@ RUN wget -O /usr/local/bin/helmfile \
 # ================= #
 #  Install Kubectl  #
 # ================= #
+## KUBECTL_VERSION=1.23.17
 RUN wget -O /usr/local/bin/kubectl \
-      https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl; sync &&\
-      chmod +x /usr/local/bin/kubectl; sync
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+
+## KUBECTL_VERSION_1_26=1.26.2
+RUN wget -O /usr/local/bin/kubectl_1_26 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_26}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+
+## KUBECTL_VERSION_1_25=1.25.7
+RUN wget -O /usr/local/bin/kubectl_1_25 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_25}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+      
+## KUBECTL_VERSION_1_24=1.24.11
+RUN wget -O /usr/local/bin/kubectl_1_24 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_24}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+      
+## KUBECTL_VERSION_1_23=1.23.17
+RUN wget -O /usr/local/bin/kubectl_1_23 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_23}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+      
+## KUBECTL_VERSION_1_22=1.22.17
+RUN wget -O /usr/local/bin/kubectl_1_22 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_22}/2023-03-17/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+      
+## KUBECTL_VERSION_1_21=1.21.14
+RUN wget -O /usr/local/bin/kubectl_1_21 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_21}/2023-01-30/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
+      
+## KUBECTL_VERSION_1_20=1.20.15
+RUN wget -O /usr/local/bin/kubectl_1_20 \ 
+      https://s3.us-west-2.amazonaws.com/amazon-eks/${KUBECTL_VERSION_1_20}/2022-10-31/bin/linux/amd64/kubectl; sync &&\
+      chmod +x /usr/local/bin/kubectl*; sync
 
 # =================== #
 #  Install AWSCli v2  #
